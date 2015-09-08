@@ -18,7 +18,6 @@ public class NetworkManager : Photon.MonoBehaviour
 	public int mapHightDifference = 3;
 	public float islandSize = 10;
 	public int mapSideLength;
-	public List<GameObject> toSpawnIslands;
 	
 	GameObject[] smallEnvirement;
 	
@@ -105,7 +104,6 @@ public class NetworkManager : Photon.MonoBehaviour
 		{
 			for (int z = 0; z < mapSize; z++)
 			{
-				GameObject nextTile = toSpawnIslands[Random.Range(0, toSpawnIslands.Count)];
 				int yPosition = Random.Range(0, mapHightDifference);
 				if (!isOdd(x))
 				{
@@ -137,13 +135,15 @@ public class NetworkManager : Photon.MonoBehaviour
 					}
 					if (z > zSpawnLineMinimum && z < mapSize - zSpawnLineMaximum)
 					{
-						Instantiate(nextTile, position, Quaternion.identity);
+						print ("spawned");
+						PhotonNetwork.Instantiate("Hexagon_Sand", position, Quaternion.identity, 0);
 					}
 				}
 				
 				else if (x == (mapSize - 1) / 2)
 				{
-					Instantiate(toSpawnIslands[0], position, Quaternion.identity);
+					print ("spawned");
+					PhotonNetwork.Instantiate("Hexagon_Sand", position, Quaternion.identity, 0);
 				}
 				
 				else if (x >= (mapSize / 2) - 1)
@@ -165,7 +165,8 @@ public class NetworkManager : Photon.MonoBehaviour
 					}
 					if (z > zSpawnLineMinimum && z < mapSize - zSpawnLineMaximum)
 					{
-						Instantiate(nextTile, position, Quaternion.identity);
+						print ("spawned");
+						PhotonNetwork.Instantiate("Hexagon_Sand", position, Quaternion.identity, 1);
 					}
 				}
 			}
@@ -182,9 +183,7 @@ public class NetworkManager : Photon.MonoBehaviour
 			int random = Random.Range(0, 3);
 			if(random == 0)
 			{
-				GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-				cube.AddComponent<BoxCollider>();
-				cube.transform.position = new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y + (cube.transform.localScale.y / 2), emptyGameObject.transform.position.z);
+				PhotonNetwork.Instantiate("Small_Cube", new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.identity, 0);
 			}
 		}
 	}
