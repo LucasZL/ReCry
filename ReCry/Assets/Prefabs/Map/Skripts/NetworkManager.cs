@@ -166,7 +166,7 @@ public class NetworkManager : Photon.MonoBehaviour
 					if (z > zSpawnLineMinimum && z < mapSize - zSpawnLineMaximum)
 					{
 						print ("spawned");
-						PhotonNetwork.Instantiate("Hexagon_Sand", position, Quaternion.identity, 1);
+						PhotonNetwork.Instantiate("Hexagon_Sand", position, Quaternion.identity, 0);
 					}
 				}
 			}
