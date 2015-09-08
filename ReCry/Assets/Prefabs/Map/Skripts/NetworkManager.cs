@@ -74,7 +74,8 @@ public class NetworkManager : Photon.MonoBehaviour
 			calculateMapDimentions();
 			placeIslands();
 			placeSmallEnvirement();
-		}
+            PhotonNetwork.Instantiate("Player_Multi", new Vector3(0,0,0), Quaternion.identity, 0);
+        }
 	}
 	
 	public void OnJoinedLobby()
