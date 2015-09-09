@@ -19,7 +19,6 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour {
     private Camera camera;
     Rigidbody rigid;
 
-    // Use this for initialization
     void Start ()
     {
         ph = PhotonView.Get(this.transform.gameObject);
@@ -28,10 +27,8 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour {
             this.rigid = GetComponent<Rigidbody>();
             this.camera = Camera.main;
         }
-        
 	}
 	
-	// Update is called once per frame
 	void Update ()
     {
         if (ph.isMine)
@@ -82,6 +79,6 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour {
         this.mouseX += Input.GetAxis("Mouse X") * MouseSensitivity;
         this.mouseY -= Input.GetAxis("Mouse Y") * MouseSensitivity;
 
-        this.camera.transform.eulerAngles = new Vector3(this.mouseY, this.mouseX);
+        this.transform.eulerAngles = new Vector3(this.mouseY, this.mouseX);
     }
 }
