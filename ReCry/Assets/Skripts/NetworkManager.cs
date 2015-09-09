@@ -74,11 +74,12 @@ public class NetworkManager : Photon.MonoBehaviour
 			calculateMapDimentions();
 			placeIslands();
 			placeSmallEnvirement();
-            PhotonNetwork.Instantiate("Player_Multi", new Vector3(25,25,25), Quaternion.identity, 0);
         }
-	}
-	
-	public void OnJoinedLobby()
+        PhotonNetwork.Instantiate("Playerprefab_Multi", new Vector3(25, 25, 25), Quaternion.identity, 0);
+
+    }
+
+    public void OnJoinedLobby()
 	{
 		Debug.Log("OnJoinedLobby(). Use a GUI to show existing rooms available in PhotonNetwork.GetRoomList().");
 	}
