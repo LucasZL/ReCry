@@ -17,6 +17,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour {
     private float vertical;
     public float speed;
     private Camera camera;
+    private JumpDetection jump;
     Rigidbody rigid;
 
     void Start ()
@@ -26,6 +27,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour {
         {
             this.rigid = GetComponent<Rigidbody>();
             this.camera = Camera.main;
+            this.jump = GetComponent<JumpDetection>();
         }
 	}
 	
@@ -70,7 +72,10 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour {
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            this.rigid.AddForce(new Vector3(0, JumpHeight, 0), ForceMode.Impulse);
+            if (jump.isGrounded)
+            {
+                this.rigid.AddForce(new Vector3(0, JumpHeight, 0), ForceMode.Impulse);
+            }
         }
     }
 

@@ -75,7 +75,7 @@ public class NetworkManager : Photon.MonoBehaviour
 			placeIslands();
 			placeSmallEnvirement();
         }
-        PhotonNetwork.Instantiate("Playerprefab_Multi", new Vector3(25, 25, 25), Quaternion.identity, 0);
+        PhotonNetwork.Instantiate("Playerprefab_Multi", new Vector3(45, 20, 38), Quaternion.identity, 0);
 
     }
 
