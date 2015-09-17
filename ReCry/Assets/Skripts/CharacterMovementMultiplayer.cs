@@ -5,18 +5,17 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour {
 
     PhotonView ph;
 
-	public Vector3 realPosition = Vector3.zero;
-	public Vector3 positionAtLastPacket = Vector3.zero;
-	public double currentTime = 0.0;
-	public double currentPacketTime = 0.0;
-	public double lastPacketTime = 0.0;
-	public double timeToReachGoal = 0.0;
+    private Vector3 latestCorrectPos;
+    private Vector3 onUpdatePos;
+    private float fraction;
 
     public float MoveSpeed = 5f;
     public float RunSpeed = 15f;
     public float MouseSensitivity = 5f;
     public float JumpHeight = 7.5f;
     public float Gravity = 20f;
+    public int LookUp = -50;
+    public int lookDown = 50;
     private bool isWalking = true;
     private bool isRunning = false;
     private float mouseX;
@@ -54,10 +53,9 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour {
 		} 
 		else
 		{
-			timeToReachGoal = currentPacketTime - lastPacketTime;
-			currentTime += Time.deltaTime;
-			transform.position = Vector3.Lerp(positionAtLastPacket, realPosition, (float)(currentTime / timeToReachGoal));
-		}
+            fraction = fraction + Time.deltaTime * 9 ;
+            transform.localPosition = Vector3.Lerp(onUpdatePos, latestCorrectPos, fraction);    // set our pos between A and B
+        }
 	}
 
     void MoveCharacter()
@@ -102,31 +100,41 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour {
         this.mouseX += Input.GetAxis("Mouse X") * MouseSensitivity;
         this.mouseY -= Input.GetAxis("Mouse Y") * MouseSensitivity;
 
-        if(this.mouseY >= 50)
+        if(this.mouseY >= lookDown)
         {
-            this.mouseY = 50;
+            this.mouseY = lookDown;
         }
-        else if(this.mouseY <= -90)
+        else if(this.mouseY <= LookUp)
         {
-            this.mouseY = -90;
+            this.mouseY = LookUp;
         }
         this.camera.transform.eulerAngles = new Vector3(this.mouseY, this.mouseX);
         this.transform.eulerAngles = new Vector3(0, this.mouseX);
     }
 
-	void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-	{
-		if (stream.isWriting)
-		{
-			stream.SendNext((Vector3)transform.position);
-		}
-		else
-		{
-			currentTime = 0.0;
-			positionAtLastPacket = transform.position;
-			realPosition = (Vector3)stream.ReceiveNext();
-			lastPacketTime = currentPacketTime;
-			currentPacketTime = info.timestamp;
-		}
-	}
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.isWriting)
+        {
+            Vector3 pos = transform.position;
+            Quaternion rot = transform.rotation;
+            stream.Serialize(ref pos);
+            stream.Serialize(ref rot);
+        }
+        else
+        {
+            // Receive latest state information
+            Vector3 pos = Vector3.zero;
+            Quaternion rot = Quaternion.identity;
+
+            stream.Serialize(ref pos);
+            stream.Serialize(ref rot);
+
+            latestCorrectPos = pos;                 // save this to move towards it in FixedUpdate()
+            onUpdatePos = transform.position;  // we interpolate from here to latestCorrectPos
+            fraction = 0;                           // reset the fraction we alreay moved. see Update()
+
+            transform.localRotation = rot;          // this sample doesn't smooth rotation
+        }
+    }
 }
