@@ -8,13 +8,17 @@ public class PhotonLobby : Photon.MonoBehaviour {
     public Button CreateRoom;
     public Button JoinRoom;
     public Button JoinRandom;
-    public InputField Room;
-    private string RoomName = "Room Name";
+    public Button RefreshList;
+    public Text Servername;
+    public Text PlayerNumber;
+    public GameObject ServerPanel;
+    public Transform ServerPanelTransform;
 
+    private RoomInfo[] roomInfo;
 	// Use this for initialization
 	void Start ()
     {
-        Room.text = RoomName;
+        
 	}
 	
     bool CheckPhotonRoom(string roomName)
@@ -30,6 +34,17 @@ public class PhotonLobby : Photon.MonoBehaviour {
         return false;
     }
 
+    public void ShowServerInBrowser()
+    {
+        foreach (var room in roomInfo)
+        {
+            GameObject serverpanel = Instantiate(ServerPanel) as GameObject;
+            serverpanel.transform.SetParent(ServerPanelTransform);
+            Debug.Log(room);
+        }
+        Debug.Log("Nicht geklappt");
+    }
+
     public void joinRoomByName()
     {
 
@@ -43,5 +58,10 @@ public class PhotonLobby : Photon.MonoBehaviour {
     public void createRoomByName()
     {
 
+    }
+
+     void OnReceivedRoomListUpdate()
+    {
+        Debug.Log("OnReceivedRoomListUpdate");
     }
 }
