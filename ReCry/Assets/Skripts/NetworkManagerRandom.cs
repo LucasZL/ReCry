@@ -18,10 +18,15 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 	public int mapHightDifference = 3;
 	public float islandSize = 10;
 	public int mapSideLength;
-	
-	GameObject[] smallEnvirement;
-	
-	bool mapNeedsCorrection = false;
+
+    public string[] IslandsToPlace;
+    public string[] SmallEnvirementsToPlace;
+    public string[] BigEnvirementsToPlace;
+
+    GameObject[] smallEnvirement;
+    GameObject[] bigEnvirement;
+
+    bool mapNeedsCorrection = false;
 
 
 	public virtual void Start()
@@ -74,6 +79,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 			calculateMapDimentions();
 			placeIslands();
 			placeSmallEnvirement();
+            placeBigEnvirement();
         }
 
         PhotonNetwork.Instantiate("Playerprefab_Multi", new Vector3(45, 20, 38), Quaternion.identity, 0);
@@ -137,16 +143,14 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 					}
 					if (z > zSpawnLineMinimum && z < mapSize - zSpawnLineMaximum)
 					{
-						print ("spawned");
-						PhotonNetwork.Instantiate("Hexagon_Sand", position, Quaternion.identity, 0);
-					}
+                        placeIsland(position);
+                    }
 				}
 				
 				else if (x == (mapSize - 1) / 2)
 				{
-					print ("spawned");
-					PhotonNetwork.Instantiate("Hexagon_Sand", position, Quaternion.identity, 0);
-				}
+                    placeIsland(position);
+                }
 				
 				else if (x >= (mapSize / 2) - 1)
 				{
@@ -167,30 +171,52 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 					}
 					if (z > zSpawnLineMinimum && z < mapSize - zSpawnLineMaximum)
 					{
-						print ("spawned");
-						PhotonNetwork.Instantiate("Hexagon_Sand", position, Quaternion.identity, 0);
-					}
+                        placeIsland(position);
+                    }
 				}
 			}
 		}
 	}
-	
-	void placeSmallEnvirement()
-	{
-		if (smallEnvirement == null)
-			smallEnvirement = GameObject.FindGameObjectsWithTag("EnvSmall");
-		
-		foreach (GameObject emptyGameObject in smallEnvirement)
-		{
-			int random = Random.Range(0, 3);
-			if(random == 0)
-			{
-				PhotonNetwork.Instantiate("Small_Cube", new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.identity, 0);
-			}
-		}
-	}
-	
-	bool isOdd(int value)
+
+    void placeSmallEnvirement()
+    {
+        if (smallEnvirement == null)
+            smallEnvirement = GameObject.FindGameObjectsWithTag("EnvSmall");
+
+        foreach (GameObject emptyGameObject in smallEnvirement)
+        {
+            int random = Random.Range(0, 7);
+            int randomEnvirement = Random.Range(0, SmallEnvirementsToPlace.Length);
+            if (random != 0)
+            {
+                PhotonNetwork.Instantiate(SmallEnvirementsToPlace[randomEnvirement], new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, Random.Range(0.0f, 360.0f), 0.0f), 0);
+            }
+        }
+    }
+
+    void placeBigEnvirement()
+    {
+        if (bigEnvirement == null)
+            bigEnvirement = GameObject.FindGameObjectsWithTag("EnvBig");
+
+        foreach (GameObject emptyGameObject in bigEnvirement)
+        {
+            int random = Random.Range(0, 7);
+            int randomEnvirement = Random.Range(0, BigEnvirementsToPlace.Length);
+            if (random != 0)
+            {
+                PhotonNetwork.Instantiate(BigEnvirementsToPlace[randomEnvirement], new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, Random.Range(0.0f, 360.0f), 0.0f), 0);
+            }
+        }
+    }
+
+    void placeIsland(Vector3 position)
+    {
+        int random = Random.Range(0, IslandsToPlace.Length);
+        PhotonNetwork.Instantiate(IslandsToPlace[random], position, Quaternion.Euler(0.0f, Random.Range(0.0f, 360.0f), 0.0f), 0);
+    }
+
+    bool isOdd(int value)
 	{
 		return value % 2 != 0;
 	}
