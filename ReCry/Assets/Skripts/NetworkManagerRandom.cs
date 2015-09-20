@@ -14,7 +14,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 
 	[Range(1, 31)]
 	public int mapSize = 3;
-	[Range(1, 10)]
+	[Range(1, 100)]
 	public int mapHightDifference = 3;
 	public float islandSize = 10;
 	public int mapSideLength;
@@ -32,7 +32,8 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 	public virtual void Start()
 	{
 		PhotonNetwork.autoJoinLobby = false;    // we join randomly. always. no need to join a lobby to get the list of rooms.
-	}
+        mapHightDifference = (int)(mapHightDifference * (islandSize / 10));
+    }
 
 	void OnGUI()
 	{
