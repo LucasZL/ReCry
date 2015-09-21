@@ -1,33 +1,32 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class RayCastShoot : MonoBehaviour {
+public class RayCastShoot : MonoBehaviour
+{
 
-    float maxRange = 80;
-    RaycastHit hit;
-	// Use this for initialization
-	void Start ()
+    float maxRange;
+
+    // Update is called once per frame
+    void Update()
     {
-	
-	}
-	
-	// Update is called once per frame
-	void Update ()
-    {
-	
-	}
+        RayCastFire();
+    }
 
     void RayCastFire()
     {
-        Ray RayCast = new Ray(this.transform.position, Vector3.forward);
-
         if (Input.GetKey(KeyCode.Mouse0))
         {
-            if (Physics.Raycast(RayCast, out hit, maxRange))
+            RaycastHit hit;
+            Ray RayCast = new Ray(this.transform.position, this.transform.forward);
+            Debug.DrawRay(this.transform.position, this.transform.forward, Color.red);
+            if (Physics.Raycast(RayCast, out hit))
             {
-                if (hit.collider.tag == "Player")
+                maxRange = hit.distance;
+                Debug.Log("Hit");
+                Debug.Log(hit.transform.tag.ToString());
+                if (hit.collider.gameObject.tag == "Player")
                 {
-
+                    Debug.Log("Penis");
                 }
             }
         }
