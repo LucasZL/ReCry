@@ -26,6 +26,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
     GameObject[] smallEnvirement;
     GameObject[] bigEnvirement;
 
+
     bool mapNeedsCorrection = false;
 
 	public virtual void Start()
@@ -189,7 +190,14 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
             int randomEnvirement = Random.Range(0, SmallEnvirementsToPlace.Length);
             if (random != 0)
             {
-                PhotonNetwork.Instantiate(SmallEnvirementsToPlace[randomEnvirement], new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, Random.Range(0.0f, 360.0f), 0.0f), 0);
+                PhotonNetwork.Instantiate(SmallEnvirementsToPlace[randomEnvirement], new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, Random.Range(0.0f, 360.0f), 0.0f), 0).transform.parent = emptyGameObject.transform.parent;
+            }
+            foreach(GameObject smallEnv in GameObject.FindGameObjectsWithTag("EnvSmall"))
+            {
+                if(smallEnv.GetComponent<PhotonView>())
+                {
+                    Destroy(smallEnv.GetComponent<PhotonView>());
+                }
             }
         }
     }
@@ -205,7 +213,14 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
             int randomEnvirement = Random.Range(0, BigEnvirementsToPlace.Length);
             if (random != 0)
             {
-                PhotonNetwork.Instantiate(BigEnvirementsToPlace[randomEnvirement], new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, Random.Range(0.0f, 360.0f), 0.0f), 0);
+                PhotonNetwork.Instantiate(BigEnvirementsToPlace[randomEnvirement], new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, Random.Range(0.0f, 360.0f), 0.0f), 0).transform.parent = emptyGameObject.transform.parent;
+            }
+        }
+        foreach (GameObject smallEnv in GameObject.FindGameObjectsWithTag("EnvBig"))
+        {
+            if (smallEnv.GetComponent<PhotonView>())
+            {
+                Destroy(smallEnv.GetComponent<PhotonView>());
             }
         }
     }
