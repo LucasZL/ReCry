@@ -31,6 +31,7 @@ public class DayNightCycle : MonoBehaviour {
             if ((SecondsOfDay + updateRaise) / updateLockCorrection > 86400)
             {
                 SecondsOfDay = 0 + ((86400 - SecondsOfDay + updateRaise) / updateLockCorrection);
+                
             }
             else
             {
