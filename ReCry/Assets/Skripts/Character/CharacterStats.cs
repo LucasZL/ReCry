@@ -12,6 +12,7 @@ public class CharacterStats : MonoBehaviour {
 	void Start ()
     {
         this.Life = 100;
+        this.LifeText = GameObject.FindWithTag("LifeText").GetComponent<Text>() as Text;
         this.LifeText.text = Life.ToString();
 	}
 	
