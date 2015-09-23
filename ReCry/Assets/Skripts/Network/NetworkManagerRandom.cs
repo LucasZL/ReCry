@@ -37,7 +37,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
     GameObject[] smallEnvirement;
     GameObject[] bigEnvirement;
     GameObject[,] Map;
-
+	GameObject[] respawnPoints;
 
     bool mapNeedsCorrection = false;
 
@@ -94,8 +94,8 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 			placeSmallEnvirement();
             placeBigEnvirement();
         }
-
-        PhotonNetwork.Instantiate("Playerprefab_Multi", new Vector3(45, 20, 38), Quaternion.identity, 0);
+		getSpawnPoints ();
+        PhotonNetwork.Instantiate("Playerprefab_Multi", respawnPoints[0].transform.position, Quaternion.identity, 0);
     }
 
     public void OnJoinedLobby()
@@ -189,7 +189,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 				}
 			}
 		}
-        CreateMapArray();
+        createMapArray();
 	}
 
     void placeSmallEnvirement()
@@ -250,7 +250,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 		return value % 2 != 0;
 	}
 
-    void RenameBridgePoints(int random, PhotonView name)
+    void renameBridgePoints(int random, PhotonView name)
     {
 
         //WayPoint[] wP = photonView.transform.gameObject.GetComponents<WayPoint>();
@@ -270,7 +270,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
         }
     }
 
-    void CreateMapArray()
+    void createMapArray()
     {
         //map = new IslandStats[mapSize, mapSize];
         Map = new GameObject[mapSize, mapSize];
@@ -332,6 +332,12 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
         //    island.GetComponent<IslandStats>().GetNeighbours(Map, mapSize);
         //}
     }
+
+	void getSpawnPoints()
+	{
+		if (respawnPoints == null)
+			respawnPoints = GameObject.FindGameObjectsWithTag("Respawn");
+	}
 
     void GenerateBridges()
     {
