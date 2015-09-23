@@ -6,17 +6,27 @@ public class CharacterStats : MonoBehaviour {
 
     public float Armor;
     public float Life;
-    private Text LifeText;
+    private Text lifeText;
+    private Text armorText;
+    public Image healthImage;
+    public Image armorImage;
 
 	// Use this for initialization
 	void Start ()
     {
         this.Life = 100;
-        this.LifeText = GameObject.FindWithTag("LifeText").GetComponent<Text>() as Text;
-	}
-	
-	// Update is called once per frame
-	void Update ()
+        this.lifeText = GameObject.FindWithTag("LifeText").GetComponent<Text>() as Text;
+        this.armorText = GameObject.FindWithTag("ArmorText").GetComponent<Text>() as Text;
+        this.healthImage = GameObject.FindWithTag("HealthUI").GetComponent<Image>() as Image;
+        this.armorImage = GameObject.FindWithTag("ArmorUI").GetComponent<Image>() as Image;
+
+        this.healthImage.sprite = Resources.Load<Sprite>("Sprites/First_aid");
+        this.armorImage.sprite = Resources.Load<Sprite>("Sprites/shield_256");
+
+    }
+
+    // Update is called once per frame
+    void Update ()
     {
         UpdateText();
         if (Life <= 0)
@@ -33,7 +43,7 @@ public class CharacterStats : MonoBehaviour {
 
     void UpdateText()
     {
-        this.LifeText.text = string.Format("Life: {0}", Life);
+        this.lifeText.text = string.Format("{0}", Life);
     }
 
 
