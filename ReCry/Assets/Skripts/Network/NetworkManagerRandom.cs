@@ -15,7 +15,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 	/// <summary>Connect automatically? If false you can set this to true later on or call ConnectUsingSettings in your own scripts.</summary>
 	public bool AutoConnect = true;
 
-	public byte Version = 1;
+	public string Version = "1.01";
 	
 	/// <summary>if we don't want to connect in Start(), we have to "remember" if we called ConnectUsingSettings()</summary>
 	private bool ConnectInUpdate = true;
@@ -59,7 +59,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 			Debug.Log("Update() was called by Unity. Scene is loaded. Let's connect to the Photon Master Server. Calling: PhotonNetwork.ConnectUsingSettings();");
 			
 			ConnectInUpdate = false;
-			PhotonNetwork.ConnectUsingSettings(Version + "."+Application.loadedLevel);
+			PhotonNetwork.ConnectUsingSettings(Version);
 		}
 		if (GameObject.FindGameObjectWithTag("Respawn"))
 		{
