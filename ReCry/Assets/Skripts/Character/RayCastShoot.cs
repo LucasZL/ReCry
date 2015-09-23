@@ -32,7 +32,7 @@ public class RayCastShoot : MonoBehaviour
                 maxRange = hit.distance;
                 if (hit.transform.gameObject.tag == "Player")
                 {
-                    Debug.Log("Penis");
+                    hit.transform.gameObject.GetComponent<CharacterStats>().GetDamage();
                 }
             }
         }
