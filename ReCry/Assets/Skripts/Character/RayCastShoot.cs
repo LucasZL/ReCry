@@ -30,9 +30,7 @@ public class RayCastShoot : MonoBehaviour
             if (Physics.Raycast(RayCast, out hit))
             {
                 maxRange = hit.distance;
-                Debug.Log("Hit");
-                Debug.Log(hit.transform.tag.ToString());
-                if (hit.collider.gameObject.tag == "Player")
+                if (hit.transform.gameObject.tag == "Player")
                 {
                     Debug.Log("Penis");
                 }
