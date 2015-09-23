@@ -99,10 +99,11 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 		if (PhotonNetwork.isMasterClient) 
 		{
 			calculateMapDimentions();
-			placeIslands();
+			placeIslands(IslandsToPlace, 0, true);
 			placeSmallEnvirement();
             placeBigEnvirement();
         }
+		placeIslands(IslandsToPlace, 40000, false);
     }
 	
     public void OnJoinedLobby()
@@ -123,25 +124,32 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 		mapSideLength = (mapSize + 1) / 2;
 	}
 	
-	void placeIslands()
+	void placeIslands(string[] islands, int yLevel, bool yRandom)
 	{
 		Vector3 position = new Vector3(0, 0, 0);
 		bool xIsOdd = false;
-		
+		int yPosition;
 		for (int x = 0; x < mapSize; x++)
 		{
 			for (int z = 0; z < mapSize; z++)
 			{
-				int yPosition = Random.Range(0, mapHightDifference);
+				if(yRandom)
+				{
+					yPosition = Random.Range(0, mapHightDifference);
+				}
+				else
+				{
+					yPosition = 0;
+				}
 				if (!isOdd(x))
 				{
 					xIsOdd = false;
-					position = new Vector3((islandSize - (islandSize / 8)) * x, yPosition, (islandSize * z) - (islandSize / 2));
+					position = new Vector3((islandSize - (islandSize / 8)) * x, yPosition - yLevel, (islandSize * z) - (islandSize / 2));
 				}
 				else
 				{
 					xIsOdd = true;
-					position = new Vector3((islandSize - (islandSize / 8)) * x, yPosition, (islandSize * z));
+					position = new Vector3((islandSize - (islandSize / 8)) * x, yPosition - yLevel, (islandSize * z));
 				}
 				
 				if (x <= (mapSize / 2) - 1)
@@ -163,14 +171,32 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 					}
 					if (z > zSpawnLineMinimum && z < mapSize - zSpawnLineMaximum)
 					{
-                        placeIsland(position);
+						if(yRandom)
+						{
+                        	placeIsland(position, islands);
+						}
+						else
+						{
+							GameObject cube = (GameObject)Instantiate(Resources.Load("Hexagon_Sand"));
+							cube.transform.position = position;
+							cube.transform.localScale = new Vector3(islandSize / 30, 0.001f, islandSize / 30);
+						}
                     }
 				}
 				
 				else if (x == (mapSize - 1) / 2)
 				{
-                    placeIsland(position);
-                }
+					if(yRandom)
+					{
+						placeIsland(position, islands);
+					}
+					else
+					{
+						GameObject cube = (GameObject)Instantiate(Resources.Load("Hexagon_Sand"));
+						cube.transform.position = position;
+						cube.transform.localScale = new Vector3(islandSize / 30, 0.001f, islandSize / 30);
+					}
+				}
 				
 				else if (x >= (mapSize / 2) - 1)
 				{
@@ -191,12 +217,24 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 					}
 					if (z > zSpawnLineMinimum && z < mapSize - zSpawnLineMaximum)
 					{
-                        placeIsland(position);
-                    }
+						if(yRandom)
+						{
+							placeIsland(position, islands);
+						}
+						else
+						{
+							GameObject cube = (GameObject)Instantiate(Resources.Load("Hexagon_Sand"));
+							cube.transform.position = position;
+							cube.transform.localScale = new Vector3(islandSize / 30, 0.001f, islandSize / 30);
+						}
+					}
 				}
 			}
 		}
-        createMapArray();
+		if (yRandom) 
+		{
+        	createMapArray();
+		}
 	}
 
     void placeSmallEnvirement()
@@ -245,11 +283,11 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
         }
     }
 
-    void placeIsland(Vector3 position)
+    void placeIsland(Vector3 position, string[] islands)
     {
-        int random = Random.Range(0, IslandsToPlace.Length);
+		int random = Random.Range(0, islands.Length);
         int rotation = Random.Range(0, 5);
-        PhotonNetwork.Instantiate(IslandsToPlace[random], position, Quaternion.Euler(0.0f, rotation * 60, 0.0f), 0);
+		PhotonNetwork.Instantiate(islands[random], position, Quaternion.Euler(0.0f, rotation * 60, 0.0f), 0);
     }
 
     bool isOdd(int value)
