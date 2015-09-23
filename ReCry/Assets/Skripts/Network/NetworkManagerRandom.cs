@@ -38,7 +38,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
     GameObject[] bigEnvirement;
     GameObject[,] Map;
 	GameObject[] respawnPoints;
-
+	bool playerSpawned = false;
     bool mapNeedsCorrection = false;
 
     public virtual void Start()
@@ -60,6 +60,15 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 			
 			ConnectInUpdate = false;
 			PhotonNetwork.ConnectUsingSettings(Version + "."+Application.loadedLevel);
+		}
+		if (GameObject.FindGameObjectWithTag("Respawn"))
+		{
+			getSpawnPoints();
+			if(!playerSpawned)
+			{
+				PhotonNetwork.Instantiate("Playerprefab_Multi", respawnPoints[0].transform.position, Quaternion.identity, 0);
+				playerSpawned = true;
+			}
 		}
 	}
 	
@@ -94,13 +103,11 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 			placeSmallEnvirement();
             placeBigEnvirement();
         }
-		getSpawnPoints ();
-        PhotonNetwork.Instantiate("Playerprefab_Multi", respawnPoints[0].transform.position, Quaternion.identity, 0);
     }
-
+	
     public void OnJoinedLobby()
 	{
-		Debug.Log("OnJoinedLobby(). Use a GUI to show existing rooms available in PhotonNetwork.GetRoomList().");
+		Utility.roomInfo = PhotonNetwork.GetRoomList();
 	}
 
 	void calculateMapDimentions()
