@@ -31,13 +31,17 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
     public string[] SmallEnvirementsToPlace;
     public string[] BigEnvirementsToPlace;
 
+    //IslandStats[,] map;
+    //IslandStats islandStats;
+
     GameObject[] smallEnvirement;
     GameObject[] bigEnvirement;
+    GameObject[,] Map;
 
 
     bool mapNeedsCorrection = false;
 
-	public virtual void Start()
+    public virtual void Start()
 	{
 		PhotonNetwork.autoJoinLobby = false;    // we join randomly. always. no need to join a lobby to get the list of rooms.
         mapHightDifference = (int)(mapHightDifference * (islandSize / 10));
@@ -185,6 +189,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 				}
 			}
 		}
+        CreateMapArray();
 	}
 
     void placeSmallEnvirement()
@@ -236,11 +241,100 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
     void placeIsland(Vector3 position)
     {
         int random = Random.Range(0, IslandsToPlace.Length);
-        PhotonNetwork.Instantiate(IslandsToPlace[random], position, Quaternion.Euler(0.0f, Random.Range(0.0f, 360.0f), 0.0f), 0);
+        int rotation = Random.Range(0, 5);
+        PhotonNetwork.Instantiate(IslandsToPlace[random], position, Quaternion.Euler(0.0f, rotation * 60, 0.0f), 0);
     }
 
     bool isOdd(int value)
 	{
 		return value % 2 != 0;
 	}
+
+    void RenameBridgePoints(int random, PhotonView name)
+    {
+
+        //WayPoint[] wP = photonView.transform.gameObject.GetComponents<WayPoint>();
+
+        switch (random)
+        {
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+        }
+    }
+
+    void CreateMapArray()
+    {
+        //map = new IslandStats[mapSize, mapSize];
+        Map = new GameObject[mapSize, mapSize];
+
+        List<GameObject> islands = new List<GameObject>();
+        GameObject[] islandArray = GameObject.FindGameObjectsWithTag("Env");
+        GameObject toCopyIsland = islandArray[0];
+        int z = 0;
+        int x = 0;
+        int currentMapWidth = (mapSize / 2) +1;
+
+        foreach (var island in islandArray)
+        {
+            islands.Add(island);
+        }
+
+        for (int i = 0; i < islands.Count; i++)
+        {
+            foreach (var island in islands)
+            {
+                if (island.transform.position.x <= toCopyIsland.transform.position.x)
+                {
+                    if (island.transform.position.z <= toCopyIsland.transform.position.z)
+                    {
+                        toCopyIsland = island;
+                    }
+                }
+            }
+
+            if (z < mapSize / 2)
+            {
+                if (x == currentMapWidth)
+                {
+                    z++;
+                    currentMapWidth++;
+                    x = 0;
+                }
+            }
+            else if (z >= mapSize / 2)
+            {
+                if (x == currentMapWidth)
+                {
+                    z++;
+                    currentMapWidth--;
+                    x = 0;
+                }
+            }
+            //map[x, z] = new IslandStats(toCopyIsland, x, z);
+            //map[x, z] = GameObject.Instantiate(islandStats);
+            //map[x, z].GetSomeStats(toCopyIsland, x, z);
+            Map[x, z] = toCopyIsland;
+            Map[x, z].AddComponent<IslandStats>();
+            Map[x, z].GetComponent<IslandStats>().GetSomeStats(toCopyIsland, x, z);
+            x++;
+        }
+
+        //foreach (var island in Map)
+        //{
+        //    island.GetComponent<IslandStats>().GetNeighbours(Map, mapSize);
+        //}
+    }
+
+    void GenerateBridges()
+    {
+        Map[0, 0].GetComponentInChildren<WayPoint>();
+    }
 }
