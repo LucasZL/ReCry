@@ -321,10 +321,18 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
         Map = new GameObject[mapSize, mapSize];
 
         List<GameObject> islands = new List<GameObject>();
+        List<GameObject> islandList = new List<GameObject>();
+        List<float> lines = new List<float>();
+        List<GameObject> clearList = new List<GameObject>();
         GameObject[] islandArray = GameObject.FindGameObjectsWithTag("Env");
         GameObject toCopyIsland = islandArray[0];
         int z = 0;
         int x = 0;
+        int counter;
+        float firstLine;
+        float secondLine;
+        float copyIslandX;
+        int islandCount;
         int currentMapWidth = (mapSize / 2) +1;
 
         foreach (var island in islandArray)
@@ -332,50 +340,110 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
             islands.Add(island);
         }
 
-        for (int i = 0; i < islands.Count; i++)
+        foreach (var island in islands)
         {
+            counter = 0;
+            if (lines.Count == 0)
+            {
+                lines.Add(island.transform.position.z);
+            }
+
+            foreach (var line in lines)
+            {
+                if (island.transform.position.z == line)
+                {
+                    break;
+                }
+                else
+                {
+                    counter++;
+                }
+            }
+
+            if (counter == lines.Count)
+            {
+                lines.Add(island.transform.position.z);
+            }
+        }
+
+        for (int i = 0; i < ((lines.Count / 2) + 1); i++)
+        {
+            firstLine = 2000;
+            secondLine = 2000;
+
             foreach (var island in islands)
             {
-                if (island.transform.position.x <= toCopyIsland.transform.position.x)
+                if (island.transform.position.z <= firstLine)
                 {
-                    if (island.transform.position.z <= toCopyIsland.transform.position.z)
+                    if (island.transform.position.z == firstLine)
                     {
-                        toCopyIsland = island;
+                        islandList.Add(island);
+                    }
+                    else
+                    {
+                        islandList.Add(island);
+                        firstLine = island.transform.position.z;
+                    }
+                }
+                else if (island.transform.position.z <= secondLine)
+                {
+                    if (island.transform.position.z == secondLine)
+                    {
+                        islandList.Add(island);
+                    }
+                    else
+                    {
+                        islandList.Add(island);
+                        secondLine = island.transform.position.z;
                     }
                 }
             }
 
-            if (z < mapSize / 2)
-            {
-                if (x == currentMapWidth)
-                {
-                    z++;
-                    currentMapWidth++;
-                    x = 0;
-                }
-            }
-            else if (z >= mapSize / 2)
-            {
-                if (x == currentMapWidth)
-                {
-                    z++;
-                    currentMapWidth--;
-                    x = 0;
-                }
-            }
-            //map[x, z] = new IslandStats(toCopyIsland, x, z);
-            //map[x, z] = GameObject.Instantiate(islandStats);
-            //map[x, z].GetSomeStats(toCopyIsland, x, z);
-            Map[x, z] = toCopyIsland;
-            Map[x, z].AddComponent<IslandStats>();
-            Map[x, z].GetComponent<IslandStats>().GetSomeStats(toCopyIsland, x, z);
-            x++;
-        }
 
-        //foreach (var island in Map)
-        //{
-        //    island.GetComponent<IslandStats>().GetNeighbours(Map, mapSize);
-        //}
+            foreach (var island in islandList)
+            {
+                if (island.transform.position.z != firstLine && island.transform.position.z != secondLine)
+                {
+                    clearList.Add(island);
+                }
+            }
+
+            foreach (var island in clearList)
+            {
+                islandList.Remove(island);
+            }
+
+            foreach (var island in islandList)
+            {
+                islands.Remove(island);
+            }
+
+            islandCount = islandList.Count;
+            clearList.Clear();
+
+            for (int j = 0; j < islandCount; j++)
+            {
+                copyIslandX = 2000;
+
+                foreach (var island in islandList)
+                {
+                    if (island.transform.position.x < copyIslandX)
+                    {
+                        toCopyIsland = island;
+                        copyIslandX = island.transform.position.x;
+                    }
+                }
+
+                Map[x, z] = toCopyIsland;
+                Map[x, z].AddComponent<IslandStats>();
+                Map[x, z].GetComponent<IslandStats>().GetSomeStats(toCopyIsland, x, z);
+                islandList.Remove(toCopyIsland);
+                x++;
+            }
+
+            z++;
+            x = 0;
+        }
     }
 
 	void getSpawnPoints()
