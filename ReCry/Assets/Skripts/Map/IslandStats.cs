@@ -23,7 +23,6 @@ public class IslandStats : MonoBehaviour
 
     public IslandStats(GameObject Island, int x, int z)
     {
-        neighbours = new List<GameObject>();
         this.island = Island;
         this.x = x;
         this.z = z;
@@ -31,7 +30,6 @@ public class IslandStats : MonoBehaviour
 
     void Start()
     {
-        neighbours = new List<GameObject>();
     }
 
     public void GetSomeStats(GameObject Island, int x, int z)
@@ -52,56 +50,76 @@ public class IslandStats : MonoBehaviour
 
     }
 
-    public void GetNeighbours(GameObject[,] map, int mapLenght)
+    public void GetNeighbours(GameObject[,] map)
     {
-        int mapWidth = GetMapWidth(mapLenght);
+        neighbours = new List<GameObject>();
 
-        if (x < (mapLenght / 2) + 1)
+        if (gameObject.transform.position.z % 60 == 0)
         {
-            if (x - 1 >= 0 && z - 1 >= 0)
-                neighbours.Add(map[x - 1, z - 1]);
-            if (z - 1 >= 0)
-                neighbours.Add(map[x, z - 1]);
-            if (x + 1 < mapWidth)
-                neighbours.Add(map[x + 1, z]);
-            if (x + 1 < mapLenght && z + 1 < mapWidth)
-                neighbours.Add(map[x + 1, z + 1]);
-            if (z + 1 < mapLenght)
-                neighbours.Add(map[x, z + 1]);
-            if (x - 1 >= 0)
-                neighbours.Add(map[x - 1, z]);
+            foreach (var island in map)
+            {
+                if (island != null)
+                {
+                    if (island.GetComponent<IslandStats>().x == x - 1 && island.GetComponent<IslandStats>().z == z)
+                    {
+                        neighbours.Add(map[x - 1, z]);
+                    }
+                    else if (island.GetComponent<IslandStats>().z == z - 1 && island.GetComponent<IslandStats>().x == x)
+                    {
+                        neighbours.Add(map[x, z - 1]);
+                    }
+                    else if (island.GetComponent<IslandStats>().x == x + 1 && island.GetComponent<IslandStats>().z == z)
+                    {
+                        neighbours.Add(map[x + 1, z]);
+                    }
+                    else if (island.GetComponent<IslandStats>().x == x + 1 && island.GetComponent<IslandStats>().z == z + 1)
+                    {
+                        neighbours.Add(map[x + 1, z + 1]);
+                    }
+                    else if (island.GetComponent<IslandStats>().z == z + 1 && island.GetComponent<IslandStats>().x == x)
+                    {
+                        neighbours.Add(map[x, z + 1]);
+                    }
+                    else if (island.GetComponent<IslandStats>().z == z + 1 && island.GetComponent<IslandStats>().x == x - 1)
+                    {
+                        neighbours.Add(map[x - 1, z + 1]);
+                    }
+                }
+            }
         }
 
-        if (x == (mapLenght / 2) + 1)
+        else
         {
-            if (x - 1 >= 0 && z - 1 >= 0)
-                neighbours.Add(map[x - 1, z - 1]);
-            if (z - 1 >= 0)
-                neighbours.Add(map[x, z - 1]);
-            if (x + 1 < islandWidth)
-                neighbours.Add(map[x + 1, z]);
-            if (z + 1 < islandWidth)
-                neighbours.Add(map[x, z + 1]);
-            if (z + 1 < islandLenght && x - 1 >= 0)
-                neighbours.Add(map[x - 1, z + 1]);
-            if (x - 1 >= 0)
-                neighbours.Add(map[x - 1, z]);
-        }
-
-        if (x > (mapLenght / 2) + 1)
-        {
-            if (z - 1 >= 0)
-                neighbours.Add(map[x, z - 1]);
-            if (z - 1 >= 0 && x + 1 < mapWidth)
-                neighbours.Add(map[x + 1, z - 1]);
-            if (x + 1 < mapWidth)
-                neighbours.Add(map[x + 1, z]);
-            if (z + 1 < mapLenght)
-                neighbours.Add(map[x, z + 1]);
-            if (z + 1 < mapLenght && x - 1 >= 0)
-                neighbours.Add(map[x - 1, z + 1]);
-            if (x - 1 >= 0)
-                neighbours.Add(map[x - 1, z]);
+            foreach (var island in map)
+            {
+                if (island != null)
+                {
+                    if (island.GetComponent<IslandStats>().x == x - 1&& island.GetComponent<IslandStats>().z == z)
+                    {
+                        neighbours.Add(map[x - 1, z]);
+                    }
+                    else if (island.GetComponent<IslandStats>().z == z - 1 && island.GetComponent<IslandStats>().x == x + 1)
+                    {
+                        neighbours.Add(map[x + 1, z - 1]);
+                    }
+                    else if (island.GetComponent<IslandStats>().z == z - 1 && island.GetComponent<IslandStats>().x == x)
+                    {
+                        neighbours.Add(map[x, z - 1]);
+                    }
+                    else if (island.GetComponent<IslandStats>().z == z - 1 && island.GetComponent<IslandStats>().x == x - 1)
+                    {
+                        neighbours.Add(map[x - 1, z - 1]);
+                    }
+                    else if (island.GetComponent<IslandStats>().x == x + 1 && island.GetComponent<IslandStats>().z == z)
+                    {
+                        neighbours.Add(map[x + 1, z]);
+                    }
+                    else if (island.GetComponent<IslandStats>().z == z + 1 && island.GetComponent<IslandStats>().x == x)
+                    {
+                        neighbours.Add(map[x, z + 1]);
+                    }
+                }
+            }
         }
     }
 

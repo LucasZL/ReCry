@@ -434,6 +434,11 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                     }
                 }
 
+                if (islandList.Count != (lines.Count / 2) + 1 && x == 0)
+                {
+                    x += (((lines.Count / 2) + 1) - islandList.Count) / 2;
+                }
+
                 Map[x, z] = toCopyIsland;
                 Map[x, z].AddComponent<IslandStats>();
                 Map[x, z].GetComponent<IslandStats>().GetSomeStats(toCopyIsland, x, z);
@@ -443,6 +448,14 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 
             z++;
             x = 0;
+        }
+
+        foreach (var island in Map)
+        {
+            if (island != null)
+            {
+                island.GetComponent<IslandStats>().GetNeighbours(Map);
+            }
         }
     }
 
