@@ -13,10 +13,11 @@ using System.Collections.Generic;
 public class IslandStats : MonoBehaviour
 {
 
-    int x, y, z;
+    public int x, y, z;
     int islandWidth, islandLenght;
     int toBeFilled;
-    List<GameObject> neighbours;
+    public List<GameObject> neighbours;
+    public List<GameObject> bridgePoints;
     WayPoint[,] wayPointMesh;
     WayPoint wayPoint;
     GameObject island;
@@ -123,6 +124,30 @@ public class IslandStats : MonoBehaviour
         }
     }
 
+    public void GetBridgePoints()
+    {
+        Transform bridgeTrans;
+        List<GameObject> pointList = new List<GameObject>();
+
+        bridgeTrans = island.transform.FindChild("BridgePoint1");
+        pointList.Add(bridgeTrans.gameObject);
+
+        bridgeTrans = island.transform.FindChild("BridgePoint2");
+        pointList.Add(bridgeTrans.gameObject);
+
+        bridgeTrans = island.transform.FindChild("BridgePoint3");
+        pointList.Add(bridgeTrans.gameObject);
+
+        bridgeTrans = island.transform.FindChild("BridgePoint4");
+        pointList.Add(bridgeTrans.gameObject);
+
+        bridgeTrans = island.transform.FindChild("BridgePoint5");
+        pointList.Add(bridgeTrans.gameObject);
+
+        bridgeTrans = island.transform.FindChild("BridgePoint6");
+        pointList.Add(bridgeTrans.gameObject);
+    }
+
     void GetWayPointMesh()
     {
         wayPointMesh = new WayPoint[islandWidth - 1, islandLenght - 1];
@@ -132,7 +157,7 @@ public class IslandStats : MonoBehaviour
             for (int z = 0; z < islandLenght; z++)
             {
                 //wayPointMesh[x, z] = GameObject.Instantiate(WayPoint , new Vector3(x - islandWidth / 2, toBeFilled, z - islandLenght / 2), Quaternion.Euler(0.0f, Random.Range(0.0f, 360.0f), 0.0f));
-                wayPointMesh[x, z] = new WayPoint(islandWidth, islandLenght, x, z);
+                //wayPointMesh[x, z] = new WayPoint(islandWidth, islandLenght, x, z);
             }
         }
 

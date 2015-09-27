@@ -234,6 +234,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 		if (yRandom) 
 		{
         	createMapArray();
+            //GetOtherBridgePoint();
 		}
 	}
 
@@ -295,23 +296,180 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 		return value % 2 != 0;
 	}
 
-    void renameBridgePoints(int random, PhotonView name)
+    void renameBridgePoints(List<GameObject> points, GameObject island)
     {
+        int sw = (int)island.transform.rotation.y / 60;
 
-        //WayPoint[] wP = photonView.transform.gameObject.GetComponents<WayPoint>();
-
-        switch (random)
+        switch (sw)
         {
             case 1:
+                foreach (var point in points)
+                {
+                    WayPoint wp = point.GetComponent<WayPoint>();
+
+                    switch (wp.bridgeNumber)
+                    {
+                        case 1: wp.bridgeNumber++;
+                            point.name = "BridgePoint2";
+                            break;
+                        case 2: wp.bridgeNumber++;
+                            point.name = "BridgePoint3";
+                            break;
+                        case 3: wp.bridgeNumber++;
+                            point.name = "BridgePoint4";
+                            break;
+                        case 4: wp.bridgeNumber++;
+                            point.name = "BridgePoint5";
+                            break;
+                        case 5: wp.bridgeNumber++;
+                            point.name = "BridgePoint6";
+                            break;
+                        case 6: wp.bridgeNumber = 1;
+                            point.name = "BridgePoint1";
+                            break;
+                    }
+                }
                 break;
             case 2:
+                foreach (var point in points)
+                {
+                    WayPoint wp = point.GetComponent<WayPoint>();
+
+                    switch (wp.bridgeNumber)
+                    {
+                        case 1:
+                            wp.bridgeNumber = 3;
+                            point.name = "BridgePoint3";
+                            break;
+                        case 2:
+                            wp.bridgeNumber = 4;
+                            point.name = "BridgePoint4";
+                            break;
+                        case 3:
+                            wp.bridgeNumber = 5;
+                            point.name = "BridgePoint5";
+                            break;
+                        case 4:
+                            wp.bridgeNumber = 6;
+                            point.name = "BridgePoint6";
+                            break;
+                        case 5:
+                            wp.bridgeNumber = 1;
+                            point.name = "BridgePoint1";
+                            break;
+                        case 6:
+                            wp.bridgeNumber = 2;
+                            point.name = "BridgePoint2";
+                            break;
+                    }
+                }
                 break;
             case 3:
+                foreach (var point in points)
+                {
+                    WayPoint wp = point.GetComponent<WayPoint>();
+
+                    switch (wp.bridgeNumber)
+                    {
+                        case 1:
+                            wp.bridgeNumber = 4;
+                            point.name = "BridgePoint4";
+                            break;
+                        case 2:
+                            wp.bridgeNumber = 5;
+                            point.name = "BridgePoint5";
+                            break;
+                        case 3:
+                            wp.bridgeNumber = 6;
+                            point.name = "BridgePoint6";
+                            break;
+                        case 4:
+                            wp.bridgeNumber = 1;
+                            point.name = "BridgePoint1";
+                            break;
+                        case 5:
+                            wp.bridgeNumber = 2;
+                            point.name = "BridgePoint2";
+                            break;
+                        case 6:
+                            wp.bridgeNumber = 3;
+                            point.name = "BridgePoint3";
+                            break;
+                    }
+                }
                 break;
             case 4:
+                foreach (var point in points)
+                {
+                    WayPoint wp = point.GetComponent<WayPoint>();
+
+                    switch (wp.bridgeNumber)
+                    {
+                        case 1:
+                            wp.bridgeNumber = 5;
+                            point.name = "BridgePoint5";
+                            break;
+                        case 2:
+                            wp.bridgeNumber = 6;
+                            point.name = "BridgePoint6";
+                            break;
+                        case 3:
+                            wp.bridgeNumber = 1;
+                            point.name = "BridgePoint1";
+                            break;
+                        case 4:
+                            wp.bridgeNumber = 2;
+                            point.name = "BridgePoint2";
+                            break;
+                        case 5:
+                            wp.bridgeNumber = 3;
+                            point.name = "BridgePoint3";
+                            break;
+                        case 6:
+                            wp.bridgeNumber = 4;
+                            point.name = "BridgePoint4";
+                            break;
+                    }
+                }
                 break;
             case 5:
+                foreach (var point in points)
+                {
+                    WayPoint wp = point.GetComponent<WayPoint>();
+
+                    switch (wp.bridgeNumber)
+                    {
+                        case 1:
+                            wp.bridgeNumber = 6;
+                            point.name = "BridgePoint6";
+                            break;
+                        case 2:
+                            wp.bridgeNumber = 1;
+                            point.name = "BridgePoint1";
+                            break;
+                        case 3:
+                            wp.bridgeNumber = 2;
+                            point.name = "BridgePoint2";
+                            break;
+                        case 4:
+                            wp.bridgeNumber = 3;
+                            point.name = "BridgePoint3";
+                            break;
+                        case 5:
+                            wp.bridgeNumber = 4;
+                            point.name = "BridgePoint4";
+                            break;
+                        case 6:
+                            wp.bridgeNumber = 5;
+                            point.name = "BridgePoint5";
+                            break;
+                    }
+                }
                 break;
+
+            default:
+                break;
+
         }
     }
 
@@ -465,8 +623,169 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 			respawnPoints = GameObject.FindGameObjectsWithTag("Respawn");
 	}
 
-    void GenerateBridges()
+    void GetOtherBridgePoint()
     {
-        Map[0, 0].GetComponentInChildren<WayPoint>();
+        IslandStats IS;
+        WayPoint wp;
+        List<GameObject> pointList = new List<GameObject>();
+
+        foreach (var island in Map)
+        {
+            if (island != null)
+            {
+                island.GetComponent<IslandStats>().GetBridgePoints();
+
+                renameBridgePoints(island.GetComponent<IslandStats>().bridgePoints, island);
+            }
+        }
+
+        foreach (var island in Map)
+        {
+            IS = island.GetComponent<IslandStats>();
+
+            foreach (var point in pointList)
+            {
+                wp = point.GetComponent<WayPoint>();
+
+                switch (wp.bridgeNumber)
+                {
+                    case 1:
+                        if (!isOdd(IS.x))
+                        {
+                            foreach (var neighbourIsland in IS.neighbours)
+                            {
+                                if (neighbourIsland.GetComponent<IslandStats>().z == IS.z + 1 && neighbourIsland.GetComponent<IslandStats>().x == IS.x)
+                                {
+                                    wp.otherBridgePoint = neighbourIsland.transform.FindChild("BridgePoint4").gameObject;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            foreach (var neighbour in IS.neighbours)
+                            {
+                                if (neighbour.GetComponent<IslandStats>().z == IS.z + 1 && neighbour.GetComponent<IslandStats>().x == IS.x)
+                                {
+                                    wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint4").gameObject;
+                                }
+                            }
+                        }
+                        break;
+                    case 2:
+                        if (!isOdd(IS.x))
+                        {
+                            foreach (var neighbour in IS.neighbours)
+                            {
+                                if (neighbour.GetComponent<IslandStats>().z == IS.z + 1 && neighbour.GetComponent<IslandStats>().x == IS.x + 1)
+                                {
+                                    wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint5").gameObject;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            foreach (var neighbour in IS.neighbours)
+                            {
+                                if (neighbour.GetComponent<IslandStats>().z == IS.z && neighbour.GetComponent<IslandStats>().x == IS.x + 1)
+                                {
+                                    wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint5").gameObject;
+                                }
+                            }
+                        }
+                        break;
+                    case 3:
+                        if (!isOdd(IS.x))
+                        {
+                            foreach (var neighbour in IS.neighbours)
+                            {
+                                if (neighbour.GetComponent<IslandStats>().z == IS.z && neighbour.GetComponent<IslandStats>().x == IS.x + 1)
+                                {
+                                    wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint6").gameObject;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            foreach (var neighbour in IS.neighbours)
+                            {
+                                if (neighbour.GetComponent<IslandStats>().z == IS.z - 1 && neighbour.GetComponent<IslandStats>().x == IS.x + 1)
+                                {
+                                    wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint6").gameObject;
+                                }
+                            }
+                        }
+                        break;
+                    case 4:
+                        if (!isOdd(IS.x))
+                        {
+                            foreach (var neighbour in IS.neighbours)
+                            {
+                                if (neighbour.GetComponent<IslandStats>().z == IS.z - 1 && neighbour.GetComponent<IslandStats>().x == IS.x)
+                                {
+                                    wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint1").gameObject;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            foreach (var neighbour in IS.neighbours)
+                            {
+                                if (neighbour.GetComponent<IslandStats>().z == IS.z - 1 && neighbour.GetComponent<IslandStats>().x == IS.x)
+                                {
+                                    wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint1").gameObject;
+                                }
+                            }
+                        }
+                        break;
+                    case 5:
+                        if (!isOdd(IS.x))
+                        {
+                            foreach (var neighbour in IS.neighbours)
+                            {
+                                if (neighbour.GetComponent<IslandStats>().z == IS.z && neighbour.GetComponent<IslandStats>().x == IS.x - 1)
+                                {
+                                    wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint2").gameObject;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            foreach (var neighbour in IS.neighbours)
+                            {
+                                if (neighbour.GetComponent<IslandStats>().z == IS.z - 1 && neighbour.GetComponent<IslandStats>().x == IS.x - 1)
+                                {
+                                    wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint2").gameObject;
+                                }
+                            }
+                        }
+                        break;
+                    case 6:
+                        if (!isOdd(IS.x))
+                        {
+                            foreach (var neighbour in IS.neighbours)
+                            {
+                                if (neighbour.GetComponent<IslandStats>().z == IS.z + 1 && neighbour.GetComponent<IslandStats>().x == IS.x - 1)
+                                {
+                                    wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint3").gameObject;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            foreach (var neighbour in IS.neighbours)
+                            {
+                                if (neighbour.GetComponent<IslandStats>().z == IS.z && neighbour.GetComponent<IslandStats>().x == IS.x - 1)
+                                {
+                                    wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint3").gameObject;
+                                }
+                            }
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        }
     }
 }

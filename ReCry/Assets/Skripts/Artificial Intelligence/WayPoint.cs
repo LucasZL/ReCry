@@ -16,17 +16,13 @@ public class WayPoint : MonoBehaviour
     int z;
     int islandWidth, islandLenght;
     List<WayPoint> neighbours;
+    public GameObject otherBridgePoint;
     public bool bridge = false;
     public int bridgeNumber;
 
-    public WayPoint(int islandWidth, int islandLenght, int x, int z)
+    public WayPoint()
     {
         neighbours = new List<WayPoint>();
-
-        this.islandLenght = islandLenght;
-        this.islandWidth = islandWidth;
-        this.x = x;
-        this.z = z;
     }
 
     void Start()
