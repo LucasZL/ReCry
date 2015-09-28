@@ -234,7 +234,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 		if (yRandom) 
 		{
         	createMapArray();
-            //GetOtherBridgePoint();
+            GetOtherBridgePoint();
 		}
 	}
 
@@ -641,149 +641,152 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 
         foreach (var island in Map)
         {
-            IS = island.GetComponent<IslandStats>();
-
-            foreach (var point in pointList)
+            if (island != null)
             {
-                wp = point.GetComponent<WayPoint>();
+                IS = island.GetComponent<IslandStats>();
 
-                switch (wp.bridgeNumber)
+                foreach (var point in pointList)
                 {
-                    case 1:
-                        if (!isOdd(IS.x))
-                        {
-                            foreach (var neighbourIsland in IS.neighbours)
-                            {
-                                if (neighbourIsland.GetComponent<IslandStats>().z == IS.z + 1 && neighbourIsland.GetComponent<IslandStats>().x == IS.x)
-                                {
-                                    wp.otherBridgePoint = neighbourIsland.transform.FindChild("BridgePoint4").gameObject;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            foreach (var neighbour in IS.neighbours)
-                            {
-                                if (neighbour.GetComponent<IslandStats>().z == IS.z + 1 && neighbour.GetComponent<IslandStats>().x == IS.x)
-                                {
-                                    wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint4").gameObject;
-                                }
-                            }
-                        }
-                        break;
-                    case 2:
-                        if (!isOdd(IS.x))
-                        {
-                            foreach (var neighbour in IS.neighbours)
-                            {
-                                if (neighbour.GetComponent<IslandStats>().z == IS.z + 1 && neighbour.GetComponent<IslandStats>().x == IS.x + 1)
-                                {
-                                    wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint5").gameObject;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            foreach (var neighbour in IS.neighbours)
-                            {
-                                if (neighbour.GetComponent<IslandStats>().z == IS.z && neighbour.GetComponent<IslandStats>().x == IS.x + 1)
-                                {
-                                    wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint5").gameObject;
-                                }
-                            }
-                        }
-                        break;
-                    case 3:
-                        if (!isOdd(IS.x))
-                        {
-                            foreach (var neighbour in IS.neighbours)
-                            {
-                                if (neighbour.GetComponent<IslandStats>().z == IS.z && neighbour.GetComponent<IslandStats>().x == IS.x + 1)
-                                {
-                                    wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint6").gameObject;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            foreach (var neighbour in IS.neighbours)
-                            {
-                                if (neighbour.GetComponent<IslandStats>().z == IS.z - 1 && neighbour.GetComponent<IslandStats>().x == IS.x + 1)
-                                {
-                                    wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint6").gameObject;
-                                }
-                            }
-                        }
-                        break;
-                    case 4:
-                        if (!isOdd(IS.x))
-                        {
-                            foreach (var neighbour in IS.neighbours)
-                            {
-                                if (neighbour.GetComponent<IslandStats>().z == IS.z - 1 && neighbour.GetComponent<IslandStats>().x == IS.x)
-                                {
-                                    wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint1").gameObject;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            foreach (var neighbour in IS.neighbours)
-                            {
-                                if (neighbour.GetComponent<IslandStats>().z == IS.z - 1 && neighbour.GetComponent<IslandStats>().x == IS.x)
-                                {
-                                    wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint1").gameObject;
-                                }
-                            }
-                        }
-                        break;
-                    case 5:
-                        if (!isOdd(IS.x))
-                        {
-                            foreach (var neighbour in IS.neighbours)
-                            {
-                                if (neighbour.GetComponent<IslandStats>().z == IS.z && neighbour.GetComponent<IslandStats>().x == IS.x - 1)
-                                {
-                                    wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint2").gameObject;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            foreach (var neighbour in IS.neighbours)
-                            {
-                                if (neighbour.GetComponent<IslandStats>().z == IS.z - 1 && neighbour.GetComponent<IslandStats>().x == IS.x - 1)
-                                {
-                                    wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint2").gameObject;
-                                }
-                            }
-                        }
-                        break;
-                    case 6:
-                        if (!isOdd(IS.x))
-                        {
-                            foreach (var neighbour in IS.neighbours)
-                            {
-                                if (neighbour.GetComponent<IslandStats>().z == IS.z + 1 && neighbour.GetComponent<IslandStats>().x == IS.x - 1)
-                                {
-                                    wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint3").gameObject;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            foreach (var neighbour in IS.neighbours)
-                            {
-                                if (neighbour.GetComponent<IslandStats>().z == IS.z && neighbour.GetComponent<IslandStats>().x == IS.x - 1)
-                                {
-                                    wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint3").gameObject;
-                                }
-                            }
-                        }
-                        break;
+                    wp = point.GetComponent<WayPoint>();
 
-                    default:
-                        break;
+                    switch (wp.bridgeNumber)
+                    {
+                        case 1:
+                            if (!isOdd(IS.x))
+                            {
+                                foreach (var neighbourIsland in IS.neighbours)
+                                {
+                                    if (neighbourIsland.GetComponent<IslandStats>().z == IS.z + 1 && neighbourIsland.GetComponent<IslandStats>().x == IS.x)
+                                    {
+                                        wp.otherBridgePoint = neighbourIsland.transform.FindChild("BridgePoint4").gameObject;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                foreach (var neighbour in IS.neighbours)
+                                {
+                                    if (neighbour.GetComponent<IslandStats>().z == IS.z + 1 && neighbour.GetComponent<IslandStats>().x == IS.x)
+                                    {
+                                        wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint4").gameObject;
+                                    }
+                                }
+                            }
+                            break;
+                        case 2:
+                            if (!isOdd(IS.x))
+                            {
+                                foreach (var neighbour in IS.neighbours)
+                                {
+                                    if (neighbour.GetComponent<IslandStats>().z == IS.z + 1 && neighbour.GetComponent<IslandStats>().x == IS.x + 1)
+                                    {
+                                        wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint5").gameObject;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                foreach (var neighbour in IS.neighbours)
+                                {
+                                    if (neighbour.GetComponent<IslandStats>().z == IS.z && neighbour.GetComponent<IslandStats>().x == IS.x + 1)
+                                    {
+                                        wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint5").gameObject;
+                                    }
+                                }
+                            }
+                            break;
+                        case 3:
+                            if (!isOdd(IS.x))
+                            {
+                                foreach (var neighbour in IS.neighbours)
+                                {
+                                    if (neighbour.GetComponent<IslandStats>().z == IS.z && neighbour.GetComponent<IslandStats>().x == IS.x + 1)
+                                    {
+                                        wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint6").gameObject;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                foreach (var neighbour in IS.neighbours)
+                                {
+                                    if (neighbour.GetComponent<IslandStats>().z == IS.z - 1 && neighbour.GetComponent<IslandStats>().x == IS.x + 1)
+                                    {
+                                        wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint6").gameObject;
+                                    }
+                                }
+                            }
+                            break;
+                        case 4:
+                            if (!isOdd(IS.x))
+                            {
+                                foreach (var neighbour in IS.neighbours)
+                                {
+                                    if (neighbour.GetComponent<IslandStats>().z == IS.z - 1 && neighbour.GetComponent<IslandStats>().x == IS.x)
+                                    {
+                                        wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint1").gameObject;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                foreach (var neighbour in IS.neighbours)
+                                {
+                                    if (neighbour.GetComponent<IslandStats>().z == IS.z - 1 && neighbour.GetComponent<IslandStats>().x == IS.x)
+                                    {
+                                        wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint1").gameObject;
+                                    }
+                                }
+                            }
+                            break;
+                        case 5:
+                            if (!isOdd(IS.x))
+                            {
+                                foreach (var neighbour in IS.neighbours)
+                                {
+                                    if (neighbour.GetComponent<IslandStats>().z == IS.z && neighbour.GetComponent<IslandStats>().x == IS.x - 1)
+                                    {
+                                        wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint2").gameObject;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                foreach (var neighbour in IS.neighbours)
+                                {
+                                    if (neighbour.GetComponent<IslandStats>().z == IS.z - 1 && neighbour.GetComponent<IslandStats>().x == IS.x - 1)
+                                    {
+                                        wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint2").gameObject;
+                                    }
+                                }
+                            }
+                            break;
+                        case 6:
+                            if (!isOdd(IS.x))
+                            {
+                                foreach (var neighbour in IS.neighbours)
+                                {
+                                    if (neighbour.GetComponent<IslandStats>().z == IS.z + 1 && neighbour.GetComponent<IslandStats>().x == IS.x - 1)
+                                    {
+                                        wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint3").gameObject;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                foreach (var neighbour in IS.neighbours)
+                                {
+                                    if (neighbour.GetComponent<IslandStats>().z == IS.z && neighbour.GetComponent<IslandStats>().x == IS.x - 1)
+                                    {
+                                        wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint3").gameObject;
+                                    }
+                                }
+                            }
+                            break;
+
+                        default:
+                            break;
+                    }
                 }
             }
         }
