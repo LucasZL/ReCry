@@ -127,25 +127,25 @@ public class IslandStats : MonoBehaviour
     public void GetBridgePoints()
     {
         Transform bridgeTrans;
-        List<GameObject> pointList = new List<GameObject>();
+        bridgePoints = new List<GameObject>();
 
         bridgeTrans = island.transform.FindChild("BridgePoint1");
-        pointList.Add(bridgeTrans.gameObject);
+        bridgePoints.Add(bridgeTrans.gameObject);
 
         bridgeTrans = island.transform.FindChild("BridgePoint2");
-        pointList.Add(bridgeTrans.gameObject);
+        bridgePoints.Add(bridgeTrans.gameObject);
 
         bridgeTrans = island.transform.FindChild("BridgePoint3");
-        pointList.Add(bridgeTrans.gameObject);
+        bridgePoints.Add(bridgeTrans.gameObject);
 
         bridgeTrans = island.transform.FindChild("BridgePoint4");
-        pointList.Add(bridgeTrans.gameObject);
+        bridgePoints.Add(bridgeTrans.gameObject);
 
         bridgeTrans = island.transform.FindChild("BridgePoint5");
-        pointList.Add(bridgeTrans.gameObject);
+        bridgePoints.Add(bridgeTrans.gameObject);
 
         bridgeTrans = island.transform.FindChild("BridgePoint6");
-        pointList.Add(bridgeTrans.gameObject);
+        bridgePoints.Add(bridgeTrans.gameObject);
     }
 
     void GetWayPointMesh()

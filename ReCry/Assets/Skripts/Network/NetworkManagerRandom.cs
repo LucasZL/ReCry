@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 ReCry. All Rights Reserved.
 //
 
+
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
@@ -38,6 +39,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
     GameObject[] bigEnvirement;
     GameObject[,] Map;
 	GameObject[] respawnPoints;
+    public GameObject bridgeCube;
 	bool playerSpawned = false;
     bool mapNeedsCorrection = false;
 
@@ -123,120 +125,122 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 		}
 		mapSideLength = (mapSize + 1) / 2;
 	}
-	
-	void placeIslands(string[] islands, int yLevel, bool yRandom)
-	{
-		Vector3 position = new Vector3(0, 0, 0);
-		bool xIsOdd = false;
-		int yPosition;
-		for (int x = 0; x < mapSize; x++)
-		{
-			for (int z = 0; z < mapSize; z++)
-			{
-				if(yRandom)
-				{
-					yPosition = Random.Range(0, mapHightDifference);
-				}
-				else
-				{
-					yPosition = 0;
-				}
-				if (!isOdd(x))
-				{
-					xIsOdd = false;
-					position = new Vector3((islandSize - (islandSize / 8)) * x, yPosition - yLevel, (islandSize * z) - (islandSize / 2));
-				}
-				else
-				{
-					xIsOdd = true;
-					position = new Vector3((islandSize - (islandSize / 8)) * x, yPosition - yLevel, (islandSize * z));
-				}
-				
-				if (x <= (mapSize / 2) - 1)
-				{
-					int toSpawnCountInLine = mapSideLength + x;
-					int zSpawnLineMinimum = (int)Mathf.Round((mapSize / 2) - (toSpawnCountInLine / 2));
-					int zSpawnLineMaximum = zSpawnLineMinimum;
-					if (xIsOdd && !mapNeedsCorrection)
-					{
-						zSpawnLineMinimum -= 1;
-					}
-					if(xIsOdd && mapNeedsCorrection)
-					{
-						zSpawnLineMaximum += 1;
-					}
-					if(mapNeedsCorrection)
-					{
-						zSpawnLineMinimum -= 1;
-					}
-					if (z > zSpawnLineMinimum && z < mapSize - zSpawnLineMaximum)
-					{
-						if(yRandom)
-						{
-                        	placeIsland(position, islands);
-						}
-						else
-						{
-							GameObject cube = (GameObject)Instantiate(Resources.Load("Hexagon_Sand"));
-							cube.transform.position = position;
-							cube.transform.localScale = new Vector3(islandSize / 30, 0.001f, islandSize / 30);
-						}
+
+    void placeIslands(string[] islands, int yLevel, bool yRandom)
+    {
+        Vector3 position = new Vector3(0, 0, 0);
+        bool xIsOdd = false;
+        int yPosition;
+        for (int x = 0; x < mapSize; x++)
+        {
+            for (int z = 0; z < mapSize; z++)
+            {
+                if (yRandom)
+                {
+                    yPosition = Random.Range(0, mapHightDifference);
+                }
+                else
+                {
+                    yPosition = 0;
+                }
+                if (!isOdd(x))
+                {
+                    xIsOdd = false;
+                    position = new Vector3((islandSize - (islandSize / 8)) * x, yPosition - yLevel, (islandSize * z) - (islandSize / 2));
+                }
+                else
+                {
+                    xIsOdd = true;
+                    position = new Vector3((islandSize - (islandSize / 8)) * x, yPosition - yLevel, (islandSize * z));
+                }
+
+                if (x <= (mapSize / 2) - 1)
+                {
+                    int toSpawnCountInLine = mapSideLength + x;
+                    int zSpawnLineMinimum = (int)Mathf.Round((mapSize / 2) - (toSpawnCountInLine / 2));
+                    int zSpawnLineMaximum = zSpawnLineMinimum;
+                    if (xIsOdd && !mapNeedsCorrection)
+                    {
+                        zSpawnLineMinimum -= 1;
                     }
-				}
-				
-				else if (x == (mapSize - 1) / 2)
-				{
-					if(yRandom)
-					{
-						placeIsland(position, islands);
-					}
-					else
-					{
-						GameObject cube = (GameObject)Instantiate(Resources.Load("Hexagon_Sand"));
-						cube.transform.position = position;
-						cube.transform.localScale = new Vector3(islandSize / 30, 0.001f, islandSize / 30);
-					}
-				}
-				
-				else if (x >= (mapSize / 2) - 1)
-				{
-					int toSpawnCountInLine = mapSideLength + (mapSize - x);
-					int zSpawnLineMinimum = (int) Mathf.Round((mapSize / 2) - (toSpawnCountInLine / 2));
-					int zSpawnLineMaximum = zSpawnLineMinimum;
-					if (xIsOdd)
-					{
-						zSpawnLineMaximum += 1;
-					}
-					if (xIsOdd && mapNeedsCorrection)
-					{
-						zSpawnLineMinimum -= 1;
-					}
-					if(!xIsOdd && mapNeedsCorrection)
-					{
-						zSpawnLineMaximum += 1;
-					}
-					if (z > zSpawnLineMinimum && z < mapSize - zSpawnLineMaximum)
-					{
-						if(yRandom)
-						{
-							placeIsland(position, islands);
-						}
-						else
-						{
-							GameObject cube = (GameObject)Instantiate(Resources.Load("Hexagon_Sand"));
-							cube.transform.position = position;
-							cube.transform.localScale = new Vector3(islandSize / 30, 0.001f, islandSize / 30);
-						}
-					}
-				}
-			}
-		}
-		if (yRandom) 
-		{
-        	createMapArray();
+                    if (xIsOdd && mapNeedsCorrection)
+                    {
+                        zSpawnLineMaximum += 1;
+                    }
+                    if (mapNeedsCorrection)
+                    {
+                        zSpawnLineMinimum -= 1;
+                    }
+                    if (z > zSpawnLineMinimum && z < mapSize - zSpawnLineMaximum)
+                    {
+                        if (yRandom)
+                        {
+                            placeIsland(position, islands);
+                        }
+                        else
+                        {
+                            GameObject cube = (GameObject)Instantiate(Resources.Load("Hexagon_Sand"));
+                            cube.transform.position = position;
+                            cube.transform.localScale = new Vector3(islandSize / 30, 0.001f, islandSize / 30);
+                        }
+                    }
+                }
+
+                else if (x == (mapSize - 1) / 2)
+                {
+                    if (yRandom)
+                    {
+                        placeIsland(position, islands);
+                    }
+                    else
+                    {
+                        GameObject cube = (GameObject)Instantiate(Resources.Load("Hexagon_Sand"));
+                        cube.transform.position = position;
+                        cube.transform.localScale = new Vector3(islandSize / 30, 0.001f, islandSize / 30);
+                    }
+                }
+
+                else if (x >= (mapSize / 2) - 1)
+                {
+                    int toSpawnCountInLine = mapSideLength + (mapSize - x);
+                    int zSpawnLineMinimum = (int)Mathf.Round((mapSize / 2) - (toSpawnCountInLine / 2));
+                    int zSpawnLineMaximum = zSpawnLineMinimum;
+                    if (xIsOdd)
+                    {
+                        zSpawnLineMaximum += 1;
+                    }
+                    if (xIsOdd && mapNeedsCorrection)
+                    {
+                        zSpawnLineMinimum -= 1;
+                    }
+                    if (!xIsOdd && mapNeedsCorrection)
+                    {
+                        zSpawnLineMaximum += 1;
+                    }
+                    if (z > zSpawnLineMinimum && z < mapSize - zSpawnLineMaximum)
+                    {
+                        if (yRandom)
+                        {
+                            placeIsland(position, islands);
+                        }
+                        else
+                        {
+                            GameObject cube = (GameObject)Instantiate(Resources.Load("Hexagon_Sand"));
+                            cube.transform.position = position;
+                            cube.transform.localScale = new Vector3(islandSize / 30, 0.001f, islandSize / 30);
+                        }
+                    }
+                }
+            }
+        }
+        if (yRandom)
+        {
+            createMapArray();
             GetOtherBridgePoint();
-		}
-	}
+            GenerateBridges();
+        }
+    }
+
 
     void placeSmallEnvirement()
     {
@@ -645,7 +649,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
             {
                 IS = island.GetComponent<IslandStats>();
 
-                foreach (var point in pointList)
+                foreach (var point in IS.bridgePoints)
                 {
                     wp = point.GetComponent<WayPoint>();
 
@@ -786,6 +790,29 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 
                         default:
                             break;
+                    }
+                }
+            }
+        }
+    }
+
+    void GenerateBridges()
+    {
+        WayPoint wp;
+        Vector3 position;
+        float scaling;
+
+        foreach (var island in Map)
+        {
+            if (island != null)
+            {
+                foreach (var point in island.GetComponent<IslandStats>().bridgePoints)
+                {
+                    wp = point.GetComponent<WayPoint>();
+
+                    if (wp.otherBridgePoint != null && !wp.bridgeSpwaned && !wp.otherBridgePoint.GetComponent<WayPoint>().bridgeSpwaned)
+                    {
+
                     }
                 }
             }

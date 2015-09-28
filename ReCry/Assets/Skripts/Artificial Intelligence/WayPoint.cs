@@ -18,6 +18,7 @@ public class WayPoint : MonoBehaviour
     List<WayPoint> neighbours;
     public GameObject otherBridgePoint;
     public bool bridge = false;
+    public bool bridgeSpwaned = false;
     public int bridgeNumber;
 
     public WayPoint()
