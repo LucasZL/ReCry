@@ -10,6 +10,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class NetworkManagerRandom : Photon.MonoBehaviour
 {
@@ -26,6 +27,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 	[Range(1, 100)]
 	public int mapHightDifference = 3;
 	public float islandSize = 10;
+    public float BridgeTileWidth;
 	public int mapSideLength;
 
     public string[] IslandsToPlace;
@@ -137,7 +139,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
             {
                 if (yRandom)
                 {
-                    yPosition = Random.Range(0, mapHightDifference);
+                    yPosition = UnityEngine.Random.Range(0, mapHightDifference);
                 }
                 else
                 {
@@ -237,7 +239,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
         {
             createMapArray();
             GetOtherBridgePoint();
-            GenerateBridges();
+            //GenerateBridges();
         }
     }
 
@@ -249,11 +251,11 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 
         foreach (GameObject emptyGameObject in smallEnvirement)
         {
-            int random = Random.Range(0, 7);
-            int randomEnvirement = Random.Range(0, SmallEnvirementsToPlace.Length);
+            int random = UnityEngine.Random.Range(0, 7);
+            int randomEnvirement = UnityEngine.Random.Range(0, SmallEnvirementsToPlace.Length);
             if (random != 0)
             {
-                PhotonNetwork.Instantiate(SmallEnvirementsToPlace[randomEnvirement], new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, Random.Range(0.0f, 360.0f), 0.0f), 0).transform.parent = emptyGameObject.transform.parent;
+                PhotonNetwork.Instantiate(SmallEnvirementsToPlace[randomEnvirement], new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, UnityEngine.Random.Range(0.0f, 360.0f), 0.0f), 0).transform.parent = emptyGameObject.transform.parent;
             }
             foreach(GameObject smallEnv in GameObject.FindGameObjectsWithTag("EnvSmall"))
             {
@@ -272,11 +274,11 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 
         foreach (GameObject emptyGameObject in bigEnvirement)
         {
-            int random = Random.Range(0, 7);
-            int randomEnvirement = Random.Range(0, BigEnvirementsToPlace.Length);
+            int random = UnityEngine.Random.Range(0, 7);
+            int randomEnvirement = UnityEngine.Random.Range(0, BigEnvirementsToPlace.Length);
             if (random != 0)
             {
-                PhotonNetwork.Instantiate(BigEnvirementsToPlace[randomEnvirement], new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, Random.Range(0.0f, 360.0f), 0.0f), 0).transform.parent = emptyGameObject.transform.parent;
+                PhotonNetwork.Instantiate(BigEnvirementsToPlace[randomEnvirement], new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, UnityEngine.Random.Range(0.0f, 360.0f), 0.0f), 0).transform.parent = emptyGameObject.transform.parent;
             }
         }
         foreach (GameObject smallEnv in GameObject.FindGameObjectsWithTag("EnvBig"))
@@ -290,8 +292,8 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 
     void placeIsland(Vector3 position, string[] islands)
     {
-		int random = Random.Range(0, islands.Length);
-        int rotation = Random.Range(0, 5);
+		int random = UnityEngine.Random.Range(0, islands.Length);
+        int rotation = UnityEngine.Random.Range(0, 5);
 		PhotonNetwork.Instantiate(islands[random], position, Quaternion.Euler(0.0f, rotation * 60, 0.0f), 0);
     }
 
@@ -629,7 +631,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 
     void GetOtherBridgePoint()
     {
-        IslandStats IS;
+        IslandStats IslandStats;
         WayPoint wp;
         List<GameObject> pointList = new List<GameObject>();
 
@@ -647,20 +649,20 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
         {
             if (island != null)
             {
-                IS = island.GetComponent<IslandStats>();
+                IslandStats = island.GetComponent<IslandStats>();
 
-                foreach (var point in IS.bridgePoints)
+                foreach (var point in IslandStats.bridgePoints)
                 {
                     wp = point.GetComponent<WayPoint>();
 
                     switch (wp.bridgeNumber)
                     {
                         case 1:
-                            if (!isOdd(IS.x))
+                            if (!isOdd(IslandStats.x))
                             {
-                                foreach (var neighbourIsland in IS.neighbours)
+                                foreach (var neighbourIsland in IslandStats.neighbours)
                                 {
-                                    if (neighbourIsland.GetComponent<IslandStats>().z == IS.z + 1 && neighbourIsland.GetComponent<IslandStats>().x == IS.x)
+                                    if (neighbourIsland.GetComponent<IslandStats>().z == IslandStats.z + 1 && neighbourIsland.GetComponent<IslandStats>().x == IslandStats.x)
                                     {
                                         wp.otherBridgePoint = neighbourIsland.transform.FindChild("BridgePoint4").gameObject;
                                     }
@@ -668,9 +670,9 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                             }
                             else
                             {
-                                foreach (var neighbour in IS.neighbours)
+                                foreach (var neighbour in IslandStats.neighbours)
                                 {
-                                    if (neighbour.GetComponent<IslandStats>().z == IS.z + 1 && neighbour.GetComponent<IslandStats>().x == IS.x)
+                                    if (neighbour.GetComponent<IslandStats>().z == IslandStats.z + 1 && neighbour.GetComponent<IslandStats>().x == IslandStats.x)
                                     {
                                         wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint4").gameObject;
                                     }
@@ -678,11 +680,11 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                             }
                             break;
                         case 2:
-                            if (!isOdd(IS.x))
+                            if (!isOdd(IslandStats.x))
                             {
-                                foreach (var neighbour in IS.neighbours)
+                                foreach (var neighbour in IslandStats.neighbours)
                                 {
-                                    if (neighbour.GetComponent<IslandStats>().z == IS.z + 1 && neighbour.GetComponent<IslandStats>().x == IS.x + 1)
+                                    if (neighbour.GetComponent<IslandStats>().z == IslandStats.z + 1 && neighbour.GetComponent<IslandStats>().x == IslandStats.x + 1)
                                     {
                                         wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint5").gameObject;
                                     }
@@ -690,9 +692,9 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                             }
                             else
                             {
-                                foreach (var neighbour in IS.neighbours)
+                                foreach (var neighbour in IslandStats.neighbours)
                                 {
-                                    if (neighbour.GetComponent<IslandStats>().z == IS.z && neighbour.GetComponent<IslandStats>().x == IS.x + 1)
+                                    if (neighbour.GetComponent<IslandStats>().z == IslandStats.z && neighbour.GetComponent<IslandStats>().x == IslandStats.x + 1)
                                     {
                                         wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint5").gameObject;
                                     }
@@ -700,11 +702,11 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                             }
                             break;
                         case 3:
-                            if (!isOdd(IS.x))
+                            if (!isOdd(IslandStats.x))
                             {
-                                foreach (var neighbour in IS.neighbours)
+                                foreach (var neighbour in IslandStats.neighbours)
                                 {
-                                    if (neighbour.GetComponent<IslandStats>().z == IS.z && neighbour.GetComponent<IslandStats>().x == IS.x + 1)
+                                    if (neighbour.GetComponent<IslandStats>().z == IslandStats.z && neighbour.GetComponent<IslandStats>().x == IslandStats.x + 1)
                                     {
                                         wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint6").gameObject;
                                     }
@@ -712,9 +714,9 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                             }
                             else
                             {
-                                foreach (var neighbour in IS.neighbours)
+                                foreach (var neighbour in IslandStats.neighbours)
                                 {
-                                    if (neighbour.GetComponent<IslandStats>().z == IS.z - 1 && neighbour.GetComponent<IslandStats>().x == IS.x + 1)
+                                    if (neighbour.GetComponent<IslandStats>().z == IslandStats.z - 1 && neighbour.GetComponent<IslandStats>().x == IslandStats.x + 1)
                                     {
                                         wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint6").gameObject;
                                     }
@@ -722,11 +724,11 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                             }
                             break;
                         case 4:
-                            if (!isOdd(IS.x))
+                            if (!isOdd(IslandStats.x))
                             {
-                                foreach (var neighbour in IS.neighbours)
+                                foreach (var neighbour in IslandStats.neighbours)
                                 {
-                                    if (neighbour.GetComponent<IslandStats>().z == IS.z - 1 && neighbour.GetComponent<IslandStats>().x == IS.x)
+                                    if (neighbour.GetComponent<IslandStats>().z == IslandStats.z - 1 && neighbour.GetComponent<IslandStats>().x == IslandStats.x)
                                     {
                                         wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint1").gameObject;
                                     }
@@ -734,9 +736,9 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                             }
                             else
                             {
-                                foreach (var neighbour in IS.neighbours)
+                                foreach (var neighbour in IslandStats.neighbours)
                                 {
-                                    if (neighbour.GetComponent<IslandStats>().z == IS.z - 1 && neighbour.GetComponent<IslandStats>().x == IS.x)
+                                    if (neighbour.GetComponent<IslandStats>().z == IslandStats.z - 1 && neighbour.GetComponent<IslandStats>().x == IslandStats.x)
                                     {
                                         wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint1").gameObject;
                                     }
@@ -744,11 +746,11 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                             }
                             break;
                         case 5:
-                            if (!isOdd(IS.x))
+                            if (!isOdd(IslandStats.x))
                             {
-                                foreach (var neighbour in IS.neighbours)
+                                foreach (var neighbour in IslandStats.neighbours)
                                 {
-                                    if (neighbour.GetComponent<IslandStats>().z == IS.z && neighbour.GetComponent<IslandStats>().x == IS.x - 1)
+                                    if (neighbour.GetComponent<IslandStats>().z == IslandStats.z && neighbour.GetComponent<IslandStats>().x == IslandStats.x - 1)
                                     {
                                         wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint2").gameObject;
                                     }
@@ -756,9 +758,9 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                             }
                             else
                             {
-                                foreach (var neighbour in IS.neighbours)
+                                foreach (var neighbour in IslandStats.neighbours)
                                 {
-                                    if (neighbour.GetComponent<IslandStats>().z == IS.z - 1 && neighbour.GetComponent<IslandStats>().x == IS.x - 1)
+                                    if (neighbour.GetComponent<IslandStats>().z == IslandStats.z - 1 && neighbour.GetComponent<IslandStats>().x == IslandStats.x - 1)
                                     {
                                         wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint2").gameObject;
                                     }
@@ -766,11 +768,11 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                             }
                             break;
                         case 6:
-                            if (!isOdd(IS.x))
+                            if (!isOdd(IslandStats.x))
                             {
-                                foreach (var neighbour in IS.neighbours)
+                                foreach (var neighbour in IslandStats.neighbours)
                                 {
-                                    if (neighbour.GetComponent<IslandStats>().z == IS.z + 1 && neighbour.GetComponent<IslandStats>().x == IS.x - 1)
+                                    if (neighbour.GetComponent<IslandStats>().z == IslandStats.z + 1 && neighbour.GetComponent<IslandStats>().x == IslandStats.x - 1)
                                     {
                                         wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint3").gameObject;
                                     }
@@ -778,9 +780,9 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                             }
                             else
                             {
-                                foreach (var neighbour in IS.neighbours)
+                                foreach (var neighbour in IslandStats.neighbours)
                                 {
-                                    if (neighbour.GetComponent<IslandStats>().z == IS.z && neighbour.GetComponent<IslandStats>().x == IS.x - 1)
+                                    if (neighbour.GetComponent<IslandStats>().z == IslandStats.z && neighbour.GetComponent<IslandStats>().x == IslandStats.x - 1)
                                     {
                                         wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint3").gameObject;
                                     }
@@ -800,7 +802,10 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
     {
         WayPoint wp;
         Vector3 position;
+        int id;
         float scaling;
+        float bridgeLenght;
+        float rotation;
 
         foreach (var island in Map)
         {
@@ -812,10 +817,101 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 
                     if (wp.otherBridgePoint != null && !wp.bridgeSpwaned && !wp.otherBridgePoint.GetComponent<WayPoint>().bridgeSpwaned)
                     {
-
+                        //SpawnBridge
+                        bridgeLenght = GetBridgeLenght(point.transform, wp.otherBridgePoint.gameObject.transform);
+                        bridgeCube.transform.localScale = new Vector3(1, 1, bridgeLenght);
+                        position = GetSpawnPosition(point.transform, wp.otherBridgePoint.gameObject.transform);
+                        GameObject.Instantiate(bridgeCube, position, Quaternion.Euler(0, GetAngle(point.transform, wp.otherBridgePoint.gameObject.transform), 0));
                     }
                 }
             }
         }
+    }
+
+    Vector3 GetSpawnPosition(Transform point, Transform otherPoint)
+    {
+        Vector3 pos = new Vector3();
+
+        if (point.position.x < otherPoint.position.x)
+        {
+            pos.x = point.position.x + ((otherPoint.position.x - point.position.x) / 2);
+        }
+        else
+        {
+            pos.x = otherPoint.position.x + ((point.position.x - otherPoint.position.x) / 2);
+        } 
+        if (point.position.y < otherPoint.position.y)
+        {
+            pos.y = point.position.y + ((otherPoint.position.y - point.position.y) / 2);
+        }
+        else
+        {
+            pos.y = otherPoint.position.y + ((point.position.y - otherPoint.position.y) / 2);
+        }
+        if (point.position.z < otherPoint.position.z)
+        {
+            pos.z = point.position.z + ((otherPoint.position.z - point.position.z) / 2);
+        }
+        else
+        {
+            pos.y = otherPoint.position.y + ((point.position.y - otherPoint.position.y) / 2);
+        }
+        return pos;
+    }
+
+    float GetBridgeLenght(Transform point, Transform otherPoint)
+    {
+        Vector3 difference = new Vector3(point.position.x - otherPoint.position.x, point.position.y - otherPoint.position.y, point.position.z - otherPoint.position.z);
+        float diffLenght = Mathf.Sqrt((difference.x * difference.x) + (difference.y * difference.y) + (difference.z * difference.z));
+        return diffLenght;
+    }
+
+    float GetAngle(Transform point, Transform otherPoint)
+    {
+        Vector2 thirdPoint = new Vector2(point.position.x, otherPoint.position.z);
+        float sineAlpha;
+        float angleAlpha;
+
+        if (otherPoint.position.x > point.position.x && otherPoint.position.z > point.position.z)
+        {
+            sineAlpha = (otherPoint.position.x - thirdPoint.x) / (Mathf.Sqrt((thirdPoint.y - point.position.z) * (thirdPoint.y - point.position.z) + (otherPoint.position.x - thirdPoint.x) * (otherPoint.position.x - thirdPoint.x)));
+            angleAlpha = 1 / sineAlpha;
+            return angleAlpha;
+        }
+        else if (otherPoint.position.x > point.position.x && otherPoint.position.z < point.position.z)
+        {
+            sineAlpha = (otherPoint.position.x - thirdPoint.x) / (Mathf.Sqrt((point.position.z - thirdPoint.y) * (point.position.z - thirdPoint.y) + (otherPoint.position.x - thirdPoint.x) * (otherPoint.position.x - thirdPoint.x)));
+            angleAlpha = 1 / sineAlpha;
+            return angleAlpha + 90;
+        }
+        else if (otherPoint.position.x < point.position.x && otherPoint.position.z < point.position.z)
+        {
+            sineAlpha = (thirdPoint.x - otherPoint.position.x) / (Mathf.Sqrt((thirdPoint.x - otherPoint.position.x) * (thirdPoint.x - otherPoint.position.x) + (point.position.z - thirdPoint.y) * (point.position.z - thirdPoint.y)));
+            angleAlpha = 1 / sineAlpha;
+            return angleAlpha + 180;
+        }
+        else if (otherPoint.position.x < point.position.x && otherPoint.position.z > point.position.z)
+        {
+            sineAlpha = (thirdPoint.x - otherPoint.position.x) / (Mathf.Sqrt((thirdPoint.x - otherPoint.position.x) * (thirdPoint.x - otherPoint.position.x) + (thirdPoint.y - point.position.z) * (thirdPoint.y - point.position.z)));
+            angleAlpha = 1 / sineAlpha;
+            return angleAlpha + 270;
+        }
+        else if (otherPoint.position.x == point.position.x && otherPoint.position.z > point.position.z)
+        {
+            return 0;
+        }
+        else if (otherPoint.position.x > point.position.x && otherPoint.position.z == point.position.z)
+        {
+            return 90;
+        }
+        else if (otherPoint.position.x == point.position.x && otherPoint.position.z < point.position.z)
+        {
+            return 180;
+        }
+        else if (otherPoint.position.x < point.position.x && otherPoint.position.z == point.position.z)
+        {
+            return 270;
+        }
+        return 0;
     }
 }
