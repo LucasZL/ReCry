@@ -7,22 +7,25 @@
 //
 
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 
 public class CharacterMovementMultiplayer : Photon.MonoBehaviour {
 
+
+    //Used for Photon
     PhotonView ph;
 
     private Vector3 latestCorrectPos;
     private Vector3 onUpdatePos;
     private float fraction;
 
+    //BaseMovement
     public float MoveSpeed = 5f;
     public float RunSpeed = 15f;
     public float MouseSensitivity = 5f;
-    public float JumpHeight = 7.5f;
-    public float Gravity = 20f;
+    public float JumpHeight = 15f;
     public int LookUp = -50;
     public int lookDown = 50;
     private bool isWalking = true;
@@ -32,8 +35,18 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour {
     private float horizontal;
     private float vertical;
     public float speed;
+
+    //JetPack
+    private Text fuel;
+    private int jetpacktank = 100;
+    public float JetPackSpeed = 25f;
+    private bool fuelIsEmpty = false;
+
+    
+    //Camera Movement and JumpController
     private Camera camera;
     private JumpDetection jump;
+
     Rigidbody rigid;
 
     void Start ()
@@ -45,6 +58,8 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour {
         {
             this.camera = this.transform.Find("Camera").GetComponent<Camera>();
             this.jump = GetComponent<JumpDetection>();
+            this.fuel = GameObject.FindWithTag("Fuel").GetComponent<Text>() as Text;
+            this.fuel.text = jetpacktank.ToString();
         }
         else
         {
@@ -68,6 +83,17 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour {
         }
 	}
 
+    void FixedUpdate()
+    {
+        if (ph.isMine)
+        {
+            Jetpack();
+            JetPackForward();
+            FillUpJetPackFuel();
+        }
+        
+    }
+
     void MoveCharacter()
     {
         if (isWalking)
@@ -81,7 +107,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour {
 
     void Run()
     {
-        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W) && !isRunning)
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W) && !isRunning && jump.isGrounded)
         {
             isWalking = false;
             this.horizontal = Input.GetAxis("Horizontal") * Time.deltaTime * MoveSpeed;
@@ -147,6 +173,54 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour {
             fraction = 0;                           // reset the fraction we alreay moved. see Update()
 
             transform.localRotation = rot;          // this sample doesn't smooth rotation
+        }
+    }
+
+    private void Jetpack()
+    {
+        if (Input.GetKey(KeyCode.Space))
+        {
+            if (!jump.isGrounded && fuelIsEmpty)
+            {
+                if (jetpacktank > 0)
+                {
+                    this.rigid.AddForce(new Vector3(0, this.transform.position.y + JetPackSpeed, 0));
+                    jetpacktank--;
+                    this.fuel.text = jetpacktank.ToString();
+                }
+                else
+                {
+                    fuelIsEmpty = true;
+                }
+                
+            }
+        }
+    }
+
+    private void JetPackForward()
+    {
+        if (Input.GetKey(KeyCode.LeftShift) && !jump.isGrounded && fuelIsEmpty)
+        {
+            if (jetpacktank > 0)
+            {
+                this.rigid.AddForce(horizontal, 0, vertical + JetPackSpeed);
+                jetpacktank--;
+                this.fuel.text = jetpacktank.ToString();
+            }
+            
+        }
+        else
+        {
+            fuelIsEmpty = true;
+        }
+    }
+
+    private void FillUpJetPackFuel()
+    {
+        if (jetpacktank < 100 && jump.isGrounded)
+        {
+            jetpacktank++;
+            this.fuel.text = jetpacktank.ToString();
         }
     }
 }

@@ -11,17 +11,25 @@ public class CharacterStats : MonoBehaviour {
     public Image healthImage;
     public Image armorImage;
 
-	// Use this for initialization
-	void Start ()
-    {
-        this.Life = 100;
-        this.lifeText = GameObject.FindWithTag("LifeText").GetComponent<Text>() as Text;
-        this.armorText = GameObject.FindWithTag("ArmorText").GetComponent<Text>() as Text;
-        this.healthImage = GameObject.FindWithTag("HealthUI").GetComponent<Image>() as Image;
-        this.armorImage = GameObject.FindWithTag("ArmorUI").GetComponent<Image>() as Image;
+    PhotonView ph;
 
-        this.healthImage.sprite = Resources.Load<Sprite>("Sprites/First_aid");
-        this.armorImage.sprite = Resources.Load<Sprite>("Sprites/shield_256");
+    // Use this for initialization
+    void Start ()
+    {
+        ph = PhotonView.Get(this.transform.gameObject);
+
+        if (ph.isMine)
+        {
+            this.Life = 100;
+            this.lifeText = GameObject.FindWithTag("LifeText").GetComponent<Text>() as Text;
+            this.armorText = GameObject.FindWithTag("ArmorText").GetComponent<Text>() as Text;
+            this.healthImage = GameObject.FindWithTag("HealthUI").GetComponent<Image>() as Image;
+            this.armorImage = GameObject.FindWithTag("ArmorUI").GetComponent<Image>() as Image;
+
+            this.healthImage.sprite = Resources.Load<Sprite>("Sprites/First_aid");
+            this.armorImage.sprite = Resources.Load<Sprite>("Sprites/shield_256");
+        }
+        
 
     }
 
