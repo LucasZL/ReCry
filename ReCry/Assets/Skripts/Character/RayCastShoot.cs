@@ -37,7 +37,6 @@ public class RayCastShoot : MonoBehaviour
             RayCastFire();
             Reload();
         }
-        
     }
 
 

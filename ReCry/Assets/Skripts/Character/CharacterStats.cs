@@ -27,6 +27,7 @@ public class CharacterStats : MonoBehaviour
         if (ph.isMine)
         {
             this.Life = 100;
+            this.Armor = 100;
             this.lifeText = GameObject.FindWithTag("LifeText").GetComponent<Text>() as Text;
             this.armorText = GameObject.FindWithTag("ArmorText").GetComponent<Text>() as Text;
             this.healthImage = GameObject.FindWithTag("HealthUI").GetComponent<Image>() as Image;
@@ -35,6 +36,7 @@ public class CharacterStats : MonoBehaviour
             this.healthImage.sprite = Resources.Load<Sprite>("Sprites/First_aid");
             this.armorImage.sprite = Resources.Load<Sprite>("Sprites/shield_256");
             this.lifeText.text = this.Life.ToString();
+            this.armorText.text = this.Armor.ToString();
         }
 
 
@@ -45,7 +47,8 @@ public class CharacterStats : MonoBehaviour
     {
         if (ph.isMine)
         {
-            UpdateText();
+            UpdateLifeText();
+            UpdateArmorText();
             if (Life <= 0)
             {
                 Debug.Log("TOT");
@@ -56,12 +59,40 @@ public class CharacterStats : MonoBehaviour
     [PunRPC]
     public void GetDamage(int damage)
     {
-        this.Life -= damage;
+        if (this.Armor > 0)
+        {
+            this.Armor -= damage / 30;
+        }
+        else
+        {
+            this.Life -= damage;
+        }
+        
     }
 
-    void UpdateText()
+    void UpdateLifeText()
     {
-        this.lifeText.text = string.Format("{0}", Life);
+        if (this.Life <= 0)
+        {
+            this.Life = 0;
+            this.lifeText.text = string.Format("{0}", Life);
+        }
+        else if (this.Life > 0)
+        {
+            this.lifeText.text = string.Format("{0}", Life);
+        }
+    }
 
+    void UpdateArmorText()
+    {
+        if (this.Armor <= 0)
+        {
+            this.Armor = 0;
+            this.armorText.text = string.Format("{0}", Armor);
+        }
+        else if (this.Life > 0)
+        {
+            this.armorText.text = string.Format("{0}", Armor);
+        }
     }
 }

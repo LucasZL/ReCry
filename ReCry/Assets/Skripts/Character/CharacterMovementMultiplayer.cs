@@ -203,7 +203,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour {
         {
             if (jetpacktank > 0)
             {
-                this.rigid.AddForce(horizontal, 0, vertical + JetPackSpeed);
+                this.rigid.AddForce(0, 0, mouseX + JetPackSpeed);
                 jetpacktank--;
                 this.fuel.text = jetpacktank.ToString();
             }
