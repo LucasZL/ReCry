@@ -14,7 +14,6 @@ public class JumpDetection : MonoBehaviour
 
     public bool isGrounded;
 
-
     void OnCollisionStay(Collision other)
     {
         if (other.gameObject.tag == "Env")
