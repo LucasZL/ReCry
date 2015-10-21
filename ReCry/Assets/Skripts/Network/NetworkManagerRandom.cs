@@ -44,6 +44,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
     public GameObject bridgeCube;
 	bool playerSpawned = false;
     bool mapNeedsCorrection = false;
+   
 
     public virtual void Start()
 	{
@@ -70,7 +71,8 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 			getSpawnPoints();
 			if(!playerSpawned)
 			{
-				PhotonNetwork.Instantiate("Playerprefab_Multi", respawnPoints[0].transform.position, Quaternion.identity, 0);
+                int spawn = UnityEngine.Random.Range(0, respawnPoints.Length);
+				PhotonNetwork.Instantiate("Playerprefab_Multi", respawnPoints[spawn].transform.position, Quaternion.identity, 0);
 				playerSpawned = true;
 			}
 		}
@@ -99,15 +101,20 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 	}
 	
 	public void OnJoinedRoom()
-	{
+    { 
+        calculateMapDimentions();
+
 		if (PhotonNetwork.isMasterClient) 
 		{
-			calculateMapDimentions();
-			placeIslands(IslandsToPlace, 0, true);
+			placeIslands(IslandsToPlace, 0, true,1);
 			placeSmallEnvirement();
             placeBigEnvirement();
         }
-		placeIslands(IslandsToPlace, 40000, false);
+        placeIslands(IslandsToPlace, -550, false,0.25f);
+        
+        GameObject minimap = GameObject.Find("Minimap");
+        minimap.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 90));
+        minimap.transform.parent = GameObject.Find("MiniMapParent").transform;
     }
 	
     public void OnJoinedLobby()
@@ -128,7 +135,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 		mapSideLength = (mapSize + 1) / 2;
 	}
 
-    void placeIslands(string[] islands, int yLevel, bool yRandom)
+    void placeIslands(string[] islands, int yLevel, bool yRandom, float scale)
     {
         Vector3 position = new Vector3(0, 0, 0);
         bool xIsOdd = false;
@@ -182,8 +189,9 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                         else
                         {
                             GameObject cube = (GameObject)Instantiate(Resources.Load("Hexagon_Sand"));
-                            cube.transform.position = position;
-                            cube.transform.localScale = new Vector3(islandSize / 30, 0.001f, islandSize / 30);
+                            cube.transform.parent = GameObject.Find("Minimap").transform;
+                            cube.transform.position = new Vector3(position.x, 0, position.z) * scale;
+                            cube.transform.localScale = new Vector3(islandSize / 30 * scale, 0.1f * scale, islandSize / 30 * scale);
                         }
                     }
                 }
@@ -197,8 +205,9 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                     else
                     {
                         GameObject cube = (GameObject)Instantiate(Resources.Load("Hexagon_Sand"));
-                        cube.transform.position = position;
-                        cube.transform.localScale = new Vector3(islandSize / 30, 0.001f, islandSize / 30);
+                        cube.transform.parent = GameObject.Find("Minimap").transform;
+                        cube.transform.position = new Vector3(position.x, 0, position.z) * scale;
+                        cube.transform.localScale = new Vector3(islandSize / 30 * scale, 0.001f * scale , islandSize / 30 * scale);
                     }
                 }
 
@@ -228,8 +237,9 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                         else
                         {
                             GameObject cube = (GameObject)Instantiate(Resources.Load("Hexagon_Sand"));
-                            cube.transform.position = position;
-                            cube.transform.localScale = new Vector3(islandSize / 30, 0.001f, islandSize / 30);
+                            cube.transform.parent = GameObject.Find("Minimap").transform;
+                            cube.transform.position = new Vector3(position.x, 0, position.z) * scale;
+                            cube.transform.localScale = new Vector3(islandSize / 30 * scale, 0.001f * scale, islandSize / 30 * scale);
                         }
                     }
                 }
@@ -913,5 +923,12 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
             return 270;
         }
         return 0;
+    }
+
+    public void RespawnPlayer(GameObject Player)
+    {
+        int spawn = UnityEngine.Random.Range(0, respawnPoints.Length);
+        Player.transform.position = this.respawnPoints[spawn].transform.position;
+        Player.GetComponent<CharacterStats>().Life = 100;
     }
 }

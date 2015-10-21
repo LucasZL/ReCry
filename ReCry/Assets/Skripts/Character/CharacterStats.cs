@@ -18,6 +18,7 @@ public class CharacterStats : MonoBehaviour
     public Image armorImage;
 
     PhotonView ph;
+    NetworkManagerRandom nmr;
 
     // Use this for initialization
     void Start()
@@ -37,6 +38,7 @@ public class CharacterStats : MonoBehaviour
             this.armorImage.sprite = Resources.Load<Sprite>("Sprites/shield_256");
             this.lifeText.text = this.Life.ToString();
             this.armorText.text = this.Armor.ToString();
+            nmr = GameObject.Find("MapGeneratorNetwork").GetComponent<NetworkManagerRandom>();
         }
 
 
@@ -51,7 +53,7 @@ public class CharacterStats : MonoBehaviour
             UpdateArmorText();
             if (Life <= 0)
             {
-                Debug.Log("TOT");
+                this.nmr.RespawnPlayer(this.gameObject);
             }
         }
     }

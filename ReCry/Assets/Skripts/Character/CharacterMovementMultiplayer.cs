@@ -11,7 +11,8 @@ using UnityEngine.UI;
 using System.Collections;
 
 
-public class CharacterMovementMultiplayer : Photon.MonoBehaviour {
+public class CharacterMovementMultiplayer : Photon.MonoBehaviour
+{
 
 
     //Used for Photon
@@ -21,7 +22,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour {
     private Vector3 onUpdatePos;
     private float fraction;
 
-    //BaseMovement
+    //BasicStats
     public float MoveSpeed = 5f;
     public float RunSpeed = 15f;
     public float MouseSensitivity = 5f;
@@ -42,14 +43,14 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour {
     public float JetPackSpeed = 25f;
     private bool fuelIsEmpty = false;
 
-    
+
     //Camera Movement and JumpController
     private Camera camera;
     private JumpDetection jump;
 
     Rigidbody rigid;
 
-    void Start ()
+    void Start()
     {
         ph = PhotonView.Get(this.transform.gameObject);
         this.rigid = GetComponent<Rigidbody>();
@@ -65,23 +66,23 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour {
         {
             this.transform.Find("Camera").gameObject.active = false;
         }
-	}
-	
-	void Update ()
+    }
+
+    void Update()
     {
-        if (ph.isMine) {
-			MoveCharacter ();
-			Run ();
-			Jump ();
-			LookAround ();
-		} 
-		else
-		{
-            //PhotonNetwork
-            fraction = fraction + Time.deltaTime * 9 ;
-            transform.localPosition = Vector3.Lerp(onUpdatePos, latestCorrectPos, fraction);    // set our pos between A and B
+        if (ph.isMine)
+        {
+            MoveCharacter();
+            //Run ();
+            LookAround();
         }
-	}
+        else
+        {
+            //PhotonNetwork
+            fraction = fraction + Time.deltaTime * 9;
+            transform.localPosition = Vector3.Lerp(onUpdatePos, latestCorrectPos, fraction);
+        }
+    }
 
     void FixedUpdate()
     {
@@ -91,7 +92,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour {
             JetPackForward();
             FillUpJetPackFuel();
         }
-        
+
     }
 
     void MoveCharacter()
@@ -120,36 +121,17 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour {
         }
     }
 
-    void Jump()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (jump.isGrounded)
-            {
-                this.rigid.AddForce(new Vector3(0, JumpHeight, 0), ForceMode.Impulse);
-            }
-        }
-    }
-
     void LookAround()
     {
         this.mouseX += Input.GetAxis("Mouse X") * MouseSensitivity;
         this.mouseY -= Input.GetAxis("Mouse Y") * MouseSensitivity;
-
-        if(this.mouseY >= lookDown)
-        {
-            this.mouseY = lookDown;
-        }
-        else if(this.mouseY <= LookUp)
-        {
-            this.mouseY = LookUp;
-        }
+        
         this.camera.transform.eulerAngles = new Vector3(this.mouseY, this.mouseX);
         this.transform.eulerAngles = new Vector3(0, this.mouseX);
     }
 
 
-    
+
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.isWriting)
@@ -178,22 +160,19 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour {
 
     private void Jetpack()
     {
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (!jump.isGrounded && fuelIsEmpty)
+            if (jetpacktank > 0)
             {
-                if (jetpacktank > 0)
-                {
-                    this.rigid.AddForce(new Vector3(0, this.transform.position.y + JetPackSpeed, 0));
-                    jetpacktank--;
-                    this.fuel.text = jetpacktank.ToString();
-                }
-                else
-                {
-                    fuelIsEmpty = true;
-                }
-                
+                this.rigid.AddForce(new Vector3(0, this.transform.position.y, 0), ForceMode.Impulse);
+                jetpacktank--;
+                this.fuel.text = jetpacktank.ToString();
             }
+            else
+            {
+                fuelIsEmpty = true;
+            }
+
         }
     }
 
@@ -203,11 +182,11 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour {
         {
             if (jetpacktank > 0)
             {
-                this.rigid.AddForce(0, 0, mouseX + JetPackSpeed);
+                this.rigid.AddForce(new Vector3(0, 0, 0));
                 jetpacktank--;
                 this.fuel.text = jetpacktank.ToString();
             }
-            
+
         }
         else
         {
