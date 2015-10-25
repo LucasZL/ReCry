@@ -41,6 +41,8 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
     GameObject[] bigEnvirement;
     GameObject[,] Map;
 	GameObject[] respawnPoints;
+    List<GameObject> minimapIslands;
+    List<GameObject> mapIslands;
     public GameObject bridgeCube;
 	bool playerSpawned = false;
     bool mapNeedsCorrection = false;
@@ -50,6 +52,8 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 	{
 		PhotonNetwork.autoJoinLobby = false;    // we join randomly. always. no need to join a lobby to get the list of rooms.
         mapHightDifference = (int)(mapHightDifference * (islandSize / 10));
+        minimapIslands = new List<GameObject>();
+        mapIslands = new List<GameObject>();
     }
 
 	void OnGUI()
@@ -66,16 +70,25 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 			ConnectInUpdate = false;
 			PhotonNetwork.ConnectUsingSettings(Version);
 		}
-		if (GameObject.FindGameObjectWithTag("Respawn"))
+		if (GameObject.FindGameObjectWithTag("Respawn") && PhotonNetwork.connectionStateDetailed.ToString() == "Joined")
 		{
-			getSpawnPoints();
 			if(!playerSpawned)
 			{
+                getSpawnPoints();
                 int spawn = UnityEngine.Random.Range(0, respawnPoints.Length);
 				PhotonNetwork.Instantiate("Playerprefab_Multi", respawnPoints[spawn].transform.position, Quaternion.identity, 0);
 				playerSpawned = true;
 			}
 		}
+
+        if(minimapIslands.Count != 0 && mapIslands.Count != 0)
+        {
+            for(int i = 0; i < mapIslands.Count; i++)
+            {
+                int owner = mapIslands[i].GetComponent<IslandOwner>().owner;
+                minimapIslands[i].GetComponent<MinimapIslandStats>().owner = owner;
+            }
+        }
 	}
 	
 	// to react to events "connected" and (expected) error "failed to join random room", we implement some methods. PhotonNetworkingMessage lists all available methods!
@@ -120,6 +133,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
         GameObject minimapparentparent = GameObject.Find("MiniMapParentParent");
         minimapparentparent.transform.position = new Vector3(((islandSize * mapSize) / 2 - (islandSize * mapSize) / 8) * 1.11f, 60, ((islandSize * mapSize) / 2 - (((islandSize * mapSize) / 2) * 0.25f) - (islandSize*mapSize)/8)*1.05f);
         SetPivotPoint();
+        fillMapList();
     }
 
     private void SetPivotPoint()
@@ -204,6 +218,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                             cube.transform.parent = GameObject.Find("Minimap").transform;
                             cube.transform.position = new Vector3(position.x, 0, position.z) * scale;
                             cube.transform.localScale = new Vector3(islandSize / 30 * scale, 0.1f * scale, islandSize / 30 * scale);
+                            minimapIslands.Add(cube);
                         }
                     }
                 }
@@ -220,6 +235,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                         cube.transform.parent = GameObject.Find("Minimap").transform;
                         cube.transform.position = new Vector3(position.x, 0, position.z) * scale;
                         cube.transform.localScale = new Vector3(islandSize / 30 * scale, 0.1f * scale , islandSize / 30 * scale);
+                        minimapIslands.Add(cube);
                     }
                 }
 
@@ -252,6 +268,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                             cube.transform.parent = GameObject.Find("Minimap").transform;
                             cube.transform.position = new Vector3(position.x, 0, position.z) * scale;
                             cube.transform.localScale = new Vector3(islandSize / 30 * scale, 0.1f * scale, islandSize / 30 * scale);
+                            minimapIslands.Add(cube);
                         }
                     }
                 }
@@ -260,7 +277,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
         if (yRandom)
         {
             createMapArray();
-            GetOtherBridgePoint();
+            //GetOtherBridgePoint();
             //GenerateBridges();
         }
     }
@@ -317,6 +334,12 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 		int random = UnityEngine.Random.Range(0, islands.Length);
         int rotation = UnityEngine.Random.Range(0, 5);
 		PhotonNetwork.Instantiate(islands[random], position, Quaternion.Euler(0.0f, rotation * 60, 0.0f), 0);
+    }
+
+    void fillMapList()
+    {
+        GameObject[] islands = GameObject.FindGameObjectsWithTag("Env");
+        mapIslands.AddRange(islands);
     }
 
     bool isOdd(int value)
@@ -939,8 +962,14 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 
     public void RespawnPlayer(GameObject Player)
     {
-        int spawn = UnityEngine.Random.Range(0, respawnPoints.Length);
-        Player.transform.position = this.respawnPoints[spawn].transform.position;
-        Player.GetComponent<CharacterStats>().Life = 100;
+        foreach(GameObject island in mapIslands)
+        {
+            if(island.GetComponent<IslandOwner>().owner == Player.GetComponent<CharacterStats>().team)
+            {
+                Player.transform.position = island.transform.Find("Respawn").transform.position;
+                Player.GetComponent<CharacterStats>().Life = 100;
+                island.GetComponent<IslandOwner>().respawnTickets--;
+            }
+        }
     }
 }

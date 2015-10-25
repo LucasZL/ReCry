@@ -11,6 +11,8 @@ public class CharacterStats : MonoBehaviour
     public int munition = 30;
     public int restmuni = 120;
     public int staticMunition = 30;
+    public int team = 1;
+
     private Text lifeText;
     private Text armorText;
     public Text ammunitionText;
