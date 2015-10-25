@@ -115,8 +115,20 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
         GameObject minimap = GameObject.Find("Minimap");
         minimap.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 90));
         minimap.transform.parent = GameObject.Find("MiniMapParent").transform;
+        GameObject minimapparent = GameObject.Find("MiniMapParent");
+        minimapparent.transform.parent = GameObject.Find("MiniMapParentParent").transform;
+        GameObject minimapparentparent = GameObject.Find("MiniMapParentParent");
+        minimapparentparent.transform.position = new Vector3(((islandSize * mapSize) / 2 - (islandSize * mapSize) / 8) * 1.11f, 60, ((islandSize * mapSize) / 2 - (((islandSize * mapSize) / 2) * 0.25f) - (islandSize*mapSize)/8)*1.05f);
+        SetPivotPoint();
     }
-	
+
+    private void SetPivotPoint()
+    {
+        GameObject point = GameObject.Find("PivotPoint");
+        point.transform.position = new Vector3(((islandSize * mapSize) / 2 - (islandSize*mapSize)/8) * 1.11f, 0, ((islandSize * mapSize) / 2 - (islandSize * mapSize) / 8)*1.01f);
+        Debug.Log((islandSize * mapSize) / 4);
+    }
+
     public void OnJoinedLobby()
 	{
 		Utility.roomInfo = PhotonNetwork.GetRoomList();
@@ -207,7 +219,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                         GameObject cube = (GameObject)Instantiate(Resources.Load("Hexagon_Sand"));
                         cube.transform.parent = GameObject.Find("Minimap").transform;
                         cube.transform.position = new Vector3(position.x, 0, position.z) * scale;
-                        cube.transform.localScale = new Vector3(islandSize / 30 * scale, 0.001f * scale , islandSize / 30 * scale);
+                        cube.transform.localScale = new Vector3(islandSize / 30 * scale, 0.1f * scale , islandSize / 30 * scale);
                     }
                 }
 
@@ -239,7 +251,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                             GameObject cube = (GameObject)Instantiate(Resources.Load("Hexagon_Sand"));
                             cube.transform.parent = GameObject.Find("Minimap").transform;
                             cube.transform.position = new Vector3(position.x, 0, position.z) * scale;
-                            cube.transform.localScale = new Vector3(islandSize / 30 * scale, 0.001f * scale, islandSize / 30 * scale);
+                            cube.transform.localScale = new Vector3(islandSize / 30 * scale, 0.1f * scale, islandSize / 30 * scale);
                         }
                     }
                 }
