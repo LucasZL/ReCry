@@ -26,7 +26,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 	public int mapSize = 3;
 	[Range(1, 100)]
 	public int mapHightDifference = 3;
-	public float islandSize = 10;
+	public float islandSize = 10.0f;
     public float BridgeTileWidth;
 	public int mapSideLength;
 
@@ -46,7 +46,11 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
     public GameObject bridgeCube;
 	bool playerSpawned = false;
     bool mapNeedsCorrection = false;
-   
+
+    GameObject firstTeamSpawn;
+    GameObject seccTeamSpawn;
+    GameObject thirdTeamSpawn;
+    GameObject fourthTeamSpawn;
 
     public virtual void Start()
 	{
@@ -59,7 +63,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 	void OnGUI()
 	{
 		GUILayout.Label(PhotonNetwork.connectionStateDetailed.ToString());
-	}
+    }
 	
 	public virtual void Update()
 	{
@@ -134,6 +138,39 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
         minimapparentparent.transform.position = new Vector3(((islandSize * mapSize) / 2 - (islandSize * mapSize) / 8) * 1.11f, 60, ((islandSize * mapSize) / 2 - (((islandSize * mapSize) / 2) * 0.25f) - (islandSize*mapSize)/8)*1.05f);
         SetPivotPoint();
         fillMapList();
+        setFirstSpawn();
+        Cursor.visible = false;
+    }
+
+    private void setFirstSpawn()
+    {
+        foreach (GameObject island in mapIslands)
+        {
+            if (island.transform.position.x == 0 && island.transform.position.z == (((mapSize + 1) * islandSize) / 2) - (islandSize * 1.5f))
+            {
+                Debug.Log("erster");
+                firstTeamSpawn = island;
+                island.GetComponent<IslandOwner>().owner = 1;
+            }
+            else if (island.transform.position.x == ((((mapSize - 1) * islandSize) * 0.875) / 2) && island.transform.position.z == 0)
+            {
+                Debug.Log("zweiter");
+                seccTeamSpawn = island;
+                island.GetComponent<IslandOwner>().owner = 2;
+            }
+            else if (island.transform.position.x == (((mapSize - 1) * islandSize) * 0.875) && island.transform.position.z == ((float)mapSize / 2) * islandSize)
+            {
+                Debug.Log("dritter");
+                thirdTeamSpawn = island;
+                island.GetComponent<IslandOwner>().owner = 3;
+            }
+            else if (island.transform.position.x == ((((mapSize - 1) * islandSize) * 0.875) / 2) && island.transform.position.z == (mapSize - 1)* islandSize)
+            {
+                Debug.Log("vierter");
+                fourthTeamSpawn = island;
+                island.GetComponent<IslandOwner>().owner = 4;
+            }
+        }
     }
 
     private void SetPivotPoint()
@@ -969,7 +1006,21 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                 Player.transform.position = island.transform.Find("Respawn").transform.position;
                 Player.GetComponent<CharacterStats>().Life = 100;
                 island.GetComponent<IslandOwner>().respawnTickets--;
+                return;
             }
         }
+    }
+
+    public void SpawnPlayer(GameObject Player)
+    {
+        int team = Player.GetComponent<CharacterStats>().team;
+        if (team == 1)
+            Player.transform.position = firstTeamSpawn.transform.Find("Respawn").transform.position;
+        else if (team == 2)
+            Player.transform.position = seccTeamSpawn.transform.Find("Respawn").transform.position;
+        else if (team == 3)
+            Player.transform.position = thirdTeamSpawn.transform.Find("Respawn").transform.position;
+        else if (team == 4)
+            Player.transform.position = fourthTeamSpawn.transform.Find("Respawn").transform.position;
     }
 }
