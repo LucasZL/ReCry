@@ -48,6 +48,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
     public GameObject bridgeCube;
 	bool playerSpawned = false;
     bool mapNeedsCorrection = false;
+	bool envFixed = false;
 
     GameObject firstTeamSpawn;
     GameObject seccTeamSpawn;
@@ -327,8 +328,6 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
         if (smallEnvirement == null)
             smallEnvirement = GameObject.FindGameObjectsWithTag("EnvSmall");
 
-        List<GameObject> envirmts = new List<GameObject>();
-
         foreach (GameObject emptyGameObject in smallEnvirement)
         {
             int random = UnityEngine.Random.Range(0, 7);
@@ -338,22 +337,10 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                 if(PhotonNetwork.isMasterClient)
                 {
                     GameObject prefab = PhotonNetwork.Instantiate(SmallEnvirementsToPlace[randomEnvirement], new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, UnityEngine.Random.Range(0.0f, 360.0f), 0.0f), 0);
-                    envirmts.Add(prefab);
                 }
             }
         }
-        for (int i = 0; i < envirmts.Count; i++)
-        {
-            envirmts[i].transform.parent = smallEnvirement[i].transform.parent;
-        }
 
-        foreach (GameObject smallEnv in GameObject.FindGameObjectsWithTag("SmallPrefab"))
-        {
-            if (smallEnv.GetComponent<PhotonView>())
-            {
-                Destroy(smallEnv.GetComponent<PhotonView>());
-            }
-        }
 
         foreach (GameObject smallEnv in GameObject.FindGameObjectsWithTag("EnvSmall"))
         {
@@ -363,12 +350,12 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 
     void placeBigEnvirement()
     {
-        if (smallEnvirement == null)
-            smallEnvirement = GameObject.FindGameObjectsWithTag("EnvBig");
+        if (bigEnvirement == null)
+			bigEnvirement = GameObject.FindGameObjectsWithTag("EnvBig");
 
         List<GameObject> envirmts = new List<GameObject>();
 
-        foreach (GameObject emptyGameObject in smallEnvirement)
+		foreach (GameObject emptyGameObject in bigEnvirement)
         {
             int random = UnityEngine.Random.Range(0, 7);
             int randomEnvirement = UnityEngine.Random.Range(0, BigEnvirementsToPlace.Length);
@@ -379,18 +366,6 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                     GameObject prefab = PhotonNetwork.Instantiate(BigEnvirementsToPlace[randomEnvirement], new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, UnityEngine.Random.Range(0.0f, 360.0f), 0.0f), 0);
                     envirmts.Add(prefab);
                 }
-            }
-        }
-        for (int i = 0; i < envirmts.Count; i++)
-        {
-            envirmts[i].transform.parent = smallEnvirement[i].transform.parent;
-        }
-
-        foreach (GameObject smallEnv in GameObject.FindGameObjectsWithTag("BigPrefab"))
-        {
-            if (smallEnv.GetComponent<PhotonView>())
-            {
-                Destroy(smallEnv.GetComponent<PhotonView>());
             }
         }
 
