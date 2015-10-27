@@ -127,10 +127,10 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 		if (PhotonNetwork.isMasterClient) 
 		{
 			placeIslands(IslandsToPlace, 0, true,1);
+			placeIslands(IslandsToPlace, -550, false,0.25f);
         }
         placeSmallEnvirement();
         placeBigEnvirement();
-        placeIslands(IslandsToPlace, -550, false,0.25f);
         
         GameObject minimap = GameObject.Find("Minimap");
         minimap.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 90));
@@ -254,7 +254,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                         }
                         else
                         {
-                            GameObject cube = (GameObject)Instantiate(Resources.Load("Hexagon_Sand"));
+							GameObject cube = PhotonNetwork.Instantiate("Hexagon_Sand", new Vector3(0,0,0), Quaternion.Euler(0.0f, 0.0f, 0.0f), 0);
                             cube.transform.parent = GameObject.Find("Minimap").transform;
                             cube.transform.position = new Vector3(position.x, 0, position.z) * scale;
                             cube.transform.localScale = new Vector3(islandSize / 30 * scale, 0.1f * scale, islandSize / 30 * scale);
@@ -271,7 +271,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                     }
                     else
                     {
-                        GameObject cube = (GameObject)Instantiate(Resources.Load("Hexagon_Sand"));
+						GameObject cube = PhotonNetwork.Instantiate("Hexagon_Sand", new Vector3(0,0,0), Quaternion.Euler(0.0f, 0.0f, 0.0f), 0);
                         cube.transform.parent = GameObject.Find("Minimap").transform;
                         cube.transform.position = new Vector3(position.x, 0, position.z) * scale;
                         cube.transform.localScale = new Vector3(islandSize / 30 * scale, 0.1f * scale , islandSize / 30 * scale);
@@ -304,7 +304,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                         }
                         else
                         {
-                            GameObject cube = (GameObject)Instantiate(Resources.Load("Hexagon_Sand"));
+							GameObject cube = PhotonNetwork.Instantiate("Hexagon_Sand", new Vector3(0,0,0), Quaternion.Euler(0.0f, 0.0f, 0.0f), 0);
                             cube.transform.parent = GameObject.Find("Minimap").transform;
                             cube.transform.position = new Vector3(position.x, 0, position.z) * scale;
                             cube.transform.localScale = new Vector3(islandSize / 30 * scale, 0.1f * scale, islandSize / 30 * scale);
