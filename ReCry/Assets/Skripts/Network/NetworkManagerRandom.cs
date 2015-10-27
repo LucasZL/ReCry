@@ -30,6 +30,8 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
     public float BridgeTileWidth;
 	public int mapSideLength;
 
+    public bool gameStarted = false;
+
     public string[] IslandsToPlace;
     public string[] SmallEnvirementsToPlace;
     public string[] BigEnvirementsToPlace;

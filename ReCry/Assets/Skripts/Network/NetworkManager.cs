@@ -91,7 +91,7 @@ public class NetworkManager : Photon.MonoBehaviour
 
     public void OnJoinedLobby()
 	{
-        Utility.roomInfo = PhotonNetwork.GetRoomList();
+        
 	}
 
     void calculateMapDimentions()

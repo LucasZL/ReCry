@@ -33,6 +33,7 @@ public class CharacterStats : MonoBehaviour
             Color color;
             if (this.team == 1)
             {
+                //Team Green
                 color = new Color32(100, 221, 23, 1);
                 gameObject.GetComponent<Renderer>().material.color = color;
                 transform.Find("Bazooka_1").GetComponent<Renderer>().material.color = color;
@@ -40,6 +41,7 @@ public class CharacterStats : MonoBehaviour
             }
             else if (this.team == 2)
             {
+                //Team Red
                 color = new Color32(244, 67, 54, 1);
                 gameObject.GetComponent<Renderer>().material.color = color;
                 transform.Find("Bazooka_1").GetComponent<Renderer>().material.color = color;
@@ -47,6 +49,7 @@ public class CharacterStats : MonoBehaviour
             }
             else if (this.team == 3)
             {
+                //Team Cyan
                 color = new Color32(11, 188, 201, 1);
                 gameObject.GetComponent<Renderer>().material.color = color;
                 transform.Find("Bazooka_1").GetComponent<Renderer>().material.color = color;
@@ -54,6 +57,7 @@ public class CharacterStats : MonoBehaviour
             }
             else if (this.team == 4)
             {
+                //Team DarkBlue
                 color = new Color32(26, 35, 126, 1);
                 gameObject.GetComponent<Renderer>().material.color = color;
                 transform.Find("Bazooka_1").GetComponent<Renderer>().material.color = color;

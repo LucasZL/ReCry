@@ -16,12 +16,14 @@ public class RayCastShoot : MonoBehaviour
     int munitionValue;
     CharacterStats stats;
     PhotonView ph;
+    Camera mainCamera;
 
     void Start()
     {
-        ph = PhotonView.Get(this.transform.parent);
+        ph = PhotonView.Get(this.transform);
         if (ph.isMine)
         {
+            mainCamera = this.transform.Find("Camera").GetComponent<Camera>();
             stats = GetComponentInParent<CharacterStats>();
             stats.ammunitionText.text = string.Format("{0} / {1}", stats.munition, stats.restmuni);
         }
@@ -46,7 +48,7 @@ public class RayCastShoot : MonoBehaviour
         {
             RaycastHit hit;
             
-            Ray RayCast = new Ray(this.transform.position, this.transform.forward);
+            Ray RayCast = new Ray(this.mainCamera.transform.position, this.mainCamera.transform.forward);
             Debug.DrawRay(this.transform.position, this.transform.forward, Color.red);
             if (Physics.Raycast(RayCast, out hit))
             {

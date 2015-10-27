@@ -26,11 +26,11 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     public float MoveSpeed = 5f;
     public float RunSpeed = 15f;
     public float MouseSensitivity = 5f;
-    public float JumpHeight = 15f;
+    public float JumpHeight = 5f;
     public int LookUp = -50;
     public int lookDown = 50;
     private bool isWalking = true;
-    private bool isRunning = false;
+    public bool isRunning = false;
     private float mouseX;
     private float mouseY;
     private float horizontal;
@@ -42,7 +42,6 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     private int jetpacktank = 100;
     public float JetPackSpeed = 25f;
     private bool fuelIsEmpty = false;
-
 
     //Camera Movement and JumpController
     private Camera camera;
@@ -73,7 +72,8 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
         if (ph.isMine)
         {
             MoveCharacter();
-            //Run ();
+            Jetpack();
+            Run ();
             LookAround();
         }
         else
@@ -88,7 +88,6 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     {
         if (ph.isMine)
         {
-            Jetpack();
             JetPackForward();
             FillUpJetPackFuel();
         }
@@ -97,7 +96,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
     void MoveCharacter()
     {
-        if (isWalking)
+        if (isWalking && jump.isGrounded)
         {
             this.horizontal = Input.GetAxis("Horizontal") * Time.deltaTime * MoveSpeed;
             this.vertical = Input.GetAxis("Vertical") * Time.deltaTime * MoveSpeed;
@@ -108,12 +107,15 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
     void Run()
     {
-        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W) && !isRunning && jump.isGrounded)
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W) && jump.isGrounded && jetpacktank > 0)
         {
             isWalking = false;
+            isRunning = true;
             this.horizontal = Input.GetAxis("Horizontal") * Time.deltaTime * MoveSpeed;
             this.vertical = Input.GetAxis("Vertical") * Time.deltaTime * RunSpeed;
             transform.Translate(horizontal, 0, vertical);
+            jetpacktank--;
+            this.fuel.text = jetpacktank.ToString();
         }
         else
         {
@@ -160,11 +162,11 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
     private void Jetpack()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && jump.isGrounded)
         {
             if (jetpacktank > 0)
             {
-                this.rigid.AddForce(new Vector3(0, this.transform.position.y, 0), ForceMode.Impulse);
+                this.rigid.AddRelativeForce(new Vector3(0, this.transform.position.y + JumpHeight, rigid.velocity.magnitude * 25), ForceMode.Impulse);
                 jetpacktank--;
                 this.fuel.text = jetpacktank.ToString();
             }
@@ -196,7 +198,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
     private void FillUpJetPackFuel()
     {
-        if (jetpacktank < 100 && jump.isGrounded)
+        if (jetpacktank < 100 && jump.isGrounded && !isRunning)
         {
             jetpacktank++;
             this.fuel.text = jetpacktank.ToString();

@@ -13,8 +13,8 @@ using Photon;
 
 public static class Utility
 {
-    
     public static string ServerName;
     public static RoomOptions roomOptions;
     public static RoomInfo[] roomInfo;
+    public static int Team;
 }
