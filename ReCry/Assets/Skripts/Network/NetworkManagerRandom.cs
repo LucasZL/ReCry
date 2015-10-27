@@ -126,9 +126,9 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 		if (PhotonNetwork.isMasterClient) 
 		{
 			placeIslands(IslandsToPlace, 0, true,1);
-			placeSmallEnvirement();
-            placeBigEnvirement();
         }
+        placeSmallEnvirement();
+        placeBigEnvirement();
         placeIslands(IslandsToPlace, -550, false,0.25f);
         
         GameObject minimap = GameObject.Find("Minimap");
