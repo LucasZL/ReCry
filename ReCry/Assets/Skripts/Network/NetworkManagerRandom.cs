@@ -333,15 +333,15 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
             int randomEnvirement = UnityEngine.Random.Range(0, SmallEnvirementsToPlace.Length);
             if (random != 0)
             {
-                PhotonNetwork.Instantiate(SmallEnvirementsToPlace[randomEnvirement], new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, UnityEngine.Random.Range(0.0f, 360.0f), 0.0f), 0).transform.parent = emptyGameObject.transform.parent;
+                PhotonNetwork.Instantiate(SmallEnvirementsToPlace[randomEnvirement], new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, UnityEngine.Random.Range(0.0f, 360.0f), 0.0f), 0);
             }
-            foreach(GameObject smallEnv in GameObject.FindGameObjectsWithTag("EnvSmall"))
-            {
-                if(smallEnv.GetComponent<PhotonView>())
-                {
-                    Destroy(smallEnv.GetComponent<PhotonView>());
-                }
-            }
+            //foreach(GameObject smallEnv in GameObject.FindGameObjectsWithTag("EnvSmall"))
+            //{
+            //    if(smallEnv.GetComponent<PhotonView>())
+            //    {
+            //        Destroy(smallEnv.GetComponent<PhotonView>());
+            //    }
+            //}
         }
     }
 

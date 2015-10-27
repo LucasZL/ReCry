@@ -166,7 +166,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
         {
             if (jetpacktank > 0)
             {
-                this.rigid.AddRelativeForce(new Vector3(0, this.transform.position.y + JumpHeight, rigid.velocity.magnitude * 25), ForceMode.Impulse);
+                this.rigid.AddRelativeForce(new Vector3(0, this.transform.position.y + JumpHeight, 25), ForceMode.Impulse);
                 jetpacktank--;
                 this.fuel.text = jetpacktank.ToString();
             }
