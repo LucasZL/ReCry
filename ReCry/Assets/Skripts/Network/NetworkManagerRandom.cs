@@ -6,7 +6,6 @@
 //  Copyright (c) 2015 ReCry. All Rights Reserved.
 //
 
-
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
@@ -132,9 +131,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 		Debug.Log("OnPhotonRandomJoinFailed() was called by PUN. No random room available, so we create one. Calling: PhotonNetwork.CreateRoom(null, new RoomOptions() {maxPlayers = 4}, null);");
 		PhotonNetwork.CreateRoom(null, new RoomOptions() { maxPlayers = 4 }, null);
 	}
-	
-	// the following methods are implemented to give you some context. re-implement them as needed.
-	
+
 	public virtual void OnFailedToConnectToPhoton(DisconnectCause cause)
 	{
 		Debug.LogError("Cause: " + cause);

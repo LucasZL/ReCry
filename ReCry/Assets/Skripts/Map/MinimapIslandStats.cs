@@ -4,13 +4,12 @@ using System.Collections;
 public class MinimapIslandStats : MonoBehaviour
 {
     public int owner = 0;
-	// Use this for initialization
+
 	void Start ()
     {
 	
 	}
-	
-	// Update is called once per frame
+
 	void Update ()
     {
         Color color;
@@ -45,16 +44,4 @@ public class MinimapIslandStats : MonoBehaviour
             gameObject.GetComponent<Renderer>().material.color = color;
         }
     }
-
-	void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-	{
-		if (stream.isWriting)
-		{
-			stream.SendNext(owner);
-		}
-		else
-		{
-			owner = (int)stream.ReceiveNext();
-		}
-	}
 }
