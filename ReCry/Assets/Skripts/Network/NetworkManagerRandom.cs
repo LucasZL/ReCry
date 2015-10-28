@@ -49,6 +49,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 	bool playerSpawned = false;
     bool mapNeedsCorrection = false;
 	bool envFixed = false;
+	bool mapFixed = false;
 
     GameObject firstTeamSpawn;
     GameObject seccTeamSpawn;
@@ -88,14 +89,35 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 			}
 		}
 
-        if(minimapIslands.Count != 0 && mapIslands.Count != 0)
+		if (!mapFixed) 
+		{
+			minimapIslands.AddRange(GameObject.FindGameObjectsWithTag ("minimapIsland"));
+			mapIslands.AddRange(GameObject.FindGameObjectsWithTag ("Env"));
+		}
+
+        if(minimapIslands.Count != 0 && mapIslands.Count != 0 && !mapFixed)
         {
             for(int i = 0; i < mapIslands.Count; i++)
             {
                 int owner = mapIslands[i].GetComponent<IslandOwner>().owner;
                 minimapIslands[i].GetComponent<MinimapIslandStats>().owner = owner;
             }
-        }
+
+			foreach (var island in minimapIslands) 
+			{
+				island.transform.localScale = new Vector3(islandSize / 30 * 0.25f, 0.1f * 0.25f , islandSize / 30 * 0.25f);
+				island.transform.parent = GameObject.Find("Minimap").transform;
+			}
+
+			GameObject minimap = GameObject.Find("Minimap");
+			minimap.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 90));
+			minimap.transform.parent = GameObject.Find("MiniMapParent").transform;
+			GameObject minimapparent = GameObject.Find("MiniMapParent");
+			minimapparent.transform.parent = GameObject.Find("MiniMapParentParent").transform;
+			GameObject minimapparentparent = GameObject.Find("MiniMapParentParent");
+			minimapparentparent.transform.position = new Vector3(((islandSize * mapSize) / 2 - (islandSize * mapSize) / 8) * 1.11f, 60, ((islandSize * mapSize) / 2 - (((islandSize * mapSize) / 2) * 0.25f) - (islandSize*mapSize)/8)*1.05f);
+			mapFixed = true;
+		}
 	}
 	
 	// to react to events "connected" and (expected) error "failed to join random room", we implement some methods. PhotonNetworkingMessage lists all available methods!
@@ -126,19 +148,12 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 
 		if (PhotonNetwork.isMasterClient) 
 		{
-			placeIslands(IslandsToPlace, 0, true,1);
-			placeIslands(IslandsToPlace, -550, false,0.25f);
+			placeIslands(IslandsToPlace, 0, true, 1);
+			placeIslands(IslandsToPlace, -550, false, 0.25f);
         }
         placeSmallEnvirement();
         placeBigEnvirement();
         
-        GameObject minimap = GameObject.Find("Minimap");
-        minimap.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 90));
-        minimap.transform.parent = GameObject.Find("MiniMapParent").transform;
-        GameObject minimapparent = GameObject.Find("MiniMapParent");
-        minimapparent.transform.parent = GameObject.Find("MiniMapParentParent").transform;
-        GameObject minimapparentparent = GameObject.Find("MiniMapParentParent");
-        minimapparentparent.transform.position = new Vector3(((islandSize * mapSize) / 2 - (islandSize * mapSize) / 8) * 1.11f, 60, ((islandSize * mapSize) / 2 - (((islandSize * mapSize) / 2) * 0.25f) - (islandSize*mapSize)/8)*1.05f);
         SetPivotPoint();
         fillMapList();
         setFirstSpawn();

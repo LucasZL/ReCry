@@ -45,4 +45,16 @@ public class MinimapIslandStats : MonoBehaviour
             gameObject.GetComponent<Renderer>().material.color = color;
         }
     }
+
+	void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+	{
+		if (stream.isWriting)
+		{
+			stream.SendNext(owner);
+		}
+		else
+		{
+			owner = (int)stream.ReceiveNext();
+		}
+	}
 }
