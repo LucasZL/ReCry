@@ -42,6 +42,8 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     private int jetpacktank = 100;
     public float JetPackSpeed = 25f;
     private bool fuelIsEmpty = false;
+    private bool moveForwards = false;
+    private bool changeFuel = true;
 
     //Camera Movement and JumpController
     private Camera camera;
@@ -56,6 +58,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
         if (ph.isMine)
         {
+            JumpHeight = 150;
             this.camera = this.transform.Find("Camera").GetComponent<Camera>();
             this.jump = GetComponent<JumpDetection>();
             this.fuel = GameObject.FindWithTag("Fuel").GetComponent<Text>() as Text;
@@ -71,7 +74,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     {
         if (ph.isMine)
         {
-            MoveCharacter();
+            CheckIfCharacterMoved();
             Jetpack();
             Run();
             LookAround();
@@ -92,6 +95,18 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
             FillUpJetPackFuel();
         }
 
+    }
+
+    void CheckIfCharacterMoved()
+    {
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
+        {
+            MoveCharacter();
+        }
+        else
+        {
+            isWalking = false;
+        }
     }
 
     void MoveCharacter()
@@ -119,6 +134,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
         }
         else
         {
+            isRunning = false;
             isWalking = true;
         }
     }
@@ -163,23 +179,28 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     private void Jetpack()
     {
         Debug.Log(jump.isGrounded);
-        if (Input.GetKeyDown(KeyCode.Space) && jump.isGrounded)
+        if (Input.GetKeyDown(KeyCode.Space) && jump.isGrounded && fuelIsEmpty)
         {
             if (jetpacktank > 0)
             {
                 if (isWalking)
                 {
+                    ChangeJetpackFuel(30, 0);
                     this.rigid.AddRelativeForce(new Vector3(0, this.transform.position.y + JumpHeight, MoveSpeed * this.rigid.mass), ForceMode.Impulse);
-                    jetpacktank--;
                     this.fuel.text = jetpacktank.ToString();
                 }
                 if (isRunning)
                 {
+                    ChangeJetpackFuel(30, 0);
                     this.rigid.AddRelativeForce(new Vector3(0, this.transform.position.y + JumpHeight, RunSpeed * this.rigid.mass), ForceMode.Impulse);
-                    jetpacktank--;
                     this.fuel.text = jetpacktank.ToString();
                 }
-               
+                if (!isWalking)
+                {
+                    ChangeJetpackFuel(30, 0);
+                    this.rigid.AddRelativeForce(new Vector3(0, this.transform.position.y + JumpHeight, 0), ForceMode.Impulse);
+                    this.fuel.text = jetpacktank.ToString();
+                }
             }
             else
             {
@@ -195,9 +216,49 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
         {
             if (jetpacktank > 0)
             {
-                this.rigid.AddForce(new Vector3(0, 0, 0));
-                jetpacktank--;
-                this.fuel.text = jetpacktank.ToString();
+                if (Input.GetKey(KeyCode.W))
+                {
+                    moveForwards = true;
+                    this.rigid.AddRelativeForce(new Vector3(0, 0, 125));
+                    jetpacktank--;
+                    this.fuel.text = jetpacktank.ToString();
+                }
+                if (Input.GetKey(KeyCode.S))
+                {
+                    moveForwards = true;
+                    this.rigid.AddRelativeForce(new Vector3(0, 0, -125));
+                    jetpacktank--;
+                    this.fuel.text = jetpacktank.ToString();
+                }
+                if (Input.GetKey(KeyCode.A))
+                {
+                    moveForwards = true;
+                    this.rigid.AddRelativeForce(new Vector3(-125, 0, 0));
+                    jetpacktank--;
+                    this.fuel.text = jetpacktank.ToString();
+                }
+                if (Input.GetKey(KeyCode.D))
+                {
+                    moveForwards = true;
+                    this.rigid.AddRelativeForce(new Vector3(125, 0, 0));
+                    jetpacktank--;
+                    this.fuel.text = jetpacktank.ToString();
+                }
+                if (Input.GetKey(KeyCode.LeftShift) && !moveForwards)
+                {
+                    this.rigid.AddRelativeForce(new Vector3(0, 250, 0));
+                    jetpacktank--;
+                    this.fuel.text = jetpacktank.ToString();
+                }
+                else
+                {
+                    moveForwards = false;
+                }
+
+            }
+            else
+            {
+                jetpacktank = 0;
             }
 
         }
@@ -214,5 +275,30 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
             jetpacktank++;
             this.fuel.text = jetpacktank.ToString();
         }
+    }
+
+    private void ChangeJetpackFuel(int change, int seconds)
+    {
+        if (jetpacktank > change)
+        {
+            if (changeFuel)
+            {
+                StartCoroutine(ChangeFuel(change,seconds));
+            }
+        }
+        else
+        {
+            fuelIsEmpty = true;
+        }
+
+    }
+
+    IEnumerator ChangeFuel(int change,int seconds)
+    {
+        changeFuel = false;
+        jetpacktank -= change;
+        this.fuel.text = jetpacktank.ToString();
+        yield return new WaitForSeconds(seconds);
+        changeFuel = true;
     }
 }
