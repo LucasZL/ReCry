@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class IslandOwnerCollider : MonoBehaviour {
-
+public class IslandOwnerCollider : MonoBehaviour 
+{
     IslandOwner islandOwner;
-
+	public int owner;
+	
 	void Start ()
     {
         islandOwner = transform.parent.GetComponent<IslandOwner>();
@@ -16,6 +17,7 @@ public class IslandOwnerCollider : MonoBehaviour {
         {
             CharacterStats stats = other.GetComponent<CharacterStats>();
             islandOwner.owner = stats.team;
+			this.owner = stats.team;
         }
     }
 }

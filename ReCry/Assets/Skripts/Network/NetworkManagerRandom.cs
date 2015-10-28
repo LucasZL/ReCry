@@ -14,12 +14,8 @@ using System;
 
 public class NetworkManagerRandom : Photon.MonoBehaviour
 {
-	/// <summary>Connect automatically? If false you can set this to true later on or call ConnectUsingSettings in your own scripts.</summary>
 	public bool AutoConnect = true;
-
 	public string Version = "1.01";
-	
-	/// <summary>if we don't want to connect in Start(), we have to "remember" if we called ConnectUsingSettings()</summary>
 	private bool ConnectInUpdate = true;
 
 	[Range(1, 31)]
@@ -35,9 +31,6 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
     public string[] IslandsToPlace;
     public string[] SmallEnvirementsToPlace;
     public string[] BigEnvirementsToPlace;
-
-    //IslandStats[,] map;
-    //IslandStats islandStats;
 
     GameObject[] smallEnvirement;
     GameObject[] bigEnvirement;
@@ -58,7 +51,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 
     public virtual void Start()
 	{
-		PhotonNetwork.autoJoinLobby = false;    // we join randomly. always. no need to join a lobby to get the list of rooms.
+		PhotonNetwork.autoJoinLobby = false;
         mapHightDifference = (int)(mapHightDifference * (islandSize / 10));
         minimapIslands = new List<GameObject>();
         mapIslands = new List<GameObject>();
@@ -71,56 +64,61 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 	
 	public virtual void Update()
 	{
-		if (ConnectInUpdate && AutoConnect && !PhotonNetwork.connected)
-		{
-			Debug.Log("Update() was called by Unity. Scene is loaded. Let's connect to the Photon Master Server. Calling: PhotonNetwork.ConnectUsingSettings();");
+		if (ConnectInUpdate && AutoConnect && !PhotonNetwork.connected) {
+			Debug.Log ("Update() was called by Unity. Scene is loaded. Let's connect to the Photon Master Server. Calling: PhotonNetwork.ConnectUsingSettings();");
 			
 			ConnectInUpdate = false;
-			PhotonNetwork.ConnectUsingSettings(Version);
+			PhotonNetwork.ConnectUsingSettings (Version);
 		}
-		if (GameObject.FindGameObjectWithTag("Respawn") && PhotonNetwork.connectionStateDetailed.ToString() == "Joined")
-		{
-			if(!playerSpawned)
-			{
-                getSpawnPoints();
-                int spawn = UnityEngine.Random.Range(0, respawnPoints.Length);
-				PhotonNetwork.Instantiate("Playerprefab_Multi", respawnPoints[spawn].transform.position, Quaternion.identity, 0);
+
+		if (GameObject.FindGameObjectWithTag ("Respawn") && PhotonNetwork.connectionStateDetailed.ToString () == "Joined") {
+			if (!playerSpawned) {
+				getSpawnPoints ();
+				int spawn = UnityEngine.Random.Range (0, respawnPoints.Length);
+				PhotonNetwork.Instantiate ("Playerprefab_Multi", respawnPoints [spawn].transform.position, Quaternion.identity, 0);
 				playerSpawned = true;
 			}
 		}
 
 		if (!mapFixed) 
 		{
-			minimapIslands.AddRange(GameObject.FindGameObjectsWithTag ("minimapIsland"));
-			mapIslands.AddRange(GameObject.FindGameObjectsWithTag ("Env"));
+			minimapIslands.AddRange (GameObject.FindGameObjectsWithTag ("minimapIsland"));
+			mapIslands.AddRange (GameObject.FindGameObjectsWithTag ("Env"));
 		}
 
-        if(minimapIslands.Count != 0 && mapIslands.Count != 0 && !mapFixed)
-        {
-            for(int i = 0; i < mapIslands.Count; i++)
-            {
-                int owner = mapIslands[i].GetComponent<IslandOwner>().owner;
-                minimapIslands[i].GetComponent<MinimapIslandStats>().owner = owner;
-            }
+		if (minimapIslands.Count != 0 && mapIslands.Count != 0 && !mapFixed) 
+		{
+			for (int i = 0; i < mapIslands.Count; i++) 
+			{
+				int owner = mapIslands [i].GetComponent<IslandOwner> ().owner;
+				minimapIslands [i].GetComponent<MinimapIslandStats> ().owner = owner;
+			}
 
 			foreach (var island in minimapIslands) 
 			{
-				island.transform.localScale = new Vector3(islandSize / 30 * 0.25f, 0.1f * 0.25f , islandSize / 30 * 0.25f);
-				island.transform.parent = GameObject.Find("Minimap").transform;
+				island.transform.localScale = new Vector3 (islandSize / 30 * 0.25f, 0.1f * 0.25f, islandSize / 30 * 0.25f);
+				island.transform.parent = GameObject.Find ("Minimap").transform;
 			}
 
-			GameObject minimap = GameObject.Find("Minimap");
-			minimap.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 90));
-			minimap.transform.parent = GameObject.Find("MiniMapParent").transform;
-			GameObject minimapparent = GameObject.Find("MiniMapParent");
-			minimapparent.transform.parent = GameObject.Find("MiniMapParentParent").transform;
-			GameObject minimapparentparent = GameObject.Find("MiniMapParentParent");
-			minimapparentparent.transform.position = new Vector3(((islandSize * mapSize) / 2 - (islandSize * mapSize) / 8) * 1.11f, 60, ((islandSize * mapSize) / 2 - (((islandSize * mapSize) / 2) * 0.25f) - (islandSize*mapSize)/8)*1.05f);
+			GameObject minimap = GameObject.Find ("Minimap");
+			minimap.transform.rotation = Quaternion.Euler (new Vector3 (0, 0, 90));
+			minimap.transform.parent = GameObject.Find ("MiniMapParent").transform;
+			GameObject minimapparent = GameObject.Find ("MiniMapParent");
+			minimapparent.transform.parent = GameObject.Find ("MiniMapParentParent").transform;
+			GameObject minimapparentparent = GameObject.Find ("MiniMapParentParent");
+			minimapparentparent.transform.position = new Vector3 (((islandSize * mapSize) / 2 - (islandSize * mapSize) / 8) * 1.11f, 60, ((islandSize * mapSize) / 2 - (((islandSize * mapSize) / 2) * 0.25f) - (islandSize * mapSize) / 8) * 1.05f);
 			mapFixed = true;
 		}
+
+		if (minimapIslands.Count != 0 && mapIslands.Count != 0) 
+		{
+			for (int i = 0; i < mapIslands.Count; i++) 
+			{
+				int owner = mapIslands [i].GetComponent<IslandOwner> ().owner;
+				minimapIslands [i].GetComponent<MinimapIslandStats> ().owner = owner;
+			}
+		}
 	}
-	
-	// to react to events "connected" and (expected) error "failed to join random room", we implement some methods. PhotonNetworkingMessage lists all available methods!
 	
 	public virtual void OnConnectedToMaster()
 	{
