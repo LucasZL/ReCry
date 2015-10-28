@@ -26,7 +26,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     public float MoveSpeed = 5f;
     public float RunSpeed = 15f;
     public float MouseSensitivity = 5f;
-    public float JumpHeight = 5f;
+    public float JumpHeight = 12.5f;
     public int LookUp = -50;
     public int lookDown = 50;
     private bool isWalking = true;
@@ -73,7 +73,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
         {
             MoveCharacter();
             Jetpack();
-            Run ();
+            Run();
             LookAround();
         }
         else
@@ -127,7 +127,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     {
         this.mouseX += Input.GetAxis("Mouse X") * MouseSensitivity;
         this.mouseY -= Input.GetAxis("Mouse Y") * MouseSensitivity;
-        
+
         this.camera.transform.eulerAngles = new Vector3(this.mouseY, this.mouseX);
         this.transform.eulerAngles = new Vector3(0, this.mouseX);
     }
@@ -162,13 +162,24 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
     private void Jetpack()
     {
+        Debug.Log(jump.isGrounded);
         if (Input.GetKeyDown(KeyCode.Space) && jump.isGrounded)
         {
             if (jetpacktank > 0)
             {
-                this.rigid.AddRelativeForce(new Vector3(0, this.transform.position.y + JumpHeight, 25), ForceMode.Impulse);
-                jetpacktank--;
-                this.fuel.text = jetpacktank.ToString();
+                if (isWalking)
+                {
+                    this.rigid.AddRelativeForce(new Vector3(0, this.transform.position.y + JumpHeight, MoveSpeed * this.rigid.mass), ForceMode.Impulse);
+                    jetpacktank--;
+                    this.fuel.text = jetpacktank.ToString();
+                }
+                if (isRunning)
+                {
+                    this.rigid.AddRelativeForce(new Vector3(0, this.transform.position.y + JumpHeight, RunSpeed * this.rigid.mass), ForceMode.Impulse);
+                    jetpacktank--;
+                    this.fuel.text = jetpacktank.ToString();
+                }
+               
             }
             else
             {
