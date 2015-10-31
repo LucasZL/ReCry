@@ -719,7 +719,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
         {
             if (island != null)
             {
-                island.GetComponent<IslandStats>().GetNeighbours(Map);
+                island.GetComponent<IslandStats>().GetNeighbours(Map, islandSize);
             }
         }
     }
@@ -922,7 +922,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                         bridgeLenght = GetBridgeLenght(point.transform, wp.otherBridgePoint.gameObject.transform);
                         bridgeCube.transform.localScale = new Vector3(1, 1, bridgeLenght);
                         position = GetSpawnPosition(point.transform, wp.otherBridgePoint.gameObject.transform);
-                        GameObject.Instantiate(bridgeCube, position, Quaternion.Euler(0, GetAngle(point.transform, wp.otherBridgePoint.gameObject.transform), 0));
+                        GameObject.Instantiate(bridgeCube, position, Quaternion.Euler(0, GetZAngle(point.transform, wp.otherBridgePoint.gameObject.transform), 0));
                     }
                 }
             }
