@@ -405,7 +405,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 
     void renameBridgePoints(List<GameObject> points, GameObject island)
     {
-        int sw = (int)island.transform.rotation.y / 60;
+        int sw = (int)island.transform.eulerAngles.y / 60;
 
         switch (sw)
         {
@@ -759,7 +759,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                     switch (wp.bridgeNumber)
                     {
                         case 1:
-                            if (!isOdd(IslandStats.x))
+                            if (!IslandStats.Odd)
                             {
                                 foreach (var neighbourIsland in IslandStats.neighbours)
                                 {
@@ -771,17 +771,17 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                             }
                             else
                             {
-                                foreach (var neighbour in IslandStats.neighbours)
+                                foreach (var neighbourIsland in IslandStats.neighbours)
                                 {
-                                    if (neighbour.GetComponent<IslandStats>().z == IslandStats.z + 1 && neighbour.GetComponent<IslandStats>().x == IslandStats.x)
+                                    if (neighbourIsland.GetComponent<IslandStats>().z == IslandStats.z + 1 && neighbourIsland.GetComponent<IslandStats>().x == IslandStats.x)
                                     {
-                                        wp.otherBridgePoint = neighbour.transform.FindChild("BridgePoint4").gameObject;
+                                        wp.otherBridgePoint = neighbourIsland.transform.FindChild("BridgePoint4").gameObject;
                                     }
                                 }
                             }
                             break;
                         case 2:
-                            if (!isOdd(IslandStats.x))
+                            if (!IslandStats.Odd)
                             {
                                 foreach (var neighbour in IslandStats.neighbours)
                                 {
@@ -803,7 +803,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                             }
                             break;
                         case 3:
-                            if (!isOdd(IslandStats.x))
+                            if (!IslandStats.Odd)
                             {
                                 foreach (var neighbour in IslandStats.neighbours)
                                 {
@@ -825,7 +825,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                             }
                             break;
                         case 4:
-                            if (!isOdd(IslandStats.x))
+                            if (!IslandStats.Odd)
                             {
                                 foreach (var neighbour in IslandStats.neighbours)
                                 {
@@ -847,7 +847,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                             }
                             break;
                         case 5:
-                            if (!isOdd(IslandStats.x))
+                            if (!IslandStats.Odd)
                             {
                                 foreach (var neighbour in IslandStats.neighbours)
                                 {
@@ -869,7 +869,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                             }
                             break;
                         case 6:
-                            if (!isOdd(IslandStats.x))
+                            if (!IslandStats.Odd)
                             {
                                 foreach (var neighbour in IslandStats.neighbours)
                                 {
@@ -929,6 +929,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
         }
     }
 
+
     Vector3 GetSpawnPosition(Transform point, Transform otherPoint)
     {
         Vector3 pos = new Vector3();
@@ -940,7 +941,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
         else
         {
             pos.x = otherPoint.position.x + ((point.position.x - otherPoint.position.x) / 2);
-        } 
+        }
         if (point.position.y < otherPoint.position.y)
         {
             pos.y = point.position.y + ((otherPoint.position.y - point.position.y) / 2);
@@ -962,40 +963,55 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 
     float GetBridgeLenght(Transform point, Transform otherPoint)
     {
-        Vector3 difference = new Vector3(point.position.x - otherPoint.position.x, point.position.y - otherPoint.position.y, point.position.z - otherPoint.position.z);
-        float diffLenght = Mathf.Sqrt((difference.x * difference.x) + (difference.y * difference.y) + (difference.z * difference.z));
+        Vector3 difference;
+        float diffLenght;
+
+        if (point.position.x >= otherPoint.position.x)
+        {
+            difference.x = point.position.x - otherPoint.position.x;
+        }
+        else
+        {
+            difference.x = otherPoint.position.x - point.position.x;
+        }
+
+        if (point.position.y >= otherPoint.position.y)
+        {
+            difference.y = point.position.y - point.position.y;
+        }
+        else
+        {
+            difference.y = otherPoint.position.y - point.position.y;
+        }
+
+        if (point.position.z >= otherPoint.position.z)
+        {
+            difference.z = point.position.z - otherPoint.position.z;
+        }
+        else
+        {
+            difference.z = otherPoint.position.z - point.position.z;
+        }
+
+        diffLenght = Mathf.Sqrt((difference.x * difference.x) + (difference.y * difference.y) + (difference.z * difference.z));
         return diffLenght;
     }
 
-    float GetAngle(Transform point, Transform otherPoint)
+    float GetYAngle(Transform point, Transform otherPoint)
     {
-        Vector2 thirdPoint = new Vector2(point.position.x, otherPoint.position.z);
-        float sineAlpha;
+        Vector3 thirdPoint = new Vector3(point.position.x, 0, point.position.z + 5);
         float angleAlpha;
 
-        if (otherPoint.position.x > point.position.x && otherPoint.position.z > point.position.z)
+        if (otherPoint.position.x > point.position.x)
         {
-            sineAlpha = (otherPoint.position.x - thirdPoint.x) / (Mathf.Sqrt((thirdPoint.y - point.position.z) * (thirdPoint.y - point.position.z) + (otherPoint.position.x - thirdPoint.x) * (otherPoint.position.x - thirdPoint.x)));
-            angleAlpha = 1 / sineAlpha;
+            angleAlpha = Vector3.Angle(thirdPoint - point.position, otherPoint.position - point.position);
             return angleAlpha;
         }
-        else if (otherPoint.position.x > point.position.x && otherPoint.position.z < point.position.z)
+        else if (otherPoint.position.x < point.position.x)
         {
-            sineAlpha = (otherPoint.position.x - thirdPoint.x) / (Mathf.Sqrt((point.position.z - thirdPoint.y) * (point.position.z - thirdPoint.y) + (otherPoint.position.x - thirdPoint.x) * (otherPoint.position.x - thirdPoint.x)));
-            angleAlpha = 1 / sineAlpha;
-            return angleAlpha + 90;
-        }
-        else if (otherPoint.position.x < point.position.x && otherPoint.position.z < point.position.z)
-        {
-            sineAlpha = (thirdPoint.x - otherPoint.position.x) / (Mathf.Sqrt((thirdPoint.x - otherPoint.position.x) * (thirdPoint.x - otherPoint.position.x) + (point.position.z - thirdPoint.y) * (point.position.z - thirdPoint.y)));
-            angleAlpha = 1 / sineAlpha;
-            return angleAlpha + 180;
-        }
-        else if (otherPoint.position.x < point.position.x && otherPoint.position.z > point.position.z)
-        {
-            sineAlpha = (thirdPoint.x - otherPoint.position.x) / (Mathf.Sqrt((thirdPoint.x - otherPoint.position.x) * (thirdPoint.x - otherPoint.position.x) + (thirdPoint.y - point.position.z) * (thirdPoint.y - point.position.z)));
-            angleAlpha = 1 / sineAlpha;
-            return angleAlpha + 270;
+            angleAlpha = Vector3.Angle(thirdPoint - point.position, otherPoint.position - point.position);
+            return 360 - angleAlpha;
+
         }
         else if (otherPoint.position.x == point.position.x && otherPoint.position.z > point.position.z)
         {
@@ -1014,6 +1030,17 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
             return 270;
         }
         return 0;
+    }
+
+    float GetZAngle(Transform point, Transform otherPoint)
+    {
+        float angle;
+
+        Vector3 thirdPoint = new Vector3(point.position.x, otherPoint.position.y, point.position.z);
+
+        angle = Vector3.Angle(thirdPoint - point.position, otherPoint.position - point.position);
+
+        return angle;
     }
 
     public void RespawnPlayer(GameObject Player)

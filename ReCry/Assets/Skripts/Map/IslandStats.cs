@@ -1,5 +1,5 @@
 ﻿//
-//  CharacterMovementMultiplayer.cs
+//  IslandStats.cs
 //  ReCry
 //  
 //  Created by Max Mulert on 21.09.2015
@@ -14,6 +14,7 @@ public class IslandStats : MonoBehaviour
 {
 
     public int x, y, z;
+    public bool Odd;
     int islandWidth, islandLenght;
     int toBeFilled;
     public List<GameObject> neighbours;
@@ -51,11 +52,11 @@ public class IslandStats : MonoBehaviour
 
     }
 
-    public void GetNeighbours(GameObject[,] map)
+    public void GetNeighbours(GameObject[,] map, float islandSize)
     {
         neighbours = new List<GameObject>();
 
-        if (gameObject.transform.position.z % 60 == 0)
+        if (gameObject.transform.position.z % islandSize == 0)
         {
             foreach (var island in map)
             {
@@ -91,11 +92,12 @@ public class IslandStats : MonoBehaviour
 
         else
         {
+            Odd = true;
             foreach (var island in map)
             {
                 if (island != null)
                 {
-                    if (island.GetComponent<IslandStats>().x == x - 1&& island.GetComponent<IslandStats>().z == z)
+                    if (island.GetComponent<IslandStats>().x == x - 1 && island.GetComponent<IslandStats>().z == z)
                     {
                         neighbours.Add(map[x - 1, z]);
                     }
