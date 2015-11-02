@@ -327,8 +327,8 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
         if (yRandom)
         {
             createMapArray();
-            //GetOtherBridgePoint();
-            //GenerateBridges();
+            GetOtherBridgePoint();
+            GenerateBridges();
         }
     }
 
@@ -915,6 +915,8 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                 foreach (var point in island.GetComponent<IslandStats>().bridgePoints)
                 {
                     wp = point.GetComponent<WayPoint>();
+                    //JustForDebugging
+                    IslandStats IS = island.GetComponent<IslandStats>();
 
                     if (wp.otherBridgePoint != null && !wp.bridgeSpwaned && !wp.otherBridgePoint.GetComponent<WayPoint>().bridgeSpwaned)
                     {
@@ -922,7 +924,10 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                         bridgeLenght = GetBridgeLenght(point.transform, wp.otherBridgePoint.gameObject.transform);
                         bridgeCube.transform.localScale = new Vector3(1, 1, bridgeLenght);
                         position = GetSpawnPosition(point.transform, wp.otherBridgePoint.gameObject.transform);
-                        GameObject.Instantiate(bridgeCube, position, Quaternion.Euler(0, GetZAngle(point.transform, wp.otherBridgePoint.gameObject.transform), 0));
+                        Instantiate(bridgeCube, position, Quaternion.Euler(0, GetYAngle(point.transform, wp.otherBridgePoint.gameObject.transform),0));
+                        bridgeCube.transform.localScale = new Vector3(1, 1, 1);
+                        wp.bridgeSpwaned = true;
+                        wp.otherBridgePoint.GetComponent<WayPoint>().bridgeSpwaned = true;
                     }
                 }
             }
@@ -933,68 +938,136 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
     Vector3 GetSpawnPosition(Transform point, Transform otherPoint)
     {
         Vector3 pos = new Vector3();
+        float diffX = 0;
+        float diffY = 0;
+        float diffZ = 0;
 
-        if (point.position.x < otherPoint.position.x)
+        if (point.position.x >= 0 && otherPoint.position.x >= 0)
         {
-            pos.x = point.position.x + ((otherPoint.position.x - point.position.x) / 2);
+            if (point.position.x < otherPoint.position.x)
+            {
+                diffX = otherPoint.position.x - point.position.x;
+            }
+            else
+            {
+                diffX = point.position.x - otherPoint.position.x;
+            }
+        }
+        else if (point.position.x < 0 && otherPoint.position.x >= 0)
+        {
+            diffX = otherPoint.position.x + Mathf.Sqrt(point.position.x * 2);
+        }
+        else if (point.position.x < 0 && otherPoint.position.x < 0)
+        {
+            if (point.position.x < otherPoint.position.x)
+            {
+                diffX = otherPoint.position.x - point.position.x;
+            }
+            else
+            {
+                diffX = point.position.x - otherPoint.position.x;
+            }
+        }
+        else if (point.position.x >= 0 && otherPoint.position.x < 0)
+        {
+            diffX = point.position.x + Mathf.Sqrt(otherPoint.position.x * 2);
+        }
+
+        if (point.position.x > otherPoint.position.x)
+        {
+            pos.x = otherPoint.position.x + (diffX / 2);
         }
         else
         {
-            pos.x = otherPoint.position.x + ((point.position.x - otherPoint.position.x) / 2);
+            pos.x = point.position.x + (diffX / 2);
         }
-        if (point.position.y < otherPoint.position.y)
+
+        if (point.position.y >= 0 && otherPoint.position.y >= 0)
         {
-            pos.y = point.position.y + ((otherPoint.position.y - point.position.y) / 2);
+            if (point.position.y < otherPoint.position.y)
+            {
+                diffY = otherPoint.position.y - point.position.y;
+            }
+            else
+            {
+                diffY = point.position.y - otherPoint.position.y;
+            }
+        }
+        else if (point.position.y < 0 && otherPoint.position.y >= 0)
+        {
+            diffY = otherPoint.position.y + Mathf.Sqrt(point.position.y * 2);
+        }
+        else if (point.position.y < 0 && otherPoint.position.y < 0)
+        {
+            if (point.position.y < otherPoint.position.y)
+            {
+                diffY = otherPoint.position.y - point.position.y;
+            }
+            else
+            {
+                diffY = point.position.y - otherPoint.position.y;
+            }
+        }
+        else if (point.position.y >= 0 && otherPoint.position.y < 0)
+        {
+            diffY = point.position.y + Mathf.Sqrt(otherPoint.position.y * 2);
+        }
+
+        if (point.position.y > otherPoint.position.y)
+        {
+            pos.y = otherPoint.position.y + (diffY / 2);
         }
         else
         {
-            pos.y = otherPoint.position.y + ((point.position.y - otherPoint.position.y) / 2);
+            pos.y = point.position.y + (diffY / 2);
         }
-        if (point.position.z < otherPoint.position.z)
+
+        if (point.position.z >= 0 && otherPoint.position.z >= 0)
         {
-            pos.z = point.position.z + ((otherPoint.position.z - point.position.z) / 2);
+            if (point.position.z < otherPoint.position.z)
+            {
+                diffZ = otherPoint.position.z - point.position.z;
+            }
+            else
+            {
+                diffZ = point.position.z - otherPoint.position.z;
+            }
+        }
+        else if (point.position.z < 0 && otherPoint.position.z >= 0)
+        {
+            diffZ = otherPoint.position.z + Mathf.Sqrt(point.position.z * 2);
+        }
+        else if (point.position.z < 0 && otherPoint.position.z < 0)
+        {
+            if (point.position.z < otherPoint.position.z)
+            {
+                diffZ = otherPoint.position.z - point.position.z;
+            }
+            else
+            {
+                diffZ = point.position.z - otherPoint.position.z;
+            }
+        }
+        else if (point.position.z >= 0 && otherPoint.position.z < 0)
+        {
+            diffZ = point.position.z + Mathf.Sqrt(otherPoint.position.z * 2);
+        }
+
+        if (point.position.z > otherPoint.position.z)
+        {
+            pos.z = otherPoint.position.z + (diffZ / 2);
         }
         else
         {
-            pos.y = otherPoint.position.y + ((point.position.y - otherPoint.position.y) / 2);
+            pos.z = point.position.z + (diffZ / 2);
         }
+
         return pos;
     }
 
     float GetBridgeLenght(Transform point, Transform otherPoint)
     {
-        Vector3 difference;
-        float diffLenght;
-
-        if (point.position.x >= otherPoint.position.x)
-        {
-            difference.x = point.position.x - otherPoint.position.x;
-        }
-        else
-        {
-            difference.x = otherPoint.position.x - point.position.x;
-        }
-
-        if (point.position.y >= otherPoint.position.y)
-        {
-            difference.y = point.position.y - point.position.y;
-        }
-        else
-        {
-            difference.y = otherPoint.position.y - point.position.y;
-        }
-
-        if (point.position.z >= otherPoint.position.z)
-        {
-            difference.z = point.position.z - otherPoint.position.z;
-        }
-        else
-        {
-            difference.z = otherPoint.position.z - point.position.z;
-        }
-
-        diffLenght = Mathf.Sqrt((difference.x * difference.x) + (difference.y * difference.y) + (difference.z * difference.z));
-        return diffLenght;
+        return Vector3.Distance(point.position, otherPoint.position);
     }
 
     float GetYAngle(Transform point, Transform otherPoint)
@@ -1032,7 +1105,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
         return 0;
     }
 
-    float GetZAngle(Transform point, Transform otherPoint)
+    float GetXAngle(Transform point, Transform otherPoint)
     {
         float angle;
 
