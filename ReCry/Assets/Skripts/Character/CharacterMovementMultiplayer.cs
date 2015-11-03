@@ -44,6 +44,8 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     private bool fuelIsEmpty = false;
     private bool moveForwards = false;
     private bool changeFuel = true;
+    private bool addFuel = true;
+    private int jetpackchange;
 
     //Camera Movement and JumpController
     private Camera camera;
@@ -66,7 +68,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
         }
         else
         {
-            this.transform.Find("Camera").gameObject.active = false;
+            this.transform.Find("Camera").gameObject.SetActive(false);
         }
     }
 
@@ -75,7 +77,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
         if (ph.isMine)
         {
             CheckIfCharacterMoved();
-            Jetpack();
+            JetPackJump();
             Run();
             LookAround();
         }
@@ -122,15 +124,19 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
     void Run()
     {
-        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W) && jump.isGrounded && jetpacktank > 0)
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W) && jump.isGrounded)
         {
-            isWalking = false;
-            isRunning = true;
-            this.horizontal = Input.GetAxis("Horizontal") * Time.deltaTime * MoveSpeed;
-            this.vertical = Input.GetAxis("Vertical") * Time.deltaTime * RunSpeed;
-            transform.Translate(horizontal, 0, vertical);
-            jetpacktank--;
-            this.fuel.text = jetpacktank.ToString();
+            if (jetpacktank >= this.jetpackchange)
+            {
+                ChangeFuel(20, 1);
+                isWalking = false;
+                isRunning = true;
+                this.horizontal = Input.GetAxis("Horizontal") * Time.deltaTime * MoveSpeed;
+                this.vertical = Input.GetAxis("Vertical") * Time.deltaTime * RunSpeed;
+                transform.Translate(horizontal, 0, vertical);
+                
+            }
+            
         }
         else
         {
@@ -176,12 +182,11 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
         }
     }
 
-    private void Jetpack()
+    private void JetPackJump()
     {
-        Debug.Log(jump.isGrounded);
         if (Input.GetKeyDown(KeyCode.Space) && jump.isGrounded && fuelIsEmpty)
         {
-            if (jetpacktank > 0)
+            if (jetpacktank >= this.jetpackchange)
             {
                 if (isWalking)
                 {
@@ -214,41 +219,41 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     {
         if (Input.GetKey(KeyCode.LeftShift) && !jump.isGrounded && fuelIsEmpty)
         {
-            if (jetpacktank > 0)
+            if (jetpacktank >= this.jetpackchange)
             {
                 if (Input.GetKey(KeyCode.W))
                 {
                     moveForwards = true;
-                    this.rigid.AddRelativeForce(new Vector3(0, 0, 125));
-                    jetpacktank--;
-                    this.fuel.text = jetpacktank.ToString();
+                    ChangeJetpackFuel(10, 1);
+                    this.rigid.AddRelativeForce(new Vector3(0, 0, 125 / (this.rigid.mass / 4)));
+                    
+                    
                 }
                 if (Input.GetKey(KeyCode.S))
                 {
                     moveForwards = true;
-                    this.rigid.AddRelativeForce(new Vector3(0, 0, -125));
-                    jetpacktank--;
-                    this.fuel.text = jetpacktank.ToString();
+                    ChangeJetpackFuel(10, 1);
+                    this.rigid.AddRelativeForce(new Vector3(0, 0, -125 / (this.rigid.mass / 4)));
+                    
                 }
                 if (Input.GetKey(KeyCode.A))
                 {
                     moveForwards = true;
-                    this.rigid.AddRelativeForce(new Vector3(-125, 0, 0));
-                    jetpacktank--;
-                    this.fuel.text = jetpacktank.ToString();
+                    ChangeJetpackFuel(10, 1);
+                    this.rigid.AddRelativeForce(new Vector3(-125 / (this.rigid.mass / 4), 0, 0));
+                    
                 }
                 if (Input.GetKey(KeyCode.D))
                 {
                     moveForwards = true;
-                    this.rigid.AddRelativeForce(new Vector3(125, 0, 0));
-                    jetpacktank--;
-                    this.fuel.text = jetpacktank.ToString();
+                    ChangeJetpackFuel(10, 1);
+                    this.rigid.AddRelativeForce(new Vector3(125 / (this.rigid.mass / 4), 0, 0));
+                    
                 }
                 if (Input.GetKey(KeyCode.LeftShift) && !moveForwards)
                 {
+                    ChangeJetpackFuel(10, 1);
                     this.rigid.AddRelativeForce(new Vector3(0, 250, 0));
-                    jetpacktank--;
-                    this.fuel.text = jetpacktank.ToString();
                 }
                 else
                 {
@@ -272,14 +277,17 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     {
         if (jetpacktank < 100 && jump.isGrounded && !isRunning)
         {
-            jetpacktank++;
-            this.fuel.text = jetpacktank.ToString();
+            if (addFuel)
+            {
+                StartCoroutine(AddFuel(10, 0.5f));
+            }
         }
     }
 
     private void ChangeJetpackFuel(int change, int seconds)
     {
-        if (jetpacktank > change)
+        this.jetpackchange = change;
+        if (jetpacktank >= this.jetpackchange)
         {
             if (changeFuel)
             {
@@ -300,5 +308,15 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
         this.fuel.text = jetpacktank.ToString();
         yield return new WaitForSeconds(seconds);
         changeFuel = true;
+    }
+
+
+    IEnumerator AddFuel(int add, float seconds)
+    {
+        addFuel = false;
+        jetpacktank += add;
+        this.fuel.text = jetpacktank.ToString();
+        yield return new WaitForSeconds(seconds);
+        addFuel = true;
     }
 }

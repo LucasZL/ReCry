@@ -27,7 +27,7 @@ public class RayCastShoot : MonoBehaviour
             stats = GetComponentInParent<CharacterStats>();
             stats.ammunitionText.text = string.Format("{0} / {1}", stats.munition, stats.restmuni);
         }
-       
+
 
     }
 
@@ -44,35 +44,39 @@ public class RayCastShoot : MonoBehaviour
 
     void RayCastFire()
     {
-        if (Input.GetKey(KeyCode.Mouse0))
+        if (!stats.respawnModus)
         {
-            RaycastHit hit;
-            
-            Ray RayCast = new Ray(this.mainCamera.transform.position, this.mainCamera.transform.forward);
-            Debug.DrawRay(this.transform.position, this.transform.forward, Color.red);
-            if (Physics.Raycast(RayCast, out hit))
+            if (Input.GetKey(KeyCode.Mouse0))
             {
-                if (stats.munition > 0)
+                RaycastHit hit;
+
+                Ray RayCast = new Ray(this.mainCamera.transform.position, this.mainCamera.transform.forward);
+                Debug.DrawRay(this.transform.position, this.transform.forward, Color.red);
+                if (Physics.Raycast(RayCast, out hit))
                 {
-                    stats.munition--;
-                    stats.ammunitionText.text = string.Format("{0} / {1}", stats.munition, stats.restmuni);
-                    maxRange = hit.distance;
-                    if (hit.transform.gameObject.tag == "Player")
+                    if (stats.munition > 0)
                     {
-                        CharacterStats s = hit.transform.GetComponent<CharacterStats>();
-                        if (s != null)
+                        stats.munition--;
+                        stats.ammunitionText.text = string.Format("{0} / {1}", stats.munition, stats.restmuni);
+                        maxRange = hit.distance;
+                        if (hit.transform.gameObject.tag == "Player")
                         {
-                            s.GetComponent<PhotonView>().RPC("GetDamage", PhotonTargets.All, 100);
+                            CharacterStats s = hit.transform.GetComponent<CharacterStats>();
+                            if (s != null)
+                            {
+                                s.GetComponent<PhotonView>().RPC("GetDamage", PhotonTargets.All, 100);
+                            }
                         }
+                        Debug.Log("Shoot");
                     }
-                    Debug.Log("Shoot");
-                }
-                else
-                {
-                    Debug.Log("Magazin is empty");
+                    else
+                    {
+                        Debug.Log("Magazin is empty");
+                    }
                 }
             }
         }
+
     }
 
     void Reload()
@@ -81,7 +85,7 @@ public class RayCastShoot : MonoBehaviour
         {
             if (stats.restmuni > 0)
             {
-                
+
                 if (stats.munition < 30)
                 {
                     munitionValue = (stats.staticMunition - stats.munition);

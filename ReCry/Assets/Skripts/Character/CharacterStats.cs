@@ -6,6 +6,12 @@ using System.Collections;
 public class CharacterStats : MonoBehaviour
 {
 
+    //Respawn
+    public bool respawnModus = false;
+
+
+
+
     public float Armor;
     public float Life;
     public int munition = 30;
@@ -88,7 +94,12 @@ public class CharacterStats : MonoBehaviour
             UpdateArmorText();
             if (Life <= 0)
             {
-                this.nmr.RespawnPlayer(this.gameObject);
+                RespawnPlayer();
+                //this.nmr.RespawnPlayer(this.gameObject);
+            }
+            if (respawnModus)
+            {
+                OnMiniMapClick();
             }
         }
     }
@@ -130,6 +141,39 @@ public class CharacterStats : MonoBehaviour
         else if (this.Life > 0)
         {
             this.armorText.text = string.Format("{0}", Armor);
+        }
+    }
+
+    void RespawnPlayer()
+    {
+        respawnModus = true;
+    }
+
+    void OnMiniMapClick()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            RaycastHit hit;
+            Ray RayCast = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
+            if (Physics.Raycast(RayCast, out hit))
+            {
+                if (hit.transform.gameObject.tag == "minimapIsland")
+                {
+                    if (hit.transform.gameObject.GetComponent<MinimapIslandStats>().owner == this.team)
+                    {
+                        foreach (var island in this.nmr.minimapIslands)
+                        {
+                            if (island == hit.transform.gameObject)
+                            {
+                                int mapIndex = this.nmr.minimapIslands.IndexOf(island);
+                                nmr.RespawnPlayer(this.gameObject,mapIndex);
+                                respawnModus = false;
+                            }
+                        }
+                    }
+                }
+            }
+            
         }
     }
 }
