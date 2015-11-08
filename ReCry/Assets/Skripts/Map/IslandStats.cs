@@ -41,12 +41,6 @@ public class IslandStats : MonoBehaviour
         this.z = z;
     }
 
-    void Update()
-    {
-
-    }
-
-
     public void GetStats(int lenght, int width)
     {
 

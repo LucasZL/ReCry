@@ -31,11 +31,6 @@ public class WayPoint : MonoBehaviour
         neighbours = new List<WayPoint>();
     }
 
-    void Update()
-    {
-
-    }
-
     public void GetNeighbours(WayPoint[,] wayPointMesh)
     {
         if (z - 1 >= 0)
