@@ -14,6 +14,8 @@ public class RayCastShoot : MonoBehaviour
 
     float maxRange;
     int munitionValue;
+    private bool fired;
+    private float firedelay = 0.15f;
     CharacterStats stats;
     PhotonView ph;
     Camera mainCamera;
@@ -37,6 +39,7 @@ public class RayCastShoot : MonoBehaviour
         if (ph.isMine)
         {
             RayCastFire();
+            ActivateTimer();
             Reload();
         }
     }
@@ -46,35 +49,41 @@ public class RayCastShoot : MonoBehaviour
     {
         if (!stats.respawnModus)
         {
-            if (Input.GetKey(KeyCode.Mouse0))
+            if (!fired)
             {
-                RaycastHit hit;
-
-                Ray RayCast = new Ray(this.mainCamera.transform.position, this.mainCamera.transform.forward);
-                Debug.DrawRay(this.transform.position, this.transform.forward, Color.red);
-                if (Physics.Raycast(RayCast, out hit))
+                if (Input.GetKey(KeyCode.Mouse0))
                 {
-                    if (stats.munition > 0)
+                    fired = true;
+                    RaycastHit hit;
+
+                    Ray RayCast = new Ray(this.mainCamera.transform.position, this.mainCamera.transform.forward);
+                    Debug.DrawRay(this.transform.position, this.transform.forward, Color.red);
+                    if (Physics.Raycast(RayCast, out hit))
                     {
-                        stats.munition--;
-                        stats.ammunitionText.text = string.Format("{0} / {1}", stats.munition, stats.restmuni);
-                        maxRange = hit.distance;
-                        if (hit.transform.gameObject.tag == "Player")
+                        if (stats.munition > 0)
                         {
-                            CharacterStats s = hit.transform.GetComponent<CharacterStats>();
-                            if (s != null)
+                            stats.munition--;
+                            stats.ammunitionText.text = string.Format("{0} / {1}", stats.munition, stats.restmuni);
+                            maxRange = hit.distance;
+                            if (hit.transform.gameObject.tag == "Player")
                             {
-                                s.GetComponent<PhotonView>().RPC("GetDamage", PhotonTargets.All, 100);
+                                CharacterStats s = hit.transform.GetComponent<CharacterStats>();
+                                if (s != null)
+                                {
+                                    s.GetComponent<PhotonView>().RPC("GetDamage", PhotonTargets.All, 100);
+                                }
                             }
+                            ActivateTimer();
+                            Debug.Log("Shoot");
                         }
-                        Debug.Log("Shoot");
-                    }
-                    else
-                    {
-                        Debug.Log("Magazin is empty");
+                        else
+                        {
+                            Debug.Log("Magazin is empty");
+                        }
                     }
                 }
             }
+
         }
 
     }
@@ -98,6 +107,16 @@ public class RayCastShoot : MonoBehaviour
             {
                 Debug.Log("Weapon Empty");
             }
+        }
+    }
+
+    void ActivateTimer()
+    {
+        firedelay -= Time.deltaTime;
+        if (firedelay <= 0)
+        {
+            fired = false;
+            firedelay = 0.15f;
         }
     }
 }
