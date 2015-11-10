@@ -53,16 +53,16 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 
     public virtual void Start()
     {
-        PhotonNetwork.autoJoinLobby = false;
         mapHightDifference = (int)(mapHightDifference * (islandSize / 10));
         minimapIslands = new List<GameObject>();
         mapIslands = new List<GameObject>();
+		CreateNewRoom();
     }
 
-    void OnGUI()
-    {
-        GUILayout.Label(PhotonNetwork.connectionStateDetailed.ToString());
-    }
+	void OnGUI()
+	{
+		GUILayout.Label(PhotonNetwork.connectionStateDetailed.ToString());
+	}
 
     public virtual void Update()
     {
@@ -125,40 +125,39 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
         }
     }
 
-    public virtual void OnConnectedToMaster()
-    {
-        if (PhotonNetwork.networkingPeer.AvailableRegions != null) Debug.LogWarning("List of available regions counts " + PhotonNetwork.networkingPeer.AvailableRegions.Count + ". First: " + PhotonNetwork.networkingPeer.AvailableRegions[0] + " \t Current Region: " + PhotonNetwork.networkingPeer.CloudRegion);
-        Debug.Log("OnConnectedToMaster() was called by PUN. Now this client is connected and could join a room. Calling: PhotonNetwork.JoinRandomRoom();");
-        PhotonNetwork.JoinRandomRoom();
-    }
-
-    public virtual void OnPhotonRandomJoinFailed()
-    {
-        Debug.Log("OnPhotonRandomJoinFailed() was called by PUN. No random room available, so we create one. Calling: PhotonNetwork.CreateRoom(null, new RoomOptions() {maxPlayers = 4}, null);");
-        PhotonNetwork.CreateRoom(null, new RoomOptions() { maxPlayers = 4 }, null);
-    }
-
-    public virtual void OnFailedToConnectToPhoton(DisconnectCause cause)
-    {
-        Debug.LogError("Cause: " + cause);
-    }
+	public virtual void OnConnectedToMaster()
+	{
+		if (PhotonNetwork.networkingPeer.AvailableRegions != null) Debug.LogWarning("List of available regions counts " + PhotonNetwork.networkingPeer.AvailableRegions.Count + ". First: " + PhotonNetwork.networkingPeer.AvailableRegions[0] + " \t Current Region: " + PhotonNetwork.networkingPeer.CloudRegion);
+		Debug.Log("OnConnectedToMaster() was called by PUN. Now this client is connected and could join a room. Calling: PhotonNetwork.JoinRandomRoom();");
+		CreateNewRoom ();
+	}
+	
+	public void CreateNewRoom()
+	{
+		PhotonNetwork.CreateRoom("test", Utility.roomOptions, TypedLobby.Default);
+	}
+	
+	public virtual void OnFailedToConnectToPhoton(DisconnectCause cause)
+	{
+		Debug.LogError("Cause: " + cause);
+	}
 
     public void OnJoinedRoom()
     {
-        calculateMapDimentions();
-
-        if (PhotonNetwork.isMasterClient)
-        {
-            placeIslands(IslandsToPlace, 0, true, 1);
-            placeIslands(IslandsToPlace, -550, false, 0.25f);
-        }
-        placeSmallEnvirement();
-        placeBigEnvirement();
-
-        SetPivotPoint();
-        fillMapList();
-        setFirstSpawn();
-        Cursor.visible = false;
+		calculateMapDimentions();
+		
+		if (PhotonNetwork.isMasterClient)
+		{
+			placeIslands(IslandsToPlace, 0, true, 1);
+			placeIslands(IslandsToPlace, -550, false, 0.25f);
+		}
+		placeSmallEnvirement();
+		placeBigEnvirement();
+		
+		SetPivotPoint();
+		fillMapList();
+		setFirstSpawn();
+		Cursor.visible = false;
     }
 
     private void setFirstSpawn()
@@ -194,15 +193,10 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 
     private void SetPivotPoint()
     {
-        GameObject point = GameObject.Find("PivotPoint");
-        point.transform.position = new Vector3(((islandSize * mapSize) / 2 - (islandSize * mapSize) / 8) * 1.11f, 0, ((islandSize * mapSize) / 2 - (islandSize * mapSize) / 8) * 1.01f);
-        Debug.Log((islandSize * mapSize) / 4);
-    }
-
-    public void OnJoinedLobby()
-    {
-        Utility.roomInfo = PhotonNetwork.GetRoomList();
-    }
+		GameObject point = GameObject.Find ("PivotPoint");
+		point.transform.position = new Vector3 (((islandSize * mapSize) / 2 - (islandSize * mapSize) / 8) * 1.11f, 0, ((islandSize * mapSize) / 2 - (islandSize * mapSize) / 8) * 1.01f);
+		Debug.Log ((islandSize * mapSize) / 4);
+	}
 
     void calculateMapDimentions()
     {
@@ -334,7 +328,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
         {
             createMapArray();
             GetOtherBridgePoint();
-            GenerateBridges();
+            //GenerateBridges();
         }
     }
 
