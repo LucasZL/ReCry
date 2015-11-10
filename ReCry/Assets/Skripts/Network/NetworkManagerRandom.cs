@@ -134,7 +134,14 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 	
 	public void CreateNewRoom()
 	{
-		PhotonNetwork.CreateRoom("test", Utility.roomOptions, TypedLobby.Default);
+		if (Utility.joinRoom) 
+		{
+			PhotonNetwork.JoinRoom("test");
+		} 
+		else 
+		{
+			PhotonNetwork.CreateRoom("test", Utility.roomOptions, TypedLobby.Default);
+		}
 	}
 	
 	public virtual void OnFailedToConnectToPhoton(DisconnectCause cause)

@@ -17,4 +17,5 @@ public static class Utility
     public static RoomOptions roomOptions;
     public static RoomInfo[] roomInfo;
     public static int Team;
+	public static bool joinRoom;
 }
