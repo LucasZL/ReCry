@@ -45,6 +45,9 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     private bool moveForwards = false;
     private bool changeFuel = true;
     private bool addFuel = true;
+    private int maxJetPackJump = 30;
+    private int maxJetPackDirection = 10;
+    private int maxFuel = 100;
     private int jetpackchange;
 
     //Camera Movement and JumpController
@@ -126,7 +129,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     {
         if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W) && jump.isGrounded)
         {
-            if (jetpacktank >= this.jetpackchange)
+            if (jetpacktank >= maxJetPackDirection)
             {
                 ChangeFuel(20, 1);
                 isWalking = false;
@@ -186,7 +189,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space) && jump.isGrounded && fuelIsEmpty)
         {
-            if (jetpacktank >= this.jetpackchange)
+            if (jetpacktank >= maxJetPackJump)
             {
                 if (isWalking)
                 {
@@ -219,7 +222,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     {
         if (Input.GetKey(KeyCode.LeftShift) && !jump.isGrounded && fuelIsEmpty)
         {
-            if (jetpacktank >= this.jetpackchange)
+            if (jetpacktank >= maxJetPackDirection)
             {
                 if (Input.GetKey(KeyCode.W))
                 {
@@ -275,7 +278,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
     private void FillUpJetPackFuel()
     {
-        if (jetpacktank < 100 && jump.isGrounded && !isRunning)
+        if (jetpacktank < maxFuel && jump.isGrounded && !isRunning)
         {
             if (addFuel)
             {
@@ -286,8 +289,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
     private void ChangeJetpackFuel(int change, int seconds)
     {
-        this.jetpackchange = change;
-        if (jetpacktank >= this.jetpackchange)
+        if (jetpacktank >= change)
         {
             if (changeFuel)
             {
