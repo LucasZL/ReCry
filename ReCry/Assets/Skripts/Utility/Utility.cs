@@ -16,6 +16,8 @@ public static class Utility
     public static string ServerName;
     public static RoomOptions roomOptions;
     public static RoomInfo[] roomInfo;
+    public static string Username;
     public static int Team;
 	public static bool joinRoom;
+    public static bool isInGame;
 }

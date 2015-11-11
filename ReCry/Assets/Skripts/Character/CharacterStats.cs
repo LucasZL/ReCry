@@ -9,9 +9,6 @@ public class CharacterStats : MonoBehaviour
     //Respawn
     public bool respawnModus = false;
 
-
-
-
     public float Armor;
     public float Life;
     public int munition = 30;
@@ -95,7 +92,6 @@ public class CharacterStats : MonoBehaviour
             if (Life <= 0)
             {
                 RespawnPlayer();
-                //this.nmr.RespawnPlayer(this.gameObject);
             }
             if (respawnModus)
             {

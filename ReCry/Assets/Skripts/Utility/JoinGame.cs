@@ -8,9 +8,10 @@ public class JoinGame : MonoBehaviour {
 		if (other.gameObject.tag == "Player") 
 		{
 			Utility.joinRoom = true;
-			PhotonNetwork.Destroy(other.gameObject);
+            Utility.isInGame = true;
+            PhotonNetwork.Destroy(other.gameObject);
 			PhotonNetwork.LeaveRoom();
-			Application.LoadLevel(1);
+			Application.LoadLevel("JoinRandomRoom");
 		}
 	}
 }

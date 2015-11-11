@@ -36,6 +36,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     private float horizontal;
     private float vertical;
     public float speed;
+    private bool gamestarted = false;
 
     //JetPack
     private Text fuel;
@@ -187,7 +188,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
     private void JetPackJump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && jump.isGrounded && fuelIsEmpty)
+        if (Input.GetKeyDown(KeyCode.Space) && jump.isGrounded && fuelIsEmpty && Utility.isInGame)
         {
             if (jetpacktank >= maxJetPackJump)
             {
@@ -220,7 +221,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
     private void JetPackForward()
     {
-        if (Input.GetKey(KeyCode.LeftShift) && !jump.isGrounded && fuelIsEmpty)
+        if (Input.GetKey(KeyCode.LeftShift) && !jump.isGrounded && fuelIsEmpty && Utility.isInGame)
         {
             if (jetpacktank >= maxJetPackDirection)
             {
@@ -278,7 +279,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
     private void FillUpJetPackFuel()
     {
-        if (jetpacktank < maxFuel && jump.isGrounded && !isRunning)
+        if (jetpacktank < maxFuel && jump.isGrounded && !isRunning && Utility.isInGame)
         {
             if (addFuel)
             {

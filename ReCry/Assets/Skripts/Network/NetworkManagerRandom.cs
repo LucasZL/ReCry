@@ -7,6 +7,7 @@
 //
 
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -51,12 +52,14 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
     GameObject thirdTeamSpawn;
     GameObject fourthTeamSpawn;
 
+    
+
     public virtual void Start()
     {
         mapHightDifference = (int)(mapHightDifference * (islandSize / 10));
         minimapIslands = new List<GameObject>();
         mapIslands = new List<GameObject>();
-		CreateNewRoom();
+        CreateNewRoom();
     }
 
 	void OnGUI()
@@ -140,7 +143,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 		} 
 		else 
 		{
-			PhotonNetwork.CreateRoom("test", Utility.roomOptions, TypedLobby.Default);
+            PhotonNetwork.CreateRoom(Utility.Username, Utility.roomOptions, TypedLobby.Default);
 		}
 	}
 	
