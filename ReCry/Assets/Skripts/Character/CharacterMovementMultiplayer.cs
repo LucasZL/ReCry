@@ -154,6 +154,15 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
         this.mouseX += Input.GetAxis("Mouse X") * MouseSensitivity;
         this.mouseY -= Input.GetAxis("Mouse Y") * MouseSensitivity;
 
+        if (this.mouseY >= lookDown)
+        {
+            this.mouseY = lookDown;
+        }
+        else if (this.mouseY <= LookUp)
+        {
+            this.mouseY = LookUp;
+        }
+
         this.camera.transform.eulerAngles = new Vector3(this.mouseY, this.mouseX);
         this.transform.eulerAngles = new Vector3(0, this.mouseX);
     }
