@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public partial class TOD_Sky : MonoBehaviour
+public partial class TOD_Sky : Photon.MonoBehaviour
 {
     /// Adjust shaders and meshes according to the quality settings.
     private void SetupQualitySettings()

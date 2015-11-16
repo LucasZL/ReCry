@@ -160,6 +160,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 		{
 			placeIslands(IslandsToPlace, 0, true, 1);
 			placeIslands(IslandsToPlace, -550, false, 0.25f);
+			PhotonNetwork.Instantiate("Sky Dome", new Vector3(0,0,0), Quaternion.Euler(0.0f, 0.0f, 0.0f), 0);
 		}
 		placeSmallEnvirement();
 		placeBigEnvirement();
@@ -1315,9 +1316,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
             island.GetComponent<IslandOwner>().respawnTickets--;
             return;
         }
-     
     }
-
 
     public void SpawnPlayer(GameObject Player)
     {

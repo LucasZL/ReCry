@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public partial class TOD_Sky : MonoBehaviour
+public partial class TOD_Sky : Photon.MonoBehaviour
 {
     protected void OnEnable()
     {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public partial class TOD_Sky : MonoBehaviour
+public partial class TOD_Sky : Photon.MonoBehaviour
 {
     /// Available methods to detect the Unity color space.
     public enum ColorSpaceDetection
