@@ -143,7 +143,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 		} 
 		else 
 		{
-            PhotonNetwork.CreateRoom(Utility.Username, Utility.roomOptions, TypedLobby.Default);
+            PhotonNetwork.CreateRoom("test", Utility.roomOptions, TypedLobby.Default);
 		}
 	}
 	

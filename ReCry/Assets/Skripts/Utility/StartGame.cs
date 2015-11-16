@@ -13,6 +13,5 @@ public class StartGame : MonoBehaviour
 			PhotonNetwork.LeaveRoom();
 			Application.LoadLevel("JoinRandomRoom");
 		}
-
 	}
 }
