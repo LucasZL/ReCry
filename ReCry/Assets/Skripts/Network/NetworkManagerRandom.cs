@@ -81,9 +81,8 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
         {
             if (!playerSpawned)
             {
-                getSpawnPoints();
-                int spawn = UnityEngine.Random.Range(0, respawnPoints.Length);
-                PhotonNetwork.Instantiate("Playerprefab_Multi", respawnPoints[spawn].transform.position, Quaternion.identity, 0);
+                GameObject Player = PhotonNetwork.Instantiate("Playerprefab_Multi", new Vector3(0,0,0), Quaternion.identity, 0);
+				SpawnPlayer(Player);
                 playerSpawned = true;
             }
         }
@@ -338,7 +337,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
         if (yRandom)
         {
             createMapArray();
-            GetOtherBridgePoint();
+            //GetOtherBridgePoint();
             //GenerateBridges();
         }
     }
