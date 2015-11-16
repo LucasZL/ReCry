@@ -12,10 +12,10 @@ using System.Collections;
 public class RayCastShoot : MonoBehaviour
 {
 
-    float maxRange;
     int munitionValue;
     private bool fired;
     private float firedelay = 0.15f;
+    private float shotDistance = 25000f;
     CharacterStats stats;
     PhotonView ph;
     Camera mainCamera;
@@ -58,13 +58,13 @@ public class RayCastShoot : MonoBehaviour
 
                     Ray RayCast = new Ray(this.mainCamera.transform.position, this.mainCamera.transform.forward);
                     Debug.DrawRay(this.transform.position, this.transform.forward, Color.red);
-                    if (Physics.Raycast(RayCast, out hit))
+                    if (Physics.Raycast(RayCast,out hit,shotDistance))
                     {
                         if (stats.munition > 0)
                         {
                             stats.munition--;
                             stats.ammunitionText.text = string.Format("{0} / {1}", stats.munition, stats.restmuni);
-                            maxRange = hit.distance;
+                            Debug.Log(hit.transform.tag);
                             if (hit.transform.gameObject.tag == "Player")
                             {
                                 CharacterStats s = hit.transform.GetComponent<CharacterStats>();
@@ -74,7 +74,6 @@ public class RayCastShoot : MonoBehaviour
                                 }
                             }
                             ActivateTimer();
-                            Debug.Log("Shoot");
                         }
                         else
                         {
@@ -98,6 +97,14 @@ public class RayCastShoot : MonoBehaviour
                 if (stats.munition < 30)
                 {
                     munitionValue = (stats.staticMunition - stats.munition);
+                    if (munitionValue > stats.restmuni)
+                    {
+                        munitionValue = stats.restmuni;
+                        stats.munition = munitionValue;
+                        stats.restmuni = 0;
+                        stats.ammunitionText.text = string.Format("{0} / {1}", stats.munition, stats.restmuni);
+                        return;
+                    }
                     stats.restmuni = stats.restmuni - munitionValue;
                     stats.munition = stats.munition + munitionValue;
                     stats.ammunitionText.text = string.Format("{0} / {1}", stats.munition, stats.restmuni);
