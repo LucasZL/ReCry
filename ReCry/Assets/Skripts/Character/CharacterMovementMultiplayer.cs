@@ -24,7 +24,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
     //BasicStats
     public float MoveSpeed;
-    public float RunSpeed = 25;
+    public float RunSpeed;
     public float MouseSensitivity = 5f;
     public float JumpHeight = 12.5f;
     public int LookUp = -50;
@@ -64,7 +64,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
         if (ph.isMine)
         {
-            RunSpeed = 25;
+            RunSpeed = 28;
             this.camera = this.transform.Find("Camera").GetComponent<Camera>();
             this.jump = GetComponent<JumpDetection>();
             this.fuel = GameObject.FindWithTag("Fuel").GetComponent<Image>();
