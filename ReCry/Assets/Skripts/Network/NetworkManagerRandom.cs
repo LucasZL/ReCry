@@ -140,11 +140,11 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 	{
 		if (Utility.joinRoom) 
 		{
-			PhotonNetwork.JoinRoom("test2");
+			PhotonNetwork.JoinRoom("test");
 		} 
 		else 
 		{
-            PhotonNetwork.CreateRoom("test2", Utility.roomOptions, TypedLobby.Default);
+            PhotonNetwork.CreateRoom("test", Utility.roomOptions, TypedLobby.Default);
 		}
 	}
 	
