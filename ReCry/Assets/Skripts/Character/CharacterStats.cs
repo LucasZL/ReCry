@@ -158,6 +158,7 @@ public class CharacterStats : MonoBehaviour
 
     void OnMiniMapClick()
     {
+		Destroy (this.gameObject);
         if (Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
