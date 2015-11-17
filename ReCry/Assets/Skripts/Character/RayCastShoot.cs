@@ -7,6 +7,7 @@
 //
 
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class RayCastShoot : MonoBehaviour
@@ -19,6 +20,7 @@ public class RayCastShoot : MonoBehaviour
     CharacterStats stats;
     PhotonView ph;
     Camera mainCamera;
+    public Text hitplayer;
 
     void Start()
     {
@@ -28,6 +30,8 @@ public class RayCastShoot : MonoBehaviour
             mainCamera = this.transform.Find("Camera").GetComponent<Camera>();
             stats = GetComponentInParent<CharacterStats>();
             stats.ammunitionText.text = string.Format("{0} / {1}", stats.munition, stats.restmuni);
+            this.hitplayer = GameObject.FindWithTag("HitPlayer").GetComponent<Text>();
+            this.hitplayer.text = "";
         }
 
 
@@ -57,20 +61,20 @@ public class RayCastShoot : MonoBehaviour
                     RaycastHit hit;
 
                     Ray RayCast = new Ray(this.mainCamera.transform.position, this.mainCamera.transform.forward);
-                    Debug.DrawRay(this.transform.position, this.transform.forward, Color.red);
-                    if (Physics.Raycast(RayCast,out hit,shotDistance))
+                    if (Physics.Raycast(RayCast, out hit, shotDistance))
                     {
                         if (stats.munition > 0)
                         {
                             stats.munition--;
                             stats.ammunitionText.text = string.Format("{0} / {1}", stats.munition, stats.restmuni);
-                            Debug.Log(hit.transform.tag);
+                            Debug.Log(hit.collider.name);
                             if (hit.transform.gameObject.tag == "Player")
                             {
                                 CharacterStats s = hit.transform.GetComponent<CharacterStats>();
                                 if (s != null)
                                 {
                                     s.GetComponent<PhotonView>().RPC("GetDamage", PhotonTargets.All, 100);
+                                    StartCoroutine(HitMarker());
                                 }
                             }
                             ActivateTimer();
@@ -80,6 +84,7 @@ public class RayCastShoot : MonoBehaviour
                             Debug.Log("Magazin is empty");
                         }
                     }
+                    Debug.DrawRay(this.mainCamera.transform.position, this.mainCamera.transform.forward, Color.red);
                 }
             }
 
@@ -93,7 +98,6 @@ public class RayCastShoot : MonoBehaviour
         {
             if (stats.restmuni > 0)
             {
-
                 if (stats.munition < 30)
                 {
                     munitionValue = (stats.staticMunition - stats.munition);
@@ -125,5 +129,13 @@ public class RayCastShoot : MonoBehaviour
             fired = false;
             firedelay = 0.15f;
         }
+    }
+
+    IEnumerator HitMarker()
+    {
+        hitplayer.color = Color.red;
+        hitplayer.text = "Player hit";
+        yield return new WaitForSeconds(0.1f);
+        hitplayer.text = "";
     }
 }
