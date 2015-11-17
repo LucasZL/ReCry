@@ -89,7 +89,7 @@ public class CharacterStats : MonoBehaviour
             //this.ammunitionText.gameObject.SetActive(false);
 
             nmr = GameObject.Find("MapGeneratorNetwork").GetComponent<NetworkManagerRandom>();
-            nmr.SpawnPlayer(this.gameObject);
+            //nmr.SpawnPlayer(this.gameObject);
             CanvasFullyLoaded = true;
         }
     }
@@ -215,7 +215,5 @@ public class CharacterStats : MonoBehaviour
             //CanvasFullyLoaded = false;
         //}
         
-    }
-
-    
+	}
 }

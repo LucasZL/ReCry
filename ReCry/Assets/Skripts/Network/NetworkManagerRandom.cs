@@ -79,7 +79,13 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
             PhotonNetwork.ConnectUsingSettings(Version);
         }
 
-        if (GameObject.FindGameObjectWithTag("Respawn") && PhotonNetwork.connectionStateDetailed.ToString() == "Joined")
+		if (mapIslands.Count == 0 && PhotonNetwork.connectionStateDetailed.ToString () == "Joined")
+		{
+			fillMapList();
+			setFirstSpawn();
+		}
+
+        if (GameObject.FindGameObjectWithTag("Respawn") && PhotonNetwork.connectionStateDetailed.ToString() == "Joined" && mapIslands.Count != 0)
         {
             if (!playerSpawned)
             {
@@ -92,11 +98,12 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
         if (!mapFixed)
         {
             minimapIslands.AddRange(GameObject.FindGameObjectsWithTag("minimapIsland"));
-            mapIslands.AddRange(GameObject.FindGameObjectsWithTag("Env"));
+            //mapIslands.AddRange(GameObject.FindGameObjectsWithTag("Env"));
         }
 
         if (minimapIslands.Count != 0 && mapIslands.Count != 0 && !mapFixed)
         {
+
             for (int i = 0; i < mapIslands.Count; i++)
             {
                 int owner = mapIslands[i].GetComponent<IslandOwner>().owner;
@@ -140,11 +147,11 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 	{
 		if (Utility.joinRoom) 
 		{
-			PhotonNetwork.JoinRoom("test2");
+			PhotonNetwork.JoinRoom("test");
 		} 
 		else 
 		{
-            PhotonNetwork.CreateRoom("test2", Utility.roomOptions, TypedLobby.Default);
+            PhotonNetwork.CreateRoom("test", Utility.roomOptions, TypedLobby.Default);
 		}
 	}
 	
@@ -173,32 +180,37 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 		Cursor.visible = false;
     }
 
-    private void setFirstSpawn()
-    {
-        foreach (GameObject island in mapIslands)
-        {
-            if (island.transform.position.x == 0 && island.transform.position.z == (((mapSize + 1) * islandSize) / 2) - (islandSize * 1.5f))
-            {
-                firstTeamSpawn = island;
-                island.GetComponent<IslandOwner>().owner = 1;
-            }
-            else if (island.transform.position.x == ((((mapSize - 1) * islandSize) * 0.875) / 2) && island.transform.position.z == 0)
-            {
-                seccTeamSpawn = island;
-                island.GetComponent<IslandOwner>().owner = 2;
-            }
-            else if (island.transform.position.x == (((mapSize - 1) * islandSize) * 0.875) && island.transform.position.z == ((float)mapSize / 2) * islandSize)
-            {
-                thirdTeamSpawn = island;
-                island.GetComponent<IslandOwner>().owner = 3;
-            }
-            else if (island.transform.position.x == ((((mapSize - 1) * islandSize) * 0.875) / 2) && island.transform.position.z == (mapSize - 1) * islandSize)
-            {
-                fourthTeamSpawn = island;
-                island.GetComponent<IslandOwner>().owner = 4;
-            }
-        }
-    }
+	private void setFirstSpawn()
+	{
+		Debug.Log ("Anzahl: " + mapIslands.Count);
+		foreach (GameObject island in mapIslands)
+		{
+			if (island.transform.position.x == 0 && island.transform.position.z == (((mapSize + 1) * islandSize) / 2) - (islandSize * 1.5f))
+			{
+				Debug.Log("erster");
+				firstTeamSpawn = island;
+				island.GetComponent<IslandOwner>().owner = 1;
+			}
+			else if (island.transform.position.x == ((((mapSize - 1) * islandSize) * 0.875) / 2) && island.transform.position.z == 0)
+			{
+				Debug.Log("zweiter");
+				seccTeamSpawn = island;
+				island.GetComponent<IslandOwner>().owner = 2;
+			}
+			else if (island.transform.position.x == (((mapSize - 1) * islandSize) * 0.875) && island.transform.position.z == ((float)mapSize / 2) * islandSize)
+			{
+				Debug.Log("dritter");
+				thirdTeamSpawn = island;
+				island.GetComponent<IslandOwner>().owner = 3;
+			}
+			else if (island.transform.position.x == ((((mapSize - 1) * islandSize) * 0.875) / 2) && island.transform.position.z == (mapSize - 1) * islandSize)
+			{
+				Debug.Log("vierter");
+				fourthTeamSpawn = island;
+				island.GetComponent<IslandOwner>().owner = 4;
+			}
+		}
+	}
 
     private void SetPivotPoint()
     {
