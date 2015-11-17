@@ -116,7 +116,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
             minimapparent.transform.parent = GameObject.Find("MiniMapParentParent").transform;
             GameObject minimapparentparent = GameObject.Find("MiniMapParentParent");
             minimapparentparent.transform.position = new Vector3(((islandSize * mapSize) / 2 - (islandSize * mapSize) / 8) * 1.11f, 60, ((islandSize * mapSize) / 2 - (((islandSize * mapSize) / 2) * 0.25f) - (islandSize * mapSize) / 8) * 1.05f);
-            mapFixed = true;
+			mapFixed = true;
         }
 
         if (minimapIslands.Count != 0 && mapIslands.Count != 0)
@@ -140,11 +140,11 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 	{
 		if (Utility.joinRoom) 
 		{
-			PhotonNetwork.JoinRoom("test");
+			PhotonNetwork.JoinRoom("test2");
 		} 
 		else 
 		{
-            PhotonNetwork.CreateRoom("test", Utility.roomOptions, TypedLobby.Default);
+            PhotonNetwork.CreateRoom("test2", Utility.roomOptions, TypedLobby.Default);
 		}
 	}
 	

@@ -16,6 +16,8 @@ public class CharacterStats : MonoBehaviour
     public int staticMunition = 30;
     public int team = 1;
 
+	private Vector3 startPos;
+
     private Text lifeText;
     private Text armorText;
     public Text ammunitionText;
@@ -154,12 +156,28 @@ public class CharacterStats : MonoBehaviour
     void RespawnPlayer()
     {
         respawnModus = true;
+		startPos = this.gameObject.transform.position;
+
+		GameObject[] minimap = GameObject.FindGameObjectsWithTag ("minimapIsland");
+		int i = (minimap.Length + 1) / 2;
+		GameObject respawn = minimap [i];
+		
+		startPos = new Vector3(respawn.transform.position.x -300, respawn.transform.position.y, respawn.transform.position.z);
     }
 
     void OnMiniMapClick()
     {
-		Destroy (this.gameObject);
-        if (Input.GetMouseButtonDown(0))
+		//this.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY| RigidbodyConstraints.FreezePositionZ;
+        
+
+		//this.gameObject.transform.position = Vector3.Lerp(startPos, new Vector3(0,0,0), Time.deltaTime);
+
+		this.gameObject.transform.position = startPos;
+
+		//this.gameObject.transform.LookAt (respawn.transform);
+		//this.gameObject.transform.position -= this.gameObject.transform.forward * 100;
+
+		if (Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
             Ray RayCast = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
