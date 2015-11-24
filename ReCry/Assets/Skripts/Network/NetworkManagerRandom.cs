@@ -15,7 +15,6 @@ using System;
 public class NetworkManagerRandom : Photon.MonoBehaviour
 {
     public bool AutoConnect = true;
-    public string Version = "1.01";
     private bool ConnectInUpdate = true;
 
     [Range(1, 31)]
@@ -32,11 +31,11 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
     public string[] IslandsToPlace;
     public string[] SmallEnvirementsToPlace;
     public string[] BigEnvirementsToPlace;
-	public string[] HousesToPlace;
+    public string[] HousesToPlace;
 
     GameObject[] smallEnvirement;
     GameObject[] bigEnvirement;
-	GameObject[] houseEnvirement;
+    GameObject[] houseEnvirement;
     GameObject[,] Map;
     GameObject[] respawnPoints;
     public List<GameObject> minimapIslands;
@@ -54,20 +53,21 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
     GameObject thirdTeamSpawn;
     GameObject fourthTeamSpawn;
 
-    
+
 
     public virtual void Start()
     {
+
         mapHightDifference = (int)(mapHightDifference * (islandSize / 10));
         minimapIslands = new List<GameObject>();
         mapIslands = new List<GameObject>();
         CreateNewRoom();
     }
 
-	void OnGUI()
-	{
-		GUILayout.Label(PhotonNetwork.connectionStateDetailed.ToString());
-	}
+    void OnGUI()
+    {
+        GUILayout.Label(PhotonNetwork.connectionStateDetailed.ToString());
+    }
 
     public virtual void Update()
     {
@@ -76,21 +76,21 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
             Debug.Log("Update() was called by Unity. Scene is loaded. Let's connect to the Photon Master Server. Calling: PhotonNetwork.ConnectUsingSettings();");
 
             ConnectInUpdate = false;
-            PhotonNetwork.ConnectUsingSettings(Version);
+            PhotonNetwork.ConnectUsingSettings(Utility.Version);
         }
 
-		if (mapIslands.Count == 0 && PhotonNetwork.connectionStateDetailed.ToString () == "Joined")
-		{
-			fillMapList();
-			setFirstSpawn();
-		}
+        if (mapIslands.Count == 0 && PhotonNetwork.connectionStateDetailed.ToString() == "Joined")
+        {
+            fillMapList();
+            setFirstSpawn();
+        }
 
         if (GameObject.FindGameObjectWithTag("Respawn") && PhotonNetwork.connectionStateDetailed.ToString() == "Joined" && mapIslands.Count != 0)
         {
             if (!playerSpawned)
             {
-                GameObject Player = PhotonNetwork.Instantiate("Playerprefab_Multi", new Vector3(0,0,0), Quaternion.identity, 0);
-				SpawnPlayer(Player);
+                GameObject Player = PhotonNetwork.Instantiate("Playerprefab_Multi", new Vector3(0, 0, 0), Quaternion.identity, 0);
+                SpawnPlayer(Player);
                 playerSpawned = true;
             }
         }
@@ -123,7 +123,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
             minimapparent.transform.parent = GameObject.Find("MiniMapParentParent").transform;
             GameObject minimapparentparent = GameObject.Find("MiniMapParentParent");
             minimapparentparent.transform.position = new Vector3(((islandSize * mapSize) / 2 - (islandSize * mapSize) / 8) * 1.11f, 60, ((islandSize * mapSize) / 2 - (((islandSize * mapSize) / 2) * 0.25f) - (islandSize * mapSize) / 8) * 1.05f);
-			mapFixed = true;
+            mapFixed = true;
         }
 
         if (minimapIslands.Count != 0 && mapIslands.Count != 0)
@@ -136,88 +136,88 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
         }
     }
 
-	public virtual void OnConnectedToMaster()
-	{
-		if (PhotonNetwork.networkingPeer.AvailableRegions != null) Debug.LogWarning("List of available regions counts " + PhotonNetwork.networkingPeer.AvailableRegions.Count + ". First: " + PhotonNetwork.networkingPeer.AvailableRegions[0] + " \t Current Region: " + PhotonNetwork.networkingPeer.CloudRegion);
-		Debug.Log("OnConnectedToMaster() was called by PUN. Now this client is connected and could join a room. Calling: PhotonNetwork.JoinRandomRoom();");
-		CreateNewRoom ();
-	}
-	
-	public void CreateNewRoom()
-	{
-		if (Utility.joinRoom) 
-		{
-			PhotonNetwork.JoinRoom("test");
-		} 
-		else 
-		{
+    public virtual void OnConnectedToMaster()
+    {
+        if (PhotonNetwork.networkingPeer.AvailableRegions != null) Debug.LogWarning("List of available regions counts " + PhotonNetwork.networkingPeer.AvailableRegions.Count + ". First: " + PhotonNetwork.networkingPeer.AvailableRegions[0] + " \t Current Region: " + PhotonNetwork.networkingPeer.CloudRegion);
+        Debug.Log("OnConnectedToMaster() was called by PUN. Now this client is connected and could join a room. Calling: PhotonNetwork.JoinRandomRoom();");
+        CreateNewRoom();
+    }
+
+    public void CreateNewRoom()
+    {
+        if (Utility.joinRoom)
+        {
+            PhotonNetwork.JoinRoom("test");
+        }
+        else
+        {
             PhotonNetwork.CreateRoom("test", Utility.roomOptions, TypedLobby.Default);
-		}
-	}
-	
-	public virtual void OnFailedToConnectToPhoton(DisconnectCause cause)
-	{
-		Debug.LogError("Cause: " + cause);
-	}
+        }
+    }
+
+    public virtual void OnFailedToConnectToPhoton(DisconnectCause cause)
+    {
+        Debug.LogError("Cause: " + cause);
+    }
 
     public void OnJoinedRoom()
     {
-		calculateMapDimentions();
-		
-		if (PhotonNetwork.isMasterClient)
-		{
-			placeIslands(IslandsToPlace, 0, true, 1);
-			placeIslands(IslandsToPlace, -550, false, 0.25f);
-			PhotonNetwork.Instantiate("Sky Dome", new Vector3(233,0,268), Quaternion.Euler(0.0f, 0.0f, 0.0f), 0);
-		}
-		placeSmallEnvirement();
-		placeBigEnvirement();
-		placeHouse();
-		
-		SetPivotPoint();
-		fillMapList();
-		setFirstSpawn();
-		Cursor.visible = false;
+        calculateMapDimentions();
+
+        if (PhotonNetwork.isMasterClient)
+        {
+            placeIslands(IslandsToPlace, 0, true, 1);
+            placeIslands(IslandsToPlace, -550, false, 0.25f);
+            PhotonNetwork.Instantiate("Sky Dome", new Vector3(233, 0, 268), Quaternion.Euler(0.0f, 0.0f, 0.0f), 0);
+        }
+        placeSmallEnvirement();
+        placeBigEnvirement();
+        placeHouse();
+
+        SetPivotPoint();
+        fillMapList();
+        setFirstSpawn();
+        Cursor.visible = false;
     }
 
-	private void setFirstSpawn()
-	{
-		Debug.Log ("Anzahl: " + mapIslands.Count);
-		foreach (GameObject island in mapIslands)
-		{
-			if (island.transform.position.x == 0 && island.transform.position.z == (((mapSize + 1) * islandSize) / 2) - (islandSize * 1.5f))
-			{
-				Debug.Log("erster");
-				firstTeamSpawn = island;
-				island.GetComponent<IslandOwner>().owner = 1;
-			}
-			else if (island.transform.position.x == ((((mapSize - 1) * islandSize) * 0.875) / 2) && island.transform.position.z == 0)
-			{
-				Debug.Log("zweiter");
-				seccTeamSpawn = island;
-				island.GetComponent<IslandOwner>().owner = 2;
-			}
-			else if (island.transform.position.x == (((mapSize - 1) * islandSize) * 0.875) && island.transform.position.z == ((float)mapSize / 2) * islandSize)
-			{
-				Debug.Log("dritter");
-				thirdTeamSpawn = island;
-				island.GetComponent<IslandOwner>().owner = 3;
-			}
-			else if (island.transform.position.x == ((((mapSize - 1) * islandSize) * 0.875) / 2) && island.transform.position.z == (mapSize - 1) * islandSize)
-			{
-				Debug.Log("vierter");
-				fourthTeamSpawn = island;
-				island.GetComponent<IslandOwner>().owner = 4;
-			}
-		}
-	}
+    private void setFirstSpawn()
+    {
+        Debug.Log("Anzahl: " + mapIslands.Count);
+        foreach (GameObject island in mapIslands)
+        {
+            if (island.transform.position.x == 0 && island.transform.position.z == (((mapSize + 1) * islandSize) / 2) - (islandSize * 1.5f))
+            {
+                Debug.Log("erster");
+                firstTeamSpawn = island;
+                island.GetComponent<IslandOwner>().owner = 1;
+            }
+            else if (island.transform.position.x == ((((mapSize - 1) * islandSize) * 0.875) / 2) && island.transform.position.z == 0)
+            {
+                Debug.Log("zweiter");
+                seccTeamSpawn = island;
+                island.GetComponent<IslandOwner>().owner = 2;
+            }
+            else if (island.transform.position.x == (((mapSize - 1) * islandSize) * 0.875) && island.transform.position.z == ((float)mapSize / 2) * islandSize)
+            {
+                Debug.Log("dritter");
+                thirdTeamSpawn = island;
+                island.GetComponent<IslandOwner>().owner = 3;
+            }
+            else if (island.transform.position.x == ((((mapSize - 1) * islandSize) * 0.875) / 2) && island.transform.position.z == (mapSize - 1) * islandSize)
+            {
+                Debug.Log("vierter");
+                fourthTeamSpawn = island;
+                island.GetComponent<IslandOwner>().owner = 4;
+            }
+        }
+    }
 
     private void SetPivotPoint()
     {
-		GameObject point = GameObject.Find ("PivotPoint");
-		point.transform.position = new Vector3 (((islandSize * mapSize) / 2 - (islandSize * mapSize) / 8) * 1.11f, 0, ((islandSize * mapSize) / 2 - (islandSize * mapSize) / 8) * 1.01f);
-		Debug.Log ((islandSize * mapSize) / 4);
-	}
+        GameObject point = GameObject.Find("PivotPoint");
+        point.transform.position = new Vector3(((islandSize * mapSize) / 2 - (islandSize * mapSize) / 8) * 1.11f, 0, ((islandSize * mapSize) / 2 - (islandSize * mapSize) / 8) * 1.01f);
+        Debug.Log((islandSize * mapSize) / 4);
+    }
 
     void calculateMapDimentions()
     {
@@ -379,60 +379,60 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
         }
     }
 
-	void placeBigEnvirement()
-	{
-		if (bigEnvirement == null)
-			bigEnvirement = GameObject.FindGameObjectsWithTag("EnvBig");
-		
-		List<GameObject> envirmts = new List<GameObject>();
-		
-		foreach (GameObject emptyGameObject in bigEnvirement)
-		{
-			int random = UnityEngine.Random.Range(0, 7);
-			int randomEnvirement = UnityEngine.Random.Range(0, BigEnvirementsToPlace.Length);
-			if (random != 0)
-			{
-				if (PhotonNetwork.isMasterClient)
-				{
-					GameObject prefab = PhotonNetwork.Instantiate(BigEnvirementsToPlace[randomEnvirement], new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, UnityEngine.Random.Range(0.0f, 360.0f), 0.0f), 0);
-					envirmts.Add(prefab);
-				}
-			}
-		}
-		
-		foreach (GameObject smallEnv in GameObject.FindGameObjectsWithTag("EnvBig"))
-		{
-			Destroy(smallEnv);
-		}
-	}
+    void placeBigEnvirement()
+    {
+        if (bigEnvirement == null)
+            bigEnvirement = GameObject.FindGameObjectsWithTag("EnvBig");
 
-	void placeHouse()
-	{
-		if (houseEnvirement == null)
-			houseEnvirement = GameObject.FindGameObjectsWithTag("WoodHouse");
-		
-		List<GameObject> envirmts = new List<GameObject>();
-		
-		foreach (GameObject emptyGameObject in houseEnvirement)
-		{
-			if (PhotonNetwork.isMasterClient)
-			{
-				GameObject prefab = PhotonNetwork.Instantiate(HousesToPlace[0], new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, UnityEngine.Random.Range(0.0f, 360.0f), 0.0f), 0);
-				envirmts.Add(prefab);
-			}
-		}
-		
-		foreach (GameObject smallEnv in GameObject.FindGameObjectsWithTag("EnvBig"))
-		{
-			Destroy(smallEnv);
-		}
-	}
+        List<GameObject> envirmts = new List<GameObject>();
+
+        foreach (GameObject emptyGameObject in bigEnvirement)
+        {
+            int random = UnityEngine.Random.Range(0, 7);
+            int randomEnvirement = UnityEngine.Random.Range(0, BigEnvirementsToPlace.Length);
+            if (random != 0)
+            {
+                if (PhotonNetwork.isMasterClient)
+                {
+                    GameObject prefab = PhotonNetwork.Instantiate(BigEnvirementsToPlace[randomEnvirement], new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, UnityEngine.Random.Range(0.0f, 360.0f), 0.0f), 0);
+                    envirmts.Add(prefab);
+                }
+            }
+        }
+
+        foreach (GameObject smallEnv in GameObject.FindGameObjectsWithTag("EnvBig"))
+        {
+            Destroy(smallEnv);
+        }
+    }
+
+    void placeHouse()
+    {
+        if (houseEnvirement == null)
+            houseEnvirement = GameObject.FindGameObjectsWithTag("WoodHouse");
+
+        List<GameObject> envirmts = new List<GameObject>();
+
+        foreach (GameObject emptyGameObject in houseEnvirement)
+        {
+            if (PhotonNetwork.isMasterClient)
+            {
+                GameObject prefab = PhotonNetwork.Instantiate(HousesToPlace[0], new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, UnityEngine.Random.Range(0.0f, 360.0f), 0.0f), 0);
+                envirmts.Add(prefab);
+            }
+        }
+
+        foreach (GameObject smallEnv in GameObject.FindGameObjectsWithTag("EnvBig"))
+        {
+            Destroy(smallEnv);
+        }
+    }
 
     void placeIsland(Vector3 position, string[] islands)
     {
         int random = UnityEngine.Random.Range(0, islands.Length);
         int rotation = UnityEngine.Random.Range(0, 5);
-		//rotate removed cause pivvot
+        //rotate removed cause pivvot
         PhotonNetwork.Instantiate(islands[random], position, Quaternion.Euler(0.0f, 0.0f, 0.0f), 0);
     }
 
@@ -1132,7 +1132,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                         bridge = new GameObject();
                         bridge.AddComponent<BridgeStats>();
                         bS = bridge.GetComponent<BridgeStats>();
-                        bS.GetStats(BridgePlank , island, wp.otherBridgePoint.gameObject.transform.parent.gameObject, bridgeLenght, xAngle, yAngle, BridgePlankWidth, BridgeGapWidth);
+                        bS.GetStats(BridgePlank, island, wp.otherBridgePoint.gameObject.transform.parent.gameObject, bridgeLenght, xAngle, yAngle, BridgePlankWidth, BridgeGapWidth);
 
 
 

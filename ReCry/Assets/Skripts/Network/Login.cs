@@ -19,6 +19,7 @@ public class Login : MonoBehaviour
         this.username = GameObject.Find("Username").GetComponent<InputField>() as InputField;
         this.password = GameObject.Find("Password").GetComponent<InputField>() as InputField;
         this.saveUserName = GameObject.Find("SaveUser").GetComponent<Toggle>() as Toggle;
+        this.saveUserName.isOn = false;
 
         DeserializeData();
     }

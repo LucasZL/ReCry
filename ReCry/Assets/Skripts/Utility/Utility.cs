@@ -20,4 +20,5 @@ public static class Utility
     public static int Team;
 	public static bool joinRoom;
     public static bool isInGame;
+    public static string Version = "1.01";
 }

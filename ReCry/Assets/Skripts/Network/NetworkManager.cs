@@ -15,7 +15,8 @@ public class NetworkManager : Photon.MonoBehaviour
 {
     /// <summary>Connect automatically? If false you can set this to true later on or call ConnectUsingSettings in your own scripts.</summary>
     public bool AutoConnect = true;
-    public Text servertext;
+    public Text NumberOfPlayers;
+    public Text NumberOfRooms;
     public byte Version = 1;
 
     /// <summary>if we don't want to connect in Start(), we have to "remember" if we called ConnectUsingSettings()</summary>
@@ -23,8 +24,11 @@ public class NetworkManager : Photon.MonoBehaviour
 
     public virtual void Start()
 	{
-        this.servertext.text = Utility.Username;
-		PhotonNetwork.autoJoinLobby = false;    // we join randomly. always. no need to join a lobby to get the list of rooms.
+        PhotonNetwork.ConnectUsingSettings(Utility.Version);
+        Debug.Log(Utility.Version);
+        this.NumberOfRooms.text = PhotonNetwork.countOfRooms.ToString();
+		PhotonNetwork.autoJoinLobby = false; // we join randomly. always. no need to join a lobby to get the list of rooms.
+        Cursor.visible = false;
 	}
 
 	void OnGUI()
@@ -39,13 +43,14 @@ public class NetworkManager : Photon.MonoBehaviour
 			Debug.Log("Update() was called by Unity. Scene is loaded. Let's connect to the Photon Master Server. Calling: PhotonNetwork.ConnectUsingSettings();");
 			
 			ConnectInUpdate = false;
-			PhotonNetwork.ConnectUsingSettings(Version + "."+Application.loadedLevel);
 		}
-	}
-	
-	// to react to events "connected" and (expected) error "failed to join random room", we implement some methods. PhotonNetworkingMessage lists all available methods!
-	
-	public virtual void OnConnectedToMaster()
+        this.NumberOfPlayers.text = PhotonNetwork.countOfPlayers.ToString();
+
+    }
+
+    // to react to events "connected" and (expected) error "failed to join random room", we implement some methods. PhotonNetworkingMessage lists all available methods!
+
+    public virtual void OnConnectedToMaster()
 	{
 		if (PhotonNetwork.networkingPeer.AvailableRegions != null) Debug.LogWarning("List of available regions counts " + PhotonNetwork.networkingPeer.AvailableRegions.Count + ". First: " + PhotonNetwork.networkingPeer.AvailableRegions[0] + " \t Current Region: " + PhotonNetwork.networkingPeer.CloudRegion);
 		Debug.Log("OnConnectedToMaster() was called by PUN. Now this client is connected and could join a room. Calling: PhotonNetwork.JoinRandomRoom();");

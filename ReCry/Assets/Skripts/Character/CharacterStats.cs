@@ -82,12 +82,6 @@ public class CharacterStats : MonoBehaviour
             this.lifeText.text = this.Life.ToString();
             this.armorText.text = this.Armor.ToString();
 
-            //this.lifeText.gameObject.SetActive(false);
-            //this.armorText.gameObject.SetActive(false);
-            //this.healthImage.gameObject.SetActive(false);
-            //this.armorImage.gameObject.SetActive(false);
-            //this.ammunitionText.gameObject.SetActive(false);
-
             nmr = GameObject.Find("MapGeneratorNetwork").GetComponent<NetworkManagerRandom>();
             //nmr.SpawnPlayer(this.gameObject);
             CanvasFullyLoaded = true;
@@ -101,7 +95,6 @@ public class CharacterStats : MonoBehaviour
         {
             UpdateLifeText();
             UpdateArmorText();
-            CheckIfPlayerIsInGame();
             if (Life <= 0)
             {
                 RespawnPlayer();
@@ -202,18 +195,4 @@ public class CharacterStats : MonoBehaviour
             
         }
     }
-
-    void CheckIfPlayerIsInGame()
-    {
-        //if (Application.loadedLevelName == "JoinRandomRoom" && CanvasFullyLoaded)
-        //{
-            //this.lifeText.gameObject.SetActive(true);
-            //this.armorText.gameObject.SetActive(true);
-            //this.healthImage.gameObject.SetActive(true);
-            //this.armorImage.gameObject.SetActive(true);
-            //this.ammunitionText.gameObject.SetActive(true);
-            //CanvasFullyLoaded = false;
-        //}
-        
-	}
 }
