@@ -9,7 +9,6 @@ public class StartGame : MonoBehaviour
 		{
 			Utility.joinRoom = false;
             Utility.isInGame = true;
-			PhotonNetwork.Destroy(other.gameObject);
             PhotonNetwork.LeaveRoom();
             PhotonNetwork.LoadLevel("JoinRandomRoom");
 		}

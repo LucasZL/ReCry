@@ -28,7 +28,7 @@ public class NetworkManager : Photon.MonoBehaviour
         Debug.Log(Utility.Version);
         this.NumberOfRooms.text = PhotonNetwork.countOfRooms.ToString();
 		PhotonNetwork.autoJoinLobby = false; // we join randomly. always. no need to join a lobby to get the list of rooms.
-        Cursor.visible = false;
+        Cursor.visible = true;
 	}
 
 	void OnGUI()
