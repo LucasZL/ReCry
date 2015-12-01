@@ -22,8 +22,8 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
     [Range(1, 100)]
     public int mapHightDifference = 3;
     public float islandSize = 10.0f;
-    public float BridgePlankWidth;
-    public float BridgeGapWidth;
+    public float BridgePlankWidth = 1;
+    public float BridgeGapWidth = 0.1f;
     public int mapSideLength;
 
     public bool gameStarted = false;
@@ -348,8 +348,8 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
         if (yRandom)
         {
             createMapArray();
-            //GetOtherBridgePoint();
-            //GenerateBridges();
+            GetOtherBridgePoint();
+            GenerateBridges();
         }
     }
 
@@ -1093,6 +1093,7 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
         }
     }
 
+
     void GenerateBridges()
     {
         GameObject bridge;
@@ -1105,6 +1106,12 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
         float xAngle;
         float yAngle;
         Bridges = new List<GameObject>();
+        //BridgePlank = GameObject.FindGameObjectWithTag("Bridge");
+        //BridgePlank = (GameObject)Resources.Load("Assets/Skripts/Prefabs/BridgeCube", typeof(GameObject));
+        BridgePlank = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        BridgePlank.transform.localScale = new Vector3(10, 1, 1);
+        BridgePlank.tag = "Bridge";
+
 
         foreach (var island in Map)
         {
@@ -1119,22 +1126,22 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                     if (wp.otherBridgePoint != null && !wp.bridgeSpwaned && !wp.otherBridgePoint.GetComponent<WayPoint>().bridgeSpwaned)
                     {
                         bridgeLenght = GetBridgeLenght(point.transform, wp.otherBridgePoint.gameObject.transform);
-                        bridgeCube.transform.localScale = new Vector3(1, 1, bridgeLenght);
-                        position = GetSpawnPosition(point.transform, wp.otherBridgePoint.gameObject.transform);
                         xAngle = GetxAngle(point.transform, wp.otherBridgePoint.gameObject.transform);
                         yAngle = GetYAngle(point.transform, wp.otherBridgePoint.gameObject.transform);
 
                         //just the placeholder
-                        Bridges[0] = (GameObject)Instantiate(bridgeCube, position, Quaternion.Euler(xAngle, yAngle, 0));
-                        bridgeCube.transform.localScale = new Vector3(1, 1, 1);
+                        //position = GetSpawnPosition(point.transform, wp.otherBridgePoint.gameObject.transform);
+                        //bridgeCube.transform.localScale = new Vector3(1, 1, bridgeLenght);
+                        //Instantiate(bridgeCube, position, Quaternion.Euler(xAngle, yAngle, 0));
+                        //bridgeCube.transform.localScale = new Vector3(1, 1, 1);
 
                         //the real bridge
                         bridge = new GameObject();
                         bridge.AddComponent<BridgeStats>();
                         bS = bridge.GetComponent<BridgeStats>();
-                        bS.GetStats(BridgePlank, island, wp.otherBridgePoint.gameObject.transform.parent.gameObject, bridgeLenght, xAngle, yAngle, BridgePlankWidth, BridgeGapWidth);
-
-
+                        bS.GetStats(BridgePlank, wp.transform.position, wp.otherBridgePoint.transform.position, bridgeLenght, xAngle, yAngle, BridgePlankWidth, BridgeGapWidth);
+                        bS.SpawnBridge();
+                        Bridges.Add(bridge);
 
 
                         wp.bridgeSpwaned = true;

@@ -16,7 +16,7 @@ public class JumpDetection : MonoBehaviour
 
     void OnCollisionStay(Collision other)
     {
-        if (other.gameObject.tag == "Env" || other.gameObject.tag == "BigPrefab" || other.gameObject.tag == "SmallPrefab")
+        if (other.gameObject.tag == "Env" || other.gameObject.tag == "BigPrefab" || other.gameObject.tag == "SmallPrefab" || other.gameObject.tag == "Bridge") 
         {
             isGrounded = true;
         }
