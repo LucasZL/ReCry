@@ -13,6 +13,14 @@ public class JumpDetection : MonoBehaviour
 {
 
     public bool isGrounded;
+    void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.tag == "Env" || other.gameObject.tag == "BigPrefab" || other.gameObject.tag == "SmallPrefab")
+        {
+            this.gameObject.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
+            isGrounded = true;
+        }
+    }
 
     void OnCollisionStay(Collision other)
     {

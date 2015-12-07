@@ -84,7 +84,6 @@ public class RayCastShoot : MonoBehaviour
                             Debug.Log("Magazin is empty");
                         }
                     }
-                    Debug.DrawRay(this.mainCamera.transform.position, this.mainCamera.transform.forward, Color.red);
                 }
             }
 
