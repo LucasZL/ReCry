@@ -29,7 +29,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     public float JumpHeight = 12.5f;
     public int LookUp = -50;
     public int lookDown = 50;
-    private bool isWalking = true;
+    public bool isWalking = true;
     public bool isRunning = false;
     private float mouseX;
     private float mouseY;
@@ -37,6 +37,8 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     private float vertical;
     public float speed;
     private bool gamestarted = false;
+    public bool IsGrounded = true;
+    private CapsuleCollider collider;
 
     //JetPack
     private Image fuel;
@@ -53,7 +55,6 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
     //Camera Movement and JumpController
     private Camera camera;
-    private JumpDetection jump;
 
     Rigidbody rigid;
 
@@ -66,9 +67,10 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
         {
             RunSpeed = 28;
             this.camera = this.transform.Find("Camera").GetComponent<Camera>();
-            this.jump = GetComponent<JumpDetection>();
             this.fuel = GameObject.FindWithTag("Fuel").GetComponent<Image>();
+            this.collider = GetComponent<CapsuleCollider>();
             this.fuel.fillAmount = jetpacktank;
+            IsGrounded = true;
         }
         else
         {
@@ -99,6 +101,10 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
         {
             JetPackForward();
             FillUpJetPackFuel();
+            if (Application.loadedLevelName == "JoinRandomRoom")
+            {
+                CheckIfGrounded();
+            }
         }
 
     }
@@ -117,7 +123,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
     void MoveCharacter()
     {
-        if (isWalking && jump.isGrounded)
+        if (isWalking && IsGrounded)
         {
             this.horizontal = Input.GetAxis("Horizontal") * Time.deltaTime * MoveSpeed;
             this.vertical = Input.GetAxis("Vertical") * Time.deltaTime * MoveSpeed;
@@ -128,7 +134,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
     void Run()
     {
-        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W) && jump.isGrounded)
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W) && IsGrounded)
         {
             if (jetpacktank >= maxJetPackDirection)
             {
@@ -197,7 +203,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
     private void JetPackJump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && jump.isGrounded && fuelIsEmpty && Utility.isInGame)
+        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded && fuelIsEmpty && Utility.isInGame)
         {
             if (jetpacktank >= maxJetPackJump)
             {
@@ -227,7 +233,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
     private void JetPackForward()
     {
-        if (Input.GetKey(KeyCode.LeftShift) && !jump.isGrounded && fuelIsEmpty && Utility.isInGame)
+        if (Input.GetKey(KeyCode.LeftShift) && !IsGrounded && fuelIsEmpty && Utility.isInGame)
         {
             if (jetpacktank >= maxJetPackDirection)
             {
@@ -285,7 +291,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
     private void FillUpJetPackFuel()
     {
-        if (jetpacktank < maxFuel && jump.isGrounded && !isRunning && Utility.isInGame)
+        if (jetpacktank < maxFuel && IsGrounded && !isRunning && Utility.isInGame)
         {
             if (addFuel)
             {
@@ -310,6 +316,29 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
     }
 
+
+    private void CheckIfGrounded()
+    {
+        RaycastHit groundcheck;
+        Vector3 startpoint = this.transform.position + collider.center + Vector3.down * (-collider.height*2f);
+        Vector3 endpoint = startpoint + (Vector3.down * collider.height * 1.25f);
+        if (Physics.CapsuleCast(startpoint,endpoint,collider.radius,Vector3.down,out groundcheck,3f))
+        {
+            if (groundcheck.transform.gameObject.tag == "Env" ||
+                groundcheck.transform.gameObject.tag == "BigPrefab" ||
+                groundcheck.transform.gameObject.tag == "SmallPrefab" ||
+                groundcheck.transform.gameObject.tag == "Bridge")
+            {
+                IsGrounded = true;
+            }
+
+        }
+        else
+        {
+            IsGrounded = false;
+        }
+    }
+
     IEnumerator ChangeFuel(float change,int seconds)
     {
         changeFuel = false;
@@ -328,4 +357,5 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
         yield return new WaitForSeconds(seconds);
         addFuel = true;
     }
+
 }
