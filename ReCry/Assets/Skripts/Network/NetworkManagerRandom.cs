@@ -1356,6 +1356,8 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
             Player.GetComponent<CharacterStats>().Armor = 100;
             Player.GetComponent<CharacterStats>().restmuni = 120;
             Player.GetComponent<CharacterStats>().munition = 30;
+            Player.GetComponent<CharacterMovementMultiplayer>().fuel.fillAmount = 1;
+            Player.GetComponent<CharacterMovementMultiplayer>().jetpacktank = 1;
             Player.GetComponent<CharacterMovementMultiplayer>().IsGrounded = true;
             island.GetComponent<IslandOwner>().respawnTickets--;
             return;

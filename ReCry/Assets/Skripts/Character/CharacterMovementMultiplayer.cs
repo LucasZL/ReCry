@@ -29,8 +29,8 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     public float JumpHeight = 12.5f;
     public int LookUp = -50;
     public int lookDown = 50;
-    public bool isWalking = true;
-    public bool isRunning = false;
+    private bool isWalking = true;
+    private bool isRunning = false;
     private float mouseX;
     private float mouseY;
     private float horizontal;
@@ -41,8 +41,8 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     private CapsuleCollider collider;
 
     //JetPack
-    private Image fuel;
-    private float jetpacktank = 1;
+    public Image fuel;
+    public float jetpacktank = 1;
     public float JetPackSpeed = 25f;
     private bool fuelIsEmpty = false;
     private bool moveForwards = false;
@@ -344,6 +344,10 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
         changeFuel = false;
         jetpacktank -= change;
         this.fuel.fillAmount = jetpacktank;
+        if (this.fuel.fillAmount < 0.1f)
+        {
+            this.fuel.fillAmount = 0.1f;
+        }
         yield return new WaitForSeconds(seconds);
         changeFuel = true;
     }
