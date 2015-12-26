@@ -39,7 +39,7 @@ public class BridgeStats : MonoBehaviour
         this.gapWidth = gapWidth;
     }
 
-    public void SpawnBridge()
+    public void SpawnMultiBridge()
     {
         int plankNumber;
         int counter = 0;
@@ -97,6 +97,12 @@ public class BridgeStats : MonoBehaviour
 
     }
 
+    public void SpawnSingleBridge()
+    {
+        plank.transform.localScale = new Vector3(10, 0.5f, lenght);
+        Instantiate(plank, GetSpawnPosition(startPos, endPos), Quaternion.Euler(xAngle, yAngle, 0));
+    }
+
     int GetPlankNumber()
     {
         float effectiveLenght = lenght - plankWidth;
@@ -147,6 +153,136 @@ public class BridgeStats : MonoBehaviour
         {
             DestroyBridge();
         }
+    }
+
+    Vector3 GetSpawnPosition(Vector3 start, Vector3 end)
+    {
+        Vector3 pos = new Vector3();
+        float diffX = 0;
+        float diffY = 0;
+        float diffZ = 0;
+
+        if (start.x >= 0 && end.x >= 0)
+        {
+            if (start.x < end.x)
+            {
+                diffX = end.x - start.x;
+            }
+            else
+            {
+                diffX = start.x - end.x;
+            }
+        }
+        else if (start.x < 0 && end.x >= 0)
+        {
+            diffX = end.x + Mathf.Sqrt(start.x * start.x);
+        }
+        else if (start.x < 0 && end.x < 0)
+        {
+            if (start.x < end.x)
+            {
+                diffX = end.x - start.x;
+            }
+            else
+            {
+                diffX = start.x - end.x;
+            }
+        }
+        else if (start.x >= 0 && end.x < 0)
+        {
+            diffX = start.x + Mathf.Sqrt(end.x * end.x);
+        }
+
+        if (start.x > end.x)
+        {
+            pos.x = end.x + (diffX / 2);
+        }
+        else
+        {
+            pos.x = start.x + (diffX / 2);
+        }
+
+        if (start.y >= 0 && end.y >= 0)
+        {
+            if (start.y < end.y)
+            {
+                diffY = end.y - start.y;
+            }
+            else
+            {
+                diffY = start.y - end.y;
+            }
+        }
+        else if (start.y < 0 && end.y >= 0)
+        {
+            diffY = end.y + Mathf.Sqrt(start.y * start.y);
+        }
+        else if (start.y < 0 && end.y < 0)
+        {
+            if (start.y < end.y)
+            {
+                diffY = end.y - start.y;
+            }
+            else
+            {
+                diffY = start.y - end.y;
+            }
+        }
+        else if (start.y >= 0 && end.y < 0)
+        {
+            diffY = start.y + Mathf.Sqrt(end.y * end.y);
+        }
+
+        if (start.y > end.y)
+        {
+            pos.y = end.y + (diffY / 2);
+        }
+        else
+        {
+            pos.y = start.y + (diffY / 2);
+        }
+
+        if (start.z >= 0 && end.z >= 0)
+        {
+            if (start.z < end.z)
+            {
+                diffZ = end.z - start.z;
+            }
+            else
+            {
+                diffZ = start.z - end.z;
+            }
+        }
+        else if (start.z < 0 && end.z >= 0)
+        {
+            diffZ = end.z + Mathf.Sqrt(start.z * start.z);
+        }
+        else if (start.z < 0 && end.z < 0)
+        {
+            if (start.z < end.z)
+            {
+                diffZ = end.z - start.z;
+            }
+            else
+            {
+                diffZ = start.z - end.z;
+            }
+        }
+        else if (start.z >= 0 && end.z < 0)
+        {
+            diffZ = start.z + Mathf.Sqrt(end.z * end.z);
+        }
+
+        if (start.z > end.z)
+        {
+            pos.z = end.z + (diffZ / 2);
+        }
+        else
+        {
+            pos.z = start.z + (diffZ / 2);
+        }
+
+        return pos;
     }
 
     void DestroyBridge()

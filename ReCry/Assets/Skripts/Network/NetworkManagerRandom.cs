@@ -1135,12 +1135,20 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
                         //Instantiate(bridgeCube, position, Quaternion.Euler(xAngle, yAngle, 0));
                         //bridgeCube.transform.localScale = new Vector3(1, 1, 1);
 
-                        //the real bridge
+                        //  ---the real bridge---
+                        //bridge = new GameObject();
+                        //bridge.AddComponent<BridgeStats>();
+                        //bS = bridge.GetComponent<BridgeStats>();
+                        //bS.GetStats(BridgePlank, wp.transform.position, wp.otherBridgePoint.transform.position, bridgeLenght, xAngle, yAngle, BridgePlankWidth, BridgeGapWidth);
+                        //bS.SpawnMultiBridge();
+                        //Bridges.Add(bridge);
+
+                        //  ---the Sinlge Bridge ---
                         bridge = new GameObject();
                         bridge.AddComponent<BridgeStats>();
                         bS = bridge.GetComponent<BridgeStats>();
                         bS.GetStats(BridgePlank, wp.transform.position, wp.otherBridgePoint.transform.position, bridgeLenght, xAngle, yAngle, BridgePlankWidth, BridgeGapWidth);
-                        bS.SpawnBridge();
+                        bS.SpawnSingleBridge();
                         Bridges.Add(bridge);
 
 
