@@ -17,6 +17,8 @@ public class NetworkManager : Photon.MonoBehaviour
     public bool AutoConnect = true;
     public Text NumberOfPlayers;
     public Text NumberOfRooms;
+    public Text ConnectedText;
+    public Image ConnectedImage;
     public byte Version = 1;
 
     /// <summary>if we don't want to connect in Start(), we have to "remember" if we called ConnectUsingSettings()</summary>
@@ -25,16 +27,10 @@ public class NetworkManager : Photon.MonoBehaviour
     public virtual void Start()
 	{
         PhotonNetwork.ConnectUsingSettings(Utility.Version);
-        Debug.Log(Utility.Version);
-        this.NumberOfRooms.text = PhotonNetwork.countOfRooms.ToString();
 		PhotonNetwork.autoJoinLobby = false; // we join randomly. always. no need to join a lobby to get the list of rooms.
         Cursor.visible = true;
 	}
 
-	void OnGUI()
-	{
-		GUILayout.Label(PhotonNetwork.connectionStateDetailed.ToString());
-	}
 	
 	public virtual void Update()
 	{
@@ -45,6 +41,7 @@ public class NetworkManager : Photon.MonoBehaviour
 			ConnectInUpdate = false;
 		}
         this.NumberOfPlayers.text = PhotonNetwork.countOfPlayers.ToString();
+        this.NumberOfRooms.text = PhotonNetwork.countOfRooms.ToString();
 
     }
 
@@ -54,31 +51,14 @@ public class NetworkManager : Photon.MonoBehaviour
 	{
 		if (PhotonNetwork.networkingPeer.AvailableRegions != null) Debug.LogWarning("List of available regions counts " + PhotonNetwork.networkingPeer.AvailableRegions.Count + ". First: " + PhotonNetwork.networkingPeer.AvailableRegions[0] + " \t Current Region: " + PhotonNetwork.networkingPeer.CloudRegion);
 		Debug.Log("OnConnectedToMaster() was called by PUN. Now this client is connected and could join a room. Calling: PhotonNetwork.JoinRandomRoom();");
-        CreateNewRoom();
+
+        ConnectedImage.color = Color.green;
+        ConnectedText.text = "Connected";
 	}
 
-    public void CreateNewRoom()
-    {
-        PhotonNetwork.CreateRoom(Utility.ServerName, Utility.roomOptions, TypedLobby.Default);
-    }
 
     public virtual void OnFailedToConnectToPhoton(DisconnectCause cause)
 	{
 		Debug.LogError("Cause: " + cause);
-	}
-	
-	public void OnJoinedRoom()
-	{
-		if (PhotonNetwork.isMasterClient) 
-		{
-
-        }
-
-        PhotonNetwork.Instantiate("Playerprefab_Multi", new Vector3(0, 1, 0), Quaternion.identity, 0);
-    }
-
-    public void OnJoinedLobby()
-	{
-        
 	}
 }
