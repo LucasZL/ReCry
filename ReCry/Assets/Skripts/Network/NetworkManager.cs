@@ -61,4 +61,8 @@ public class NetworkManager : Photon.MonoBehaviour
 	{
 		Debug.LogError("Cause: " + cause);
 	}
+
+    public virtual void OnJoinedRoom()
+    { 
+}
 }
