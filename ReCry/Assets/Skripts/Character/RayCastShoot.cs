@@ -14,6 +14,7 @@ public class RayCastShoot : MonoBehaviour
 {
 
     int munitionValue;
+    AudioSource source;
     private bool fired;
     private float firedelay = 0.15f;
     private float shotDistance = 25000f;
@@ -28,6 +29,7 @@ public class RayCastShoot : MonoBehaviour
         if (ph.isMine)
         {
             mainCamera = this.transform.Find("Camera").GetComponent<Camera>();
+            this.source = transform.Find("Bazooka_1").GetComponent<AudioSource>();
             stats = GetComponentInParent<CharacterStats>();
             stats.ammunitionText.text = string.Format("{0} / {1}", stats.munition, stats.restmuni);
             this.hitplayer = GameObject.FindWithTag("HitPlayer").GetComponent<Text>();
@@ -63,8 +65,10 @@ public class RayCastShoot : MonoBehaviour
                     Ray RayCast = new Ray(this.mainCamera.transform.position, this.mainCamera.transform.forward);
                     if (Physics.Raycast(RayCast, out hit, shotDistance))
                     {
+
                         if (stats.munition > 0)
                         {
+                            this.source.Play();
                             stats.munition--;
                             stats.ammunitionText.text = string.Format("{0} / {1}", stats.munition, stats.restmuni);
                             Debug.Log(hit.collider.name);
@@ -74,6 +78,7 @@ public class RayCastShoot : MonoBehaviour
                                 if (s != null)
                                 {
                                     s.GetComponent<PhotonView>().RPC("GetDamage", PhotonTargets.All, 100);
+                                    
                                     StartCoroutine(HitMarker());
                                 }
                             }

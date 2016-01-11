@@ -27,7 +27,7 @@ public class NetworkManager : Photon.MonoBehaviour
     public virtual void Start()
 	{
         PhotonNetwork.ConnectUsingSettings(Utility.Version);
-		PhotonNetwork.autoJoinLobby = false; // we join randomly. always. no need to join a lobby to get the list of rooms.
+		PhotonNetwork.autoJoinLobby = true; // we join randomly. always. no need to join a lobby to get the list of rooms.
         Cursor.visible = true;
 	}
 

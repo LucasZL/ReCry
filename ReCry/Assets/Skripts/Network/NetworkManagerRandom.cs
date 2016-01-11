@@ -57,7 +57,6 @@ public class NetworkManagerRandom : Photon.MonoBehaviour
 
     public virtual void Start()
     {
-
         mapHightDifference = (int)(mapHightDifference * (islandSize / 10));
         minimapIslands = new List<GameObject>();
         mapIslands = new List<GameObject>();
