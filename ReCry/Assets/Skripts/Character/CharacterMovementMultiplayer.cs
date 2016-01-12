@@ -101,10 +101,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
         {
             JetPackForward();
             FillUpJetPackFuel();
-            if (Application.loadedLevelName == "JoinRandomRoom")
-            {
-                CheckIfGrounded();
-            }
+            CheckIfGrounded();
         }
 
     }
@@ -144,9 +141,9 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
                 this.horizontal = Input.GetAxis("Horizontal") * Time.deltaTime * MoveSpeed;
                 this.vertical = Input.GetAxis("Vertical") * Time.deltaTime * RunSpeed;
                 transform.Translate(horizontal, 0, vertical);
-                
+
             }
-            
+
         }
         else
         {
@@ -203,7 +200,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
     private void JetPackJump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded && fuelIsEmpty && Utility.isInGame)
+        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded && fuelIsEmpty)
         {
             if (jetpacktank >= maxJetPackJump)
             {
@@ -233,7 +230,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
     private void JetPackForward()
     {
-        if (Input.GetKey(KeyCode.LeftShift) && !IsGrounded && fuelIsEmpty && Utility.isInGame)
+        if (Input.GetKey(KeyCode.LeftShift) && !IsGrounded && fuelIsEmpty)
         {
             if (jetpacktank >= maxJetPackDirection)
             {
@@ -242,29 +239,29 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
                     moveForwards = true;
                     ChangeJetpackFuel(0.1f, 1);
                     this.rigid.AddRelativeForce(new Vector3(0, 0, 125 / (this.rigid.mass / 4)));
-                    
-                    
+
+
                 }
                 if (Input.GetKey(KeyCode.S))
                 {
                     moveForwards = true;
                     ChangeJetpackFuel(0.1f, 1);
                     this.rigid.AddRelativeForce(new Vector3(0, 0, -125 / (this.rigid.mass / 4)));
-                    
+
                 }
                 if (Input.GetKey(KeyCode.A))
                 {
                     moveForwards = true;
                     ChangeJetpackFuel(0.1f, 1);
                     this.rigid.AddRelativeForce(new Vector3(-125 / (this.rigid.mass / 4), 0, 0));
-                    
+
                 }
                 if (Input.GetKey(KeyCode.D))
                 {
                     moveForwards = true;
                     ChangeJetpackFuel(0.1f, 1);
                     this.rigid.AddRelativeForce(new Vector3(125 / (this.rigid.mass / 4), 0, 0));
-                    
+
                 }
                 if (Input.GetKey(KeyCode.LeftShift) && !moveForwards)
                 {
@@ -291,7 +288,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
     private void FillUpJetPackFuel()
     {
-        if (jetpacktank < maxFuel && IsGrounded && !isRunning && Utility.isInGame)
+        if (jetpacktank < maxFuel && IsGrounded && !isRunning)
         {
             if (addFuel)
             {
@@ -306,7 +303,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
         {
             if (changeFuel)
             {
-                StartCoroutine(ChangeFuel(change,seconds));
+                StartCoroutine(ChangeFuel(change, seconds));
             }
         }
         else
@@ -320,9 +317,9 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     private void CheckIfGrounded()
     {
         RaycastHit groundcheck;
-        Vector3 startpoint = this.transform.position + collider.center + Vector3.down * (-collider.height*2f);
+        Vector3 startpoint = this.transform.position + collider.center + Vector3.down * (-collider.height * 2f);
         Vector3 endpoint = startpoint + (Vector3.down * collider.height * 1.25f);
-        if (Physics.CapsuleCast(startpoint,endpoint,collider.radius,Vector3.down,out groundcheck,3f))
+        if (Physics.CapsuleCast(startpoint, endpoint, collider.radius, Vector3.down, out groundcheck, 3f))
         {
             if (groundcheck.transform.gameObject.tag == "Env" ||
                 groundcheck.transform.gameObject.tag == "BigPrefab" ||
@@ -339,7 +336,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
         }
     }
 
-    IEnumerator ChangeFuel(float change,int seconds)
+    IEnumerator ChangeFuel(float change, int seconds)
     {
         changeFuel = false;
         jetpacktank -= change;

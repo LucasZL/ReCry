@@ -1,10 +1,22 @@
-﻿using UnityEngine;
+﻿//
+//  CharacterMovementMultiplayer.cs
+//  ReCry
+//  
+//  Created by Kevin Holst on 12.01.2015
+//  Copyright (c) 2015 ReCry. All Rights Reserved.
+//
+
+using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
-public class ButtonManager : MonoBehaviour {
+public class ButtonManager : Photon.MonoBehaviour {
 
     public Menu CurrentMenu;
 
+    public InputField Servername;
+    public InputField Player;
+    public Text failuretext;
 
 	// Use this for initialization
 	void Start ()
@@ -20,5 +32,18 @@ public class ButtonManager : MonoBehaviour {
         }
         CurrentMenu = menu;
         CurrentMenu.Animate = true;
+    }
+
+
+    public void CreateGame()
+    {
+        if (Servername.text != "")
+        {
+            PhotonNetwork.CreateRoom(Servername.text);
+        }
+        else
+        {
+            failuretext.text = "Please enter a Servername";
+        }
     }
 }
