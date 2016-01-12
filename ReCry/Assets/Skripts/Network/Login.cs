@@ -63,11 +63,11 @@ public class Login : MonoBehaviour
             if (adminNumber == 1)
             {
                 Debug.Log("Admin");
-                Application.LoadLevel("MainMenu");
+                Application.LoadLevel("Menu");
             }
             else
             {
-                Application.LoadLevel("MainMenu");
+                Application.LoadLevel("Menu");
             }
         }
     }

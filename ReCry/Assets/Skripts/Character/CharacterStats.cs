@@ -36,6 +36,8 @@ public class CharacterStats : MonoBehaviour
 
         if (ph.isMine)
         {
+            PhotonNetwork.playerName = Utility.Username;
+            this.gameObject.name = Utility.Username;
             this.team = Random.Range(1, 5);
             Color color;
             if (this.team == 1)
@@ -83,7 +85,6 @@ public class CharacterStats : MonoBehaviour
             this.armorText.text = this.Armor.ToString();
 
             nmr = GameObject.Find("MapGeneratorNetwork").GetComponent<NetworkManagerRandom>();
-            //nmr.SpawnPlayer(this.gameObject);
             CanvasFullyLoaded = true;
         }
     }
