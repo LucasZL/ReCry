@@ -16,11 +16,12 @@ public class CreatePhotonRoom : Photon.MonoBehaviour {
     public InputField MaxPlayers;
     public Toggle IsVisible;
     public Toggle IsPrivate;
+    public Text failuretext;
 
     public void CreateNewRoom()
     {
         RoomOptions options = new RoomOptions();
-        if (IsVisible.enabled)
+        if (IsVisible.isOn)
         {
             options.isVisible = true;
         }
@@ -29,7 +30,7 @@ public class CreatePhotonRoom : Photon.MonoBehaviour {
             options.isVisible = false;
         }
 
-        if (IsPrivate.enabled)
+        if (IsPrivate.isOn)
         {
             options.isOpen = false;
         }
@@ -39,10 +40,20 @@ public class CreatePhotonRoom : Photon.MonoBehaviour {
         }
         options.maxPlayers = byte.Parse(MaxPlayers.text);
 
-        Utility.roomOptions = options;
-        Utility.ServerName = ServerName.text;
+        if (ServerName.text != "")
+        {
+            PhotonNetwork.CreateRoom(ServerName.text,options,TypedLobby.Default);
+        }
+        else
+        {
+            failuretext.text = "Please enter a Servername";
+        }
+        
         Debug.Log(string.Format("Room created with this options Servername: {0}, MaxPlayers: {1}, IsVisible: {2}, IsPrivate: {3} ", ServerName.text, MaxPlayers.text, IsVisible, IsPrivate));
+    }
 
-        Application.LoadLevel("CreateRoom");
+    public void JoinPhotonRoom()
+    {
+        PhotonNetwork.JoinRoom(ServerName.text);
     }
 }

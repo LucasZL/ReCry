@@ -29,15 +29,25 @@ public class ServerBrowserPhoton : Photon.MonoBehaviour {
 
     public void LoadServers()
     {
+        foreach (Transform item in Serverbrowser)
+        {
+            Destroy(item.gameObject);
+        }
         if (PhotonNetwork.insideLobby)
         {
             foreach (var room in PhotonNetwork.GetRoomList())
             {
-                Servername.text = room.name;
-                Player.text = string.Format("{0} / {1}", room.playerCount, room.maxPlayers);
-                Ping.text = PhotonNetwork.GetPing().ToString();
-                this.server = Instantiate(ServerPrefab);
-                this.server.transform.SetParent(Serverbrowser,false);
+                if (room.visible)
+                {
+                    Servername.text = room.name;
+                    Player.text = string.Format("{0} / {1}", room.playerCount, room.maxPlayers);
+                    Ping.text = PhotonNetwork.GetPing().ToString();
+                    this.server = Instantiate(ServerPrefab);
+                    this.server.transform.SetParent(Serverbrowser, false);
+                    var script = this.server.GetComponent<JoinGame>();
+                    script.Name = room.name;
+                }
+                
             }
         }
     }

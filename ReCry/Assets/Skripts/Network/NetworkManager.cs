@@ -67,4 +67,9 @@ public class NetworkManager : Photon.MonoBehaviour
     {
         Debug.Log(PhotonNetwork.GetRoomList().Length);
     }
+
+    public virtual void OnPhotonJoinRoomFailed(object[] codeAndMsg)
+    {
+        Debug.LogFormat("Failed: {0},{1}",codeAndMsg);
+    }
 }

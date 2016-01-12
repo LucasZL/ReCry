@@ -14,10 +14,6 @@ public class ButtonManager : Photon.MonoBehaviour {
 
     public Menu CurrentMenu;
 
-    public InputField Servername;
-    public InputField Player;
-    public Text failuretext;
-
 	// Use this for initialization
 	void Start ()
     {
@@ -32,18 +28,5 @@ public class ButtonManager : Photon.MonoBehaviour {
         }
         CurrentMenu = menu;
         CurrentMenu.Animate = true;
-    }
-
-
-    public void CreateGame()
-    {
-        if (Servername.text != "")
-        {
-            PhotonNetwork.CreateRoom(Servername.text);
-        }
-        else
-        {
-            failuretext.text = "Please enter a Servername";
-        }
     }
 }

@@ -91,7 +91,7 @@ public class CharacterStats : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (ph.isMine && Application.loadedLevelName == "JoinRandomRoom")
+        if (ph.isMine)
         {
             UpdateLifeText();
             UpdateArmorText();
