@@ -52,12 +52,12 @@ public class NetworkManager : Photon.MonoBehaviour
 
     public virtual void OnJoinedRoom()
     {
-        PhotonNetwork.LoadLevel("JoinGame");
+        PhotonNetwork.LoadLevel("Teamselection");
     }
 
     public virtual void OnJoinedLobby()
     {
-        Debug.Log("Yes im joined a Lobby");
+        Debug.LogError("Yes im joined a Lobby");
         ConnectedImage.color = Color.green;
         ConnectedText.text = "Connected";
 

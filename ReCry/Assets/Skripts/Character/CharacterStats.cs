@@ -50,7 +50,7 @@ public class CharacterStats : MonoBehaviour
             }
             else if (this.team == 2)
             {
-                //Team Red
+                //Team Orange
                 color = new Color32(244, 67, 54, 1);
                 gameObject.GetComponent<Renderer>().material.color = color;
                 transform.Find("Bazooka_1").GetComponent<Renderer>().material.color = color;
