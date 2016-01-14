@@ -10,11 +10,6 @@ public class TeamSelection : Photon.MonoBehaviour
     public Text CyanTeam;
     public Text GreenTeam;
 
-    // Use this for initialization
-    void Start()
-    {
-    }
-
     void Update()
     {
         foreach (var team in PunTeams.PlayersPerTeam)
@@ -44,23 +39,25 @@ public class TeamSelection : Photon.MonoBehaviour
     public void JoinCyanTeam()
     {
         PhotonNetwork.player.SetTeam(PunTeams.Team.cyan);
+        PhotonNetwork.LoadLevel("JoinGame");
     }
 
     public void JoinBlueTeam()
     {
         PhotonNetwork.player.SetTeam(PunTeams.Team.darkblue);
-
+        PhotonNetwork.LoadLevel("JoinGame");
     }
 
     public void JoinRedTeam()
     {
         PhotonNetwork.player.SetTeam(PunTeams.Team.red);
-
+        PhotonNetwork.LoadLevel("JoinGame");
     }
 
     public void JoinGreenTeam()
     {
         PhotonNetwork.player.SetTeam(PunTeams.Team.green);
+        PhotonNetwork.LoadLevel("JoinGame");
     }
 
     public virtual void OnPhotonSerializeView()
