@@ -29,6 +29,7 @@ public class NetworkManager : Photon.MonoBehaviour
         PhotonNetwork.ConnectUsingSettings(Utility.Version);
         PhotonNetwork.autoJoinLobby = true;// we join randomly. always. no need to join a lobby to get the list of rooms.
         Cursor.visible = true;
+        PhotonNetwork.automaticallySyncScene = false;
     }
 
 
@@ -42,7 +43,7 @@ public class NetworkManager : Photon.MonoBehaviour
         }
         this.NumberOfPlayers.text = PhotonNetwork.countOfPlayers.ToString();
         this.NumberOfRooms.text = PhotonNetwork.countOfRooms.ToString();
-
+        
     }
 
     public virtual void OnFailedToConnectToPhoton(DisconnectCause cause)
@@ -52,7 +53,7 @@ public class NetworkManager : Photon.MonoBehaviour
 
     public virtual void OnJoinedRoom()
     {
-        PhotonNetwork.LoadLevel("Teamselection");
+        PhotonNetwork.LoadLevel("JoinGame");
     }
 
     public virtual void OnJoinedLobby()

@@ -13,5 +13,6 @@ public class JoinGame : Photon.MonoBehaviour
     public void Click()
     {
         PhotonNetwork.JoinRoom(Name);
+        Debug.Log("Joined Room" + Name);
     }
 }

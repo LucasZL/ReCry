@@ -44,7 +44,7 @@ public class MapWithoutConnectingtoMaster : Photon.MonoBehaviour
     public List<GameObject> Bridges;
     public GameObject bridgeCube;
     public GameObject BridgePlank;
-    bool playerSpawned = false;
+    public bool playerSpawned;
     bool mapNeedsCorrection = false;
     bool envFixed = false;
     bool mapFixed = false;
@@ -58,6 +58,7 @@ public class MapWithoutConnectingtoMaster : Photon.MonoBehaviour
 
     public virtual void Start()
     {
+        playerSpawned = true;
         mapHightDifference = (int)(mapHightDifference * (islandSize / 10));
         minimapIslands = new List<GameObject>();
         mapIslands = new List<GameObject>();
@@ -119,8 +120,11 @@ public class MapWithoutConnectingtoMaster : Photon.MonoBehaviour
         {
             for (int i = 0; i < mapIslands.Count; i++)
             {
-                int owner = mapIslands[i].GetComponent<IslandOwner>().owner;
-                minimapIslands[i].GetComponent<MinimapIslandStats>().owner = owner;
+                if (!playerSpawned)
+                {
+                    int owner = mapIslands[i].GetComponent<IslandOwner>().owner;
+                    minimapIslands[i].GetComponent<MinimapIslandStats>().owner = owner;
+                }
             }
         }
     }

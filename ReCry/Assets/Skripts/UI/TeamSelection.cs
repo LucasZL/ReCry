@@ -9,11 +9,20 @@ public class TeamSelection : Photon.MonoBehaviour
     public Text RedTeam;
     public Text CyanTeam;
     public Text GreenTeam;
+    MapWithoutConnectingtoMaster master;
+    public GameObject PanelCamera;
+    public GameObject buttonpanel;
 
+    void Start()
+    {
+        master = GameObject.Find("MapGenerator").GetComponent<MapWithoutConnectingtoMaster>();
+    }
+    
     void Update()
     {
         foreach (var team in PunTeams.PlayersPerTeam)
         {
+           
             switch (team.Key)
             {
                 case PunTeams.Team.none:
@@ -39,25 +48,30 @@ public class TeamSelection : Photon.MonoBehaviour
     public void JoinCyanTeam()
     {
         PhotonNetwork.player.SetTeam(PunTeams.Team.cyan);
-        PhotonNetwork.LoadLevel("JoinGame");
+        //PanelCamera.SetActive(false);
+        buttonpanel.SetActive(false);
+        master.playerSpawned = false;
     }
 
     public void JoinBlueTeam()
     {
         PhotonNetwork.player.SetTeam(PunTeams.Team.darkblue);
-        PhotonNetwork.LoadLevel("JoinGame");
+        buttonpanel.SetActive(false);
+        master.playerSpawned = false;
     }
 
     public void JoinRedTeam()
     {
         PhotonNetwork.player.SetTeam(PunTeams.Team.red);
-        PhotonNetwork.LoadLevel("JoinGame");
+        buttonpanel.SetActive(false);
+        master.playerSpawned = false;
     }
 
     public void JoinGreenTeam()
     {
         PhotonNetwork.player.SetTeam(PunTeams.Team.green);
-        PhotonNetwork.LoadLevel("JoinGame");
+        buttonpanel.SetActive(false);
+        master.playerSpawned = false;
     }
 
     public virtual void OnPhotonSerializeView()
