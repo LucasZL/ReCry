@@ -77,7 +77,7 @@ public class RayCastShoot : MonoBehaviour
                                 CharacterStats s = hit.transform.GetComponent<CharacterStats>();
                                 if (s != null)
                                 {
-                                    s.GetComponent<PhotonView>().RPC("GetDamage", PhotonTargets.All, 100);
+                                    s.GetComponent<PhotonView>().RPC("GetDamage", PhotonTargets.OthersBuffered, 100);
                                     
                                     StartCoroutine(HitMarker());
                                 }

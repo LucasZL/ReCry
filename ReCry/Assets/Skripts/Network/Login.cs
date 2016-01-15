@@ -1,4 +1,13 @@
-﻿using UnityEngine;
+﻿//
+//  CharacterMovementMultiplayer.cs
+//  ReCry
+//  
+//  Created by Kevin Holst on 25.10.2015
+//  Copyright (c) 2015 ReCry. All Rights Reserved.
+//
+
+
+using UnityEngine;
 using SimpleJSON;
 using UnityEngine.UI;
 using System.Xml;

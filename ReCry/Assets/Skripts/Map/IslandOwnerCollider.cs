@@ -20,4 +20,9 @@ public class IslandOwnerCollider : MonoBehaviour
 			this.owner = stats.team;
         }
     }
+
+    public virtual void OnPhotonSerializeView()
+    {
+
+    }
 }
