@@ -28,6 +28,7 @@ public class CharacterStats : MonoBehaviour
 
     PhotonView ph;
     NetworkManagerRandom nmr;
+    Color color;
 
     // Use this for initialization
     void Start()
@@ -38,40 +39,7 @@ public class CharacterStats : MonoBehaviour
         {
             PhotonNetwork.playerName = Utility.Username;
             this.gameObject.name = Utility.Username;
-            this.team = Random.Range(1, 5);
-            Color color;
-            if (this.team == 1)
-            {
-                //Team Green
-                color = new Color32(100, 221, 23, 1);
-                gameObject.GetComponent<Renderer>().material.color = color;
-                transform.Find("Bazooka_1").GetComponent<Renderer>().material.color = color;
-                transform.Find("Bazooka_2").GetComponent<Renderer>().material.color = color;
-            }
-            else if (this.team == 2)
-            {
-                //Team Red
-                color = new Color32(244, 67, 54, 1);
-                gameObject.GetComponent<Renderer>().material.color = color;
-                transform.Find("Bazooka_1").GetComponent<Renderer>().material.color = color;
-                transform.Find("Bazooka_2").GetComponent<Renderer>().material.color = color;
-            }
-            else if (this.team == 3)
-            {
-                //Team Cyan
-                color = new Color32(11, 188, 201, 1);
-                gameObject.GetComponent<Renderer>().material.color = color;
-                transform.Find("Bazooka_1").GetComponent<Renderer>().material.color = color;
-                transform.Find("Bazooka_2").GetComponent<Renderer>().material.color = color;
-            }
-            else if (this.team == 4)
-            {
-                //Team DarkBlue
-                color = new Color32(26, 35, 126, 1);
-                gameObject.GetComponent<Renderer>().material.color = color;
-                transform.Find("Bazooka_1").GetComponent<Renderer>().material.color = color;
-                transform.Find("Bazooka_2").GetComponent<Renderer>().material.color = color;
-            }
+            GetTeamColor();
             this.Life = 100;
             this.Armor = 100;
             this.lifeText = GameObject.FindWithTag("LifeText").GetComponent<Text>() as Text;
@@ -132,6 +100,43 @@ public class CharacterStats : MonoBehaviour
         {
             this.lifeText.text = string.Format("{0}", Life);
         }
+    }
+
+    void GetTeamColor()
+    {
+        if (PhotonNetwork.player.GetTeam() == PunTeams.Team.darkblue)
+        {
+            this.team = 4;
+            color = new Color32(26, 35, 126, 1);
+            gameObject.GetComponent<Renderer>().material.color = color;
+            transform.Find("Bazooka_1").GetComponent<Renderer>().material.color = color;
+            transform.Find("Bazooka_2").GetComponent<Renderer>().material.color = color;
+        }
+        else if (PhotonNetwork.player.GetTeam() == PunTeams.Team.cyan)
+        {
+            this.team = 3;
+            color = new Color32(11, 188, 201, 1);
+            gameObject.GetComponent<Renderer>().material.color = color;
+            transform.Find("Bazooka_1").GetComponent<Renderer>().material.color = color;
+            transform.Find("Bazooka_2").GetComponent<Renderer>().material.color = color;
+        }
+        else if (PhotonNetwork.player.GetTeam() == PunTeams.Team.red)
+        {
+            this.team = 2;
+            color = new Color32(244, 67, 54, 1);
+            gameObject.GetComponent<Renderer>().material.color = color;
+            transform.Find("Bazooka_1").GetComponent<Renderer>().material.color = color;
+            transform.Find("Bazooka_2").GetComponent<Renderer>().material.color = color;
+        }
+        else if (PhotonNetwork.player.GetTeam() == PunTeams.Team.green)
+        {
+            this.team = 1;
+            color = new Color32(100, 221, 23, 1);
+            gameObject.GetComponent<Renderer>().material.color = color;
+            transform.Find("Bazooka_1").GetComponent<Renderer>().material.color = color;
+            transform.Find("Bazooka_2").GetComponent<Renderer>().material.color = color;
+        }
+        Debug.Log(PhotonNetwork.player.GetTeam());
     }
 
     void UpdateArmorText()

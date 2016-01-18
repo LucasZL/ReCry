@@ -22,6 +22,8 @@ public class MapWithoutConnectingtoMaster : Photon.MonoBehaviour
     public int mapSize = 3;
     [Range(1, 100)]
     public int mapHightDifference = 3;
+    [Range(0, 30)]
+    public int agentNumber = 1;
     public float islandSize = 10.0f;
     public float BridgePlankWidth = 1;
     public float BridgeGapWidth = 0.1f;
@@ -39,12 +41,15 @@ public class MapWithoutConnectingtoMaster : Photon.MonoBehaviour
     GameObject[] houseEnvirement;
     GameObject[,] Map;
     GameObject[] respawnPoints;
+    GameObject[] kiPoints;
+    GameObject[] kiPointsHeight;
+
     public List<GameObject> minimapIslands;
     public List<GameObject> mapIslands;
     public List<GameObject> Bridges;
     public GameObject bridgeCube;
     public GameObject BridgePlank;
-    bool playerSpawned = false;
+    public bool playerSpawned;
     bool mapNeedsCorrection = false;
     bool envFixed = false;
     bool mapFixed = false;
@@ -54,13 +59,17 @@ public class MapWithoutConnectingtoMaster : Photon.MonoBehaviour
     GameObject thirdTeamSpawn;
     GameObject fourthTeamSpawn;
 
-
+    List<int> usedStartKiPoints;
+    List<int> usedEndKiPoints;
 
     public virtual void Start()
     {
+        playerSpawned = true;
         mapHightDifference = (int)(mapHightDifference * (islandSize / 10));
         minimapIslands = new List<GameObject>();
         mapIslands = new List<GameObject>();
+        usedStartKiPoints = new List<int>();
+        usedEndKiPoints = new List<int>();
         pimmel();
     }
 
@@ -119,8 +128,11 @@ public class MapWithoutConnectingtoMaster : Photon.MonoBehaviour
         {
             for (int i = 0; i < mapIslands.Count; i++)
             {
-                int owner = mapIslands[i].GetComponent<IslandOwner>().owner;
-                minimapIslands[i].GetComponent<MinimapIslandStats>().owner = owner;
+                if (!playerSpawned)
+                {
+                    int owner = mapIslands[i].GetComponent<IslandOwner>().owner;
+                    minimapIslands[i].GetComponent<MinimapIslandStats>().owner = owner;
+                }
             }
         }
     }
@@ -136,6 +148,7 @@ public class MapWithoutConnectingtoMaster : Photon.MonoBehaviour
             placeIslands(IslandsToPlace, -550, false, 0.25f);
             PhotonNetwork.Instantiate("Sky Dome", new Vector3(233, 0, 268), Quaternion.Euler(0.0f, 0.0f, 0.0f), 0);
         }
+
         placeSmallEnvirement();
         placeBigEnvirement();
         placeHouse();
@@ -144,11 +157,84 @@ public class MapWithoutConnectingtoMaster : Photon.MonoBehaviour
         fillMapList();
         setFirstSpawn();
         Cursor.visible = false;
+        getKIPoints();
+        spawnAgents();
+    }
+
+    private void getKIPoints()
+    {
+        kiPoints = GameObject.FindGameObjectsWithTag("KIPoint");
+        kiPointsHeight = GameObject.FindGameObjectsWithTag("KIPointHeight");
+        GameObject[] map = GameObject.FindGameObjectsWithTag("Env");
+        float maxHeight = -10000;
+
+        for (int i = 0; i <= map.Length - 1; i++)
+        {
+            if (map[i].transform.position.y > maxHeight)
+            {
+                maxHeight = map[i].transform.position.y;
+            }
+        }
+
+        for (int i = 0; i <= map.Length - 1; i++)
+        {
+            GameObject maxHeightPoint = kiPointsHeight[i];
+            maxHeightPoint.transform.position += new Vector3(0, maxHeight + 20, 0);
+        }
+    }
+
+    private void spawnAgents()
+    {
+        if (PhotonNetwork.isMasterClient)
+        {
+            for (int i = 0; i <= agentNumber; i++)
+            {
+                //				int randomStart = UnityEngine.Random.Range (0, kiPoints.Length);
+                //				int randomEnd = UnityEngine.Random.Range (0, kiPoints.Length);
+                //
+                //				while (usedStartKiPoints.IndexOf(randomStart) != -1) {
+                //					randomStart = UnityEngine.Random.Range (0, kiPoints.Length);
+                //				}
+                //
+                //				while (usedEndKiPoints.IndexOf(randomEnd) != -1) {
+                //					randomEnd = UnityEngine.Random.Range (0, kiPoints.Length);
+                //				}
+
+                //				usedStartKiPoints.Add (randomStart);
+                //				usedEndKiPoints.Add (randomEnd);
+
+                GameObject prefab = PhotonNetwork.Instantiate("Agent", kiPoints[i].transform.position, Quaternion.Euler(0.0f, 0.0f, 0.0f), 0);
+                AIAgent agent = prefab.GetComponent<AIAgent>();
+                agent.startPoint = kiPoints[i];
+                agent.startPointHigh = kiPointsHeight[i];
+                agent.endPoint = kiPoints[i + 1];
+                agent.endPointHigh = kiPointsHeight[i + 1];
+                agent.timer = UnityEngine.Random.Range(0, 90);
+                agent.active = true;
+            }
+        }
+    }
+
+    private void setAgentPoints()
+    {
+        getKIPoints();
+        GameObject[] agents = GameObject.FindGameObjectsWithTag("Agent");
+        Debug.LogError("Anzahl Agents" + agents.Length);
+        for (int i = 0; i <= agents.Length - 1; i++)
+        {
+            Debug.LogError("setze Agenten");
+            AIAgent agent = agents[i].GetComponent<AIAgent>();
+            agent.startPoint = kiPoints[i];
+            agent.startPointHigh = kiPointsHeight[i];
+            agent.endPoint = kiPoints[i + 1];
+            agent.endPointHigh = kiPointsHeight[i + 1];
+            agent.timer = UnityEngine.Random.Range(0, 90);
+            agent.active = true;
+        }
     }
 
     private void setFirstSpawn()
     {
-        Debug.Log("Anzahl: " + mapIslands.Count);
         foreach (GameObject island in mapIslands)
         {
             if (island.transform.position.x == 0 && island.transform.position.z == (((mapSize + 1) * islandSize) / 2) - (islandSize * 1.5f))
@@ -176,6 +262,8 @@ public class MapWithoutConnectingtoMaster : Photon.MonoBehaviour
                 island.GetComponent<IslandOwner>().owner = 4;
             }
         }
+
+        setAgentPoints();
     }
 
     private void SetPivotPoint()
@@ -1341,6 +1429,7 @@ public class MapWithoutConnectingtoMaster : Photon.MonoBehaviour
     public void SpawnPlayer(GameObject Player)
     {
         int team = Player.GetComponent<CharacterStats>().team;
+        Debug.LogError("Team " + team);
         if (team == 1)
             Player.transform.position = firstTeamSpawn.transform.Find("Respawn").transform.position;
         else if (team == 2)
