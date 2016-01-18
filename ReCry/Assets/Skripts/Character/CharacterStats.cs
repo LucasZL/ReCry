@@ -39,7 +39,7 @@ public class CharacterStats : MonoBehaviour
         {
             PhotonNetwork.playerName = Utility.Username;
             this.gameObject.name = Utility.Username;
-            ph.RPC("GetTeamColor", PhotonTargets.AllBuffered, null);
+            GetTeamColor();
             this.Life = 100;
             this.Armor = 100;
             this.lifeText = GameObject.FindWithTag("LifeText").GetComponent<Text>() as Text;
@@ -108,36 +108,59 @@ public class CharacterStats : MonoBehaviour
         if (PhotonNetwork.player.GetTeam() == PunTeams.Team.darkblue)
         {
             this.team = 4;
-            color = new Color32(26, 35, 126, 1);
-            gameObject.GetComponent<Renderer>().material.color = color;
-            transform.Find("Bazooka_1").GetComponent<Renderer>().material.color = color;
-            transform.Find("Bazooka_2").GetComponent<Renderer>().material.color = color;
+            ph.RPC("SetDarkBlue", PhotonTargets.AllBuffered, null);
         }
         else if (PhotonNetwork.player.GetTeam() == PunTeams.Team.cyan)
         {
             this.team = 3;
-            color = new Color32(11, 188, 201, 1);
-            gameObject.GetComponent<Renderer>().material.color = color;
-            transform.Find("Bazooka_1").GetComponent<Renderer>().material.color = color;
-            transform.Find("Bazooka_2").GetComponent<Renderer>().material.color = color;
+            ph.RPC("SetCyan", PhotonTargets.AllBuffered, null);
         }
         else if (PhotonNetwork.player.GetTeam() == PunTeams.Team.red)
         {
             this.team = 2;
-            color = new Color32(244, 67, 54, 1);
-            gameObject.GetComponent<Renderer>().material.color = color;
-            transform.Find("Bazooka_1").GetComponent<Renderer>().material.color = color;
-            transform.Find("Bazooka_2").GetComponent<Renderer>().material.color = color;
+            ph.RPC("SetRed", PhotonTargets.AllBuffered, null);
         }
         else if (PhotonNetwork.player.GetTeam() == PunTeams.Team.green)
         {
             this.team = 1;
-            color = new Color32(100, 221, 23, 1);
-            gameObject.GetComponent<Renderer>().material.color = color;
-            transform.Find("Bazooka_1").GetComponent<Renderer>().material.color = color;
-            transform.Find("Bazooka_2").GetComponent<Renderer>().material.color = color;
+            ph.RPC("SetGreen", PhotonTargets.AllBuffered, null);
         }
         Debug.Log(PhotonNetwork.player.GetTeam());
+    }
+
+    [PunRPC]
+    void SetDarkBlue()
+    {
+        color = new Color32(26, 35, 126, 1);
+        gameObject.GetComponent<Renderer>().material.color = color;
+        transform.Find("Bazooka_1").GetComponent<Renderer>().material.color = color;
+        transform.Find("Bazooka_2").GetComponent<Renderer>().material.color = color;
+    }
+    [PunRPC]
+    void SetRed()
+    {
+        color = new Color32(244, 67, 54, 1);
+        gameObject.GetComponent<Renderer>().material.color = color;
+        transform.Find("Bazooka_1").GetComponent<Renderer>().material.color = color;
+        transform.Find("Bazooka_2").GetComponent<Renderer>().material.color = color;
+    }
+
+    [PunRPC]
+    void SetCyan()
+    {
+        color = new Color32(11, 188, 201, 1);
+        gameObject.GetComponent<Renderer>().material.color = color;
+        transform.Find("Bazooka_1").GetComponent<Renderer>().material.color = color;
+        transform.Find("Bazooka_2").GetComponent<Renderer>().material.color = color;
+    }
+
+    [PunRPC]
+    void SetGreen()
+    {
+        color = new Color32(100, 221, 23, 1);
+        gameObject.GetComponent<Renderer>().material.color = color;
+        transform.Find("Bazooka_1").GetComponent<Renderer>().material.color = color;
+        transform.Find("Bazooka_2").GetComponent<Renderer>().material.color = color;
     }
 
     void UpdateArmorText()
