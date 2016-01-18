@@ -62,6 +62,7 @@ public class CharacterStats : MonoBehaviour
             this.armorText.text = this.Armor.ToString();
 
             nmr = GameObject.Find("MapGenerator").GetComponent<MapWithoutConnectingtoMaster>();
+			nmr.SpawnPlayer (this.gameObject);
             CanvasFullyLoaded = true;
         }
     }
