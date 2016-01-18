@@ -27,7 +27,7 @@ public class CharacterStats : MonoBehaviour
     private bool CanvasFullyLoaded;
 
     PhotonView ph;
-    NetworkManagerRandom nmr;
+    MapWithoutConnectingtoMaster nmr;
     Color color;
 
     // Use this for initialization
@@ -39,7 +39,7 @@ public class CharacterStats : MonoBehaviour
         {
             PhotonNetwork.playerName = Utility.Username;
             this.gameObject.name = Utility.Username;
-            GetTeamColor();
+            ph.RPC("GetTeamColor", PhotonTargets.AllBuffered, null);
             this.Life = 100;
             this.Armor = 100;
             this.lifeText = GameObject.FindWithTag("LifeText").GetComponent<Text>() as Text;
@@ -52,7 +52,7 @@ public class CharacterStats : MonoBehaviour
             this.lifeText.text = this.Life.ToString();
             this.armorText.text = this.Armor.ToString();
 
-            nmr = GameObject.Find("MapGeneratorNetwork").GetComponent<NetworkManagerRandom>();
+            nmr = GameObject.Find("MapGenerator").GetComponent<MapWithoutConnectingtoMaster>();
             CanvasFullyLoaded = true;
         }
     }
@@ -102,6 +102,7 @@ public class CharacterStats : MonoBehaviour
         }
     }
 
+    [PunRPC]
     void GetTeamColor()
     {
         if (PhotonNetwork.player.GetTeam() == PunTeams.Team.darkblue)
