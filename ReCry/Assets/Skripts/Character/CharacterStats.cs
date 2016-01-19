@@ -54,7 +54,6 @@ public class CharacterStats : MonoBehaviour
 
             nmr = GameObject.Find("MapGenerator").GetComponent<MapWithoutConnectingtoMaster>();
             this.nmr.SpawnPlayer(this.gameObject);
-            CanvasFullyLoaded = true;
         }
     }
 

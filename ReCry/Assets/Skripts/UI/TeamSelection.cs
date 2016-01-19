@@ -59,6 +59,7 @@ public class TeamSelection : Photon.MonoBehaviour
         //PanelCamera.SetActive(false);
         buttonpanel.SetActive(false);
         master.playerSpawned = false;
+        Cursor.visible = false;
     }
 
     public void JoinBlueTeam()
@@ -66,6 +67,8 @@ public class TeamSelection : Photon.MonoBehaviour
         PhotonNetwork.player.SetTeam(PunTeams.Team.darkblue);
         buttonpanel.SetActive(false);
         master.playerSpawned = false;
+        Cursor.visible = false;
+
     }
 
     public void JoinRedTeam()
@@ -73,6 +76,8 @@ public class TeamSelection : Photon.MonoBehaviour
         PhotonNetwork.player.SetTeam(PunTeams.Team.red);
         buttonpanel.SetActive(false);
         master.playerSpawned = false;
+        Cursor.visible = false;
+
     }
 
     public void JoinGreenTeam()
@@ -80,6 +85,8 @@ public class TeamSelection : Photon.MonoBehaviour
         PhotonNetwork.player.SetTeam(PunTeams.Team.green);
         buttonpanel.SetActive(false);
         master.playerSpawned = false;
+        Cursor.visible = false;
+
     }
 
     public virtual void OnPhotonSerializeView()

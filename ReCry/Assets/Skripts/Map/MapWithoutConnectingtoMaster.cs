@@ -144,7 +144,7 @@ public class MapWithoutConnectingtoMaster : Photon.MonoBehaviour
         SetPivotPoint();
         fillMapList();
         setFirstSpawn();
-        Cursor.visible = false;
+        Cursor.visible = true;
     }
 
     private void setFirstSpawn()
