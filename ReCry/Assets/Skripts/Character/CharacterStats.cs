@@ -14,7 +14,7 @@ public class CharacterStats : MonoBehaviour
     public int munition = 30;
     public int restmuni = 120;
     public int staticMunition = 30;
-    public int team = 1;
+    public int team;
 
 	private Vector3 startPos;
 
@@ -53,6 +53,7 @@ public class CharacterStats : MonoBehaviour
             this.armorText.text = this.Armor.ToString();
 
             nmr = GameObject.Find("MapGenerator").GetComponent<MapWithoutConnectingtoMaster>();
+            this.nmr.SpawnPlayer(this.gameObject);
             CanvasFullyLoaded = true;
         }
     }
