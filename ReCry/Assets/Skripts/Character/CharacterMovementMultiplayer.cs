@@ -135,7 +135,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
         {
             if (jetpacktank >= maxJetPackDirection)
             {
-                ChangeFuel(20, 1);
+                ChangeJetpackFuel(0.1f, 1);
                 isWalking = false;
                 isRunning = true;
                 this.horizontal = Input.GetAxis("Horizontal") * Time.deltaTime * MoveSpeed;
@@ -143,7 +143,11 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
                 transform.Translate(horizontal, 0, vertical);
 
             }
-
+            else
+            {
+                isRunning = false;
+                isWalking = true;
+            }
         }
         else
         {
