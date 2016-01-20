@@ -20,5 +20,6 @@ public static class Utility
     public static int Team;
 	public static bool joinRoom;
     public static bool isInGame = true;
+    public static float MouseSensitivity;
     public static string Version = "1.01";
 }
