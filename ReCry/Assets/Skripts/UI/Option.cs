@@ -36,6 +36,7 @@ public class Option : MonoBehaviour
         Anti.value = PlayerPrefs.GetInt("QualityAntiAliasing");
         Texture.value = PlayerPrefs.GetInt("QualityTexture");
         MouseSensitivity.value = PlayerPrefs.GetFloat("MouseSensitivity");
+        //Polishing
         VSync.isOn = PlayerPrefs.GetInt("VSync") != 0;
         AnisotropicFiltering.value = PlayerPrefs.GetInt("QualityAnisotropicFiltering");
         ShadowDistance.value = PlayerPrefs.GetFloat("QualityShadowDistance");
@@ -153,15 +154,18 @@ public class Option : MonoBehaviour
         PlayerPrefs.SetInt("QualityTexture", changed);
     }
 
-    public void ChangeVSync(int changed)
+    public void ChangeVSync()
     {
+        int changed;
         if (VSync.isOn)
         {
+            changed = 1;
             QualitySettings.vSyncCount = changed;
         }
         else
         {
-            QualitySettings.vSyncCount = changed;
+            changed = 0;
+            QualitySettings.vSyncCount = 0;
         }
         PlayerPrefs.SetInt("VSync", changed);
     }
