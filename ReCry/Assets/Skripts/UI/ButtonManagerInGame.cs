@@ -24,6 +24,7 @@ public class ButtonManagerInGame : Photon.MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Cursor.visible = true;
+            Utility.IsInGame = true;
             MenuPanel.SetActive(true);
         }
     }
@@ -43,11 +44,13 @@ public class ButtonManagerInGame : Photon.MonoBehaviour {
     public void ReturntoMenu()
     {
         OptionPanel.SetActive(false);
+        MenuPanel.SetActive(true);
     }
 
     public void ResumeGame()
     {
         Cursor.visible = false;
+        Utility.IsInGame = false;
         MenuPanel.SetActive(false);
     }
 

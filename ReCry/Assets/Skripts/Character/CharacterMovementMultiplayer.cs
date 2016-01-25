@@ -97,7 +97,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
     void FixedUpdate()
     {
-        if (ph.isMine)
+        if (ph.isMine && !Utility.IsInGame)
         {
             JetPackForward();
             FillUpJetPackFuel();
@@ -108,7 +108,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
     void CheckIfCharacterMoved()
     {
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D) && !Utility.IsInGame)
         {
             MoveCharacter();
         }
@@ -131,7 +131,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
     void Run()
     {
-        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W) && IsGrounded)
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W) && !Utility.IsInGame && IsGrounded)
         {
             if (jetpacktank >= maxJetPackDirection)
             {
@@ -158,20 +158,23 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
     void LookAround()
     {
-        this.mouseX += Input.GetAxis("Mouse X") * MouseSensitivity;
-        this.mouseY -= Input.GetAxis("Mouse Y") * MouseSensitivity;
-
-        if (this.mouseY >= lookDown)
+        if (!Utility.IsInGame)
         {
-            this.mouseY = lookDown;
-        }
-        else if (this.mouseY <= LookUp)
-        {
-            this.mouseY = LookUp;
-        }
+            this.mouseX += Input.GetAxis("Mouse X") * MouseSensitivity;
+            this.mouseY -= Input.GetAxis("Mouse Y") * MouseSensitivity;
 
-        this.camera.transform.eulerAngles = new Vector3(this.mouseY, this.mouseX);
-        this.transform.eulerAngles = new Vector3(0, this.mouseX);
+            if (this.mouseY >= lookDown)
+            {
+                this.mouseY = lookDown;
+            }
+            else if (this.mouseY <= LookUp)
+            {
+                this.mouseY = LookUp;
+            }
+
+            this.camera.transform.eulerAngles = new Vector3(this.mouseY, this.mouseX);
+            this.transform.eulerAngles = new Vector3(0, this.mouseX);
+        }
     }
 
 
@@ -204,7 +207,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
     private void JetPackJump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded && fuelIsEmpty)
+        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded && fuelIsEmpty && !Utility.IsInGame)
         {
             if (jetpacktank >= maxJetPackJump)
             {

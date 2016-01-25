@@ -29,4 +29,9 @@ public class ButtonManager : Photon.MonoBehaviour {
         CurrentMenu = menu;
         CurrentMenu.Animate = true;
     }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
 }

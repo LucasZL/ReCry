@@ -42,7 +42,7 @@ public class RayCastShoot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (ph.isMine)
+        if (ph.isMine && !Utility.IsInGame)
         {
             RayCastFire();
             ActivateTimer();
