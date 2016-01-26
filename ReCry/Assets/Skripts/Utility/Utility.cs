@@ -20,6 +20,7 @@ public static class Utility
     public static string Username;
     public static int Team;
 	public static bool joinRoom;
+    public static int TutorialID;
     public static float MouseSensitivity;
     public static string Version = "1.01";
 }

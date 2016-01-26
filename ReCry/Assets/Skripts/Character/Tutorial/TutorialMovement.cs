@@ -11,7 +11,7 @@ using UnityEngine.UI;
 using System.Collections;
 
 
-public class CharacterMovementMultiplayer : Photon.MonoBehaviour
+public class TutorialMovement : Photon.MonoBehaviour
 {
 
 
@@ -331,8 +331,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
             if (groundcheck.transform.gameObject.tag == "Env" ||
                 groundcheck.transform.gameObject.tag == "BigPrefab" ||
                 groundcheck.transform.gameObject.tag == "SmallPrefab" ||
-                groundcheck.transform.gameObject.tag == "Bridge" ||
-                groundcheck.transform.gameObject.tag == "Trigger")
+                groundcheck.transform.gameObject.tag == "Bridge")
             {
                 IsGrounded = true;
             }

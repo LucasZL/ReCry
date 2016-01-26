@@ -34,4 +34,12 @@ public class ButtonManager : Photon.MonoBehaviour {
     {
         Application.Quit();
     }
+
+    public void LoadTutorial()
+    {
+        PhotonNetwork.Disconnect();
+        PhotonNetwork.offlineMode = true;
+        PhotonNetwork.CreateRoom("TutorialRoom");
+        Application.LoadLevel("Tutorial");
+    }
 }

@@ -40,7 +40,6 @@ public class Option : MonoBehaviour
         VSync.isOn = PlayerPrefs.GetInt("VSync") != 0;
         AnisotropicFiltering.value = PlayerPrefs.GetInt("QualityAnisotropicFiltering");
         ShadowDistance.value = PlayerPrefs.GetFloat("QualityShadowDistance");
-        Master.value = source.volume;
     }
 
     public void IsFullScreen(bool changed)
