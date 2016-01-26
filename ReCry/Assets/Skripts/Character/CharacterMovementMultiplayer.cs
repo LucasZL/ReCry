@@ -245,7 +245,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
                 {
                     moveForwards = true;
                     ChangeJetpackFuel(0.1f, 1);
-                    this.rigid.AddRelativeForce(new Vector3(0, 0, 125 / (this.rigid.mass / 4)));
+                    this.rigid.AddRelativeForce(new Vector3(0, 0, 500 / (this.rigid.mass / 4)));
 
 
                 }
@@ -253,21 +253,21 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
                 {
                     moveForwards = true;
                     ChangeJetpackFuel(0.1f, 1);
-                    this.rigid.AddRelativeForce(new Vector3(0, 0, -125 / (this.rigid.mass / 4)));
+                    this.rigid.AddRelativeForce(new Vector3(0, 0, -500 / (this.rigid.mass / 4)));
 
                 }
                 if (Input.GetKey(KeyCode.A))
                 {
                     moveForwards = true;
                     ChangeJetpackFuel(0.1f, 1);
-                    this.rigid.AddRelativeForce(new Vector3(-125 / (this.rigid.mass / 4), 0, 0));
+                    this.rigid.AddRelativeForce(new Vector3(-500 / (this.rigid.mass / 4), 0, 0));
 
                 }
                 if (Input.GetKey(KeyCode.D))
                 {
                     moveForwards = true;
                     ChangeJetpackFuel(0.1f, 1);
-                    this.rigid.AddRelativeForce(new Vector3(125 / (this.rigid.mass / 4), 0, 0));
+                    this.rigid.AddRelativeForce(new Vector3(500 / (this.rigid.mass / 4), 0, 0));
 
                 }
                 if (Input.GetKey(KeyCode.LeftShift) && !moveForwards)
