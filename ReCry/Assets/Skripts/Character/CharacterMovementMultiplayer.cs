@@ -26,6 +26,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     public float MoveSpeed;
     public float RunSpeed;
     public float MouseSensitivity = 5f;
+    public float MaxHeight;
     public float JumpHeight = 12.5f;
     public int LookUp = -50;
     public int lookDown = 50;
@@ -125,7 +126,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
             this.horizontal = Input.GetAxis("Horizontal") * Time.deltaTime * MoveSpeed;
             this.vertical = Input.GetAxis("Vertical") * Time.deltaTime * MoveSpeed;
 
-            transform.Translate(horizontal, 0, vertical);
+            this.rigid.MovePosition(this.transform.position + this.transform.rotation * new Vector3(this.horizontal, 0, this.vertical));
         }
     }
 
@@ -160,8 +161,8 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     {
         if (!Utility.IsInGame)
         {
-            this.mouseX += Input.GetAxis("Mouse X") * MouseSensitivity;
-            this.mouseY -= Input.GetAxis("Mouse Y") * MouseSensitivity;
+            this.mouseX += Input.GetAxis("Mouse X") * Utility.MouseSensitivity;
+            this.mouseY -= Input.GetAxis("Mouse Y") * Utility.MouseSensitivity;
 
             if (this.mouseY >= lookDown)
             {
@@ -239,53 +240,63 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     {
         if (Input.GetKey(KeyCode.LeftShift) && !IsGrounded && fuelIsEmpty)
         {
-            if (jetpacktank >= maxJetPackDirection)
+            if (this.transform.position.y <= MaxHeight)
             {
-                if (Input.GetKey(KeyCode.W))
+                if (jetpacktank >= maxJetPackDirection)
                 {
-                    moveForwards = true;
-                    ChangeJetpackFuel(0.1f, 1);
-                    this.rigid.AddRelativeForce(new Vector3(0, 0, 500 / (this.rigid.mass / 4)));
+                    if (Input.GetKey(KeyCode.W))
+                    {
+                        moveForwards = true;
+                        ChangeJetpackFuel(0.1f, 1);
+                        this.rigid.AddRelativeForce(new Vector3(0, 0, 300 / (this.rigid.mass / 4)));
 
 
-                }
-                if (Input.GetKey(KeyCode.S))
-                {
-                    moveForwards = true;
-                    ChangeJetpackFuel(0.1f, 1);
-                    this.rigid.AddRelativeForce(new Vector3(0, 0, -500 / (this.rigid.mass / 4)));
+                    }
+                    if (Input.GetKey(KeyCode.S))
+                    {
+                        moveForwards = true;
+                        ChangeJetpackFuel(0.1f, 1);
+                        this.rigid.AddRelativeForce(new Vector3(0, 0, -300 / (this.rigid.mass / 4)));
 
-                }
-                if (Input.GetKey(KeyCode.A))
-                {
-                    moveForwards = true;
-                    ChangeJetpackFuel(0.1f, 1);
-                    this.rigid.AddRelativeForce(new Vector3(-500 / (this.rigid.mass / 4), 0, 0));
+                    }
+                    if (Input.GetKey(KeyCode.A))
+                    {
+                        moveForwards = true;
+                        ChangeJetpackFuel(0.1f, 1);
+                        this.rigid.AddRelativeForce(new Vector3(-250 / (this.rigid.mass / 4), 0, 0));
 
-                }
-                if (Input.GetKey(KeyCode.D))
-                {
-                    moveForwards = true;
-                    ChangeJetpackFuel(0.1f, 1);
-                    this.rigid.AddRelativeForce(new Vector3(500 / (this.rigid.mass / 4), 0, 0));
+                    }
+                    if (Input.GetKey(KeyCode.D))
+                    {
+                        moveForwards = true;
+                        ChangeJetpackFuel(0.1f, 1);
+                        this.rigid.AddRelativeForce(new Vector3(250 / (this.rigid.mass / 4), 0, 0));
 
-                }
-                if (Input.GetKey(KeyCode.LeftShift) && !moveForwards)
-                {
-                    ChangeJetpackFuel(0.1f, 1);
-                    this.rigid.AddRelativeForce(new Vector3(0, 250, 0));
+                    }
+                    if (Input.GetKey(KeyCode.LeftShift) && !moveForwards)
+                    {
+                        ChangeJetpackFuel(0.1f, 1);
+                        this.rigid.AddRelativeForce(new Vector3(0, 250, 0));
+                    }
+                    else
+                    {
+                        moveForwards = false;
+                    }
+
                 }
                 else
                 {
-                    moveForwards = false;
+                    jetpacktank = 0;
+                    this.fuel.fillAmount = jetpacktank;
                 }
-
             }
-            else
+            else if (this.transform.position.y >= MaxHeight)
             {
-                jetpacktank = 0;
+                Vector3 newpos = this.transform.position;
+                newpos.y = MaxHeight;
+                this.transform.position = newpos;
+                ChangeJetpackFuel(0.1f, 1);
             }
-
         }
         else
         {
