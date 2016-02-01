@@ -41,19 +41,21 @@ public class CreatePhotonRoom : Photon.MonoBehaviour
             options.isOpen = true;
         }
         this.maxplayer = int.Parse(MaxPlayers.text);
-        if (maxplayer > 32)
-        {
-            failuretext.text = "Max Player cannot be higher than 32";
-            StartCoroutine(DeleteTextAfterFewSeconds(4));
-        }
-        else
-        {
-            options.maxPlayers = byte.Parse(MaxPlayers.text);
-        }
+
 
         if (ServerName.text != "")
         {
-            PhotonNetwork.CreateRoom(ServerName.text, options, TypedLobby.Default);
+            if (maxplayer > 32)
+            {
+                failuretext.text = "Max Player cannot be higher than 32";
+                StartCoroutine(DeleteTextAfterFewSeconds(4));
+            }
+            else
+            {
+                options.maxPlayers = byte.Parse(MaxPlayers.text);
+                PhotonNetwork.CreateRoom(ServerName.text, options, TypedLobby.Default);
+
+            }
         }
         else
         {

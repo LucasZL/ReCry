@@ -66,6 +66,8 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
         if (ph.isMine)
         {
             RunSpeed = 28;
+            JetPackDirectionSpeed = 4000;
+            JetPackHeight = 2000;
             this.camera = this.transform.Find("Camera").GetComponent<Camera>();
             this.fuel = GameObject.FindWithTag("Fuel").GetComponent<Image>();
             this.collider = GetComponent<CapsuleCollider>();
@@ -214,17 +216,17 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
                 if (isWalking)
                 {
                     ChangeJetpackFuel(0.3f, 0);
-                    this.rigid.AddRelativeForce(new Vector3(0, this.transform.position.y + JumpHeight, MoveSpeed * this.rigid.mass), ForceMode.Impulse);
+                    this.rigid.AddRelativeForce(new Vector3(0,JumpHeight, MoveSpeed * this.rigid.mass), ForceMode.Impulse);
                 }
                 if (isRunning)
                 {
                     ChangeJetpackFuel(0.3f, 0);
-                    this.rigid.AddRelativeForce(new Vector3(0, this.transform.position.y + JumpHeight, RunSpeed * this.rigid.mass), ForceMode.Impulse);
+                    this.rigid.AddRelativeForce(new Vector3(0,JumpHeight, RunSpeed * this.rigid.mass), ForceMode.Impulse);
                 }
                 if (!isWalking)
                 {
                     ChangeJetpackFuel(0.3f, 0);
-                    this.rigid.AddRelativeForce(new Vector3(0, this.transform.position.y + JumpHeight, 0), ForceMode.Impulse);
+                    this.rigid.AddRelativeForce(new Vector3(0,JumpHeight, 0), ForceMode.Impulse);
                 }
             }
             else
