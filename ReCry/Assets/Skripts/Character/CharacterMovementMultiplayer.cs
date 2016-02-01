@@ -9,7 +9,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
-
+using System;
 
 public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 {
@@ -38,14 +38,16 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     private float mouseY;
     private float horizontal;
     private float vertical;
+    private Vector3 lastvelocity;
     public bool IsGrounded = true;
     private CapsuleCollider collider;
+    CharacterStats stats;
 
     //JetPack
     public Image fuel;
     public float jetpacktank = 1;
     public float JetPackSpeed = 25f;
-    private bool fuelIsEmpty = false;
+    //private bool fuelIsEmpty = false;
     private bool moveForwards = false;
     private bool changeFuel = true;
     private bool addFuel = true;
@@ -68,6 +70,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
             RunSpeed = 28;
             JetPackDirectionSpeed = 4000;
             JetPackHeight = 2000;
+            this.stats = GetComponent<CharacterStats>();
             this.camera = this.transform.Find("Camera").GetComponent<Camera>();
             this.fuel = GameObject.FindWithTag("Fuel").GetComponent<Image>();
             this.collider = GetComponent<CapsuleCollider>();
@@ -104,8 +107,18 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
             JetPackForward();
             FillUpJetPackFuel();
             CheckIfGrounded();
+            OnCrashWithGorund();
+            lastvelocity = rigid.velocity;
         }
 
+    }
+
+    private void OnCrashWithGorund()
+    {
+        if (Vector3.Distance(lastvelocity, this.rigid.velocity) > 10)
+        {
+            stats.Armor -= 30;
+        }
     }
 
     void CheckIfCharacterMoved()
@@ -209,7 +222,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
     private void JetPackJump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded && fuelIsEmpty && !Utility.IsInGame)
+        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded && !Utility.IsInGame)
         {
             if (jetpacktank >= maxJetPackJump)
             {
@@ -229,17 +242,12 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
                     this.rigid.AddRelativeForce(new Vector3(0,JumpHeight, 0), ForceMode.Impulse);
                 }
             }
-            else
-            {
-                fuelIsEmpty = true;
-            }
-
         }
     }
 
     private void JetPackForward()
     {
-        if (Input.GetKey(KeyCode.LeftShift) && !IsGrounded && fuelIsEmpty)
+        if (Input.GetKey(KeyCode.LeftShift) && !IsGrounded)
         {
             if (this.transform.position.y <= MaxHeight)
             {
@@ -293,15 +301,10 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
             }
             else if (this.transform.position.y >= MaxHeight)
             {
-                Vector3 newpos = this.transform.position;
-                newpos.y = MaxHeight;
-                this.transform.position = newpos;
+                this.rigid.AddRelativeForce(-Physics.gravity * rigid.mass * Time.deltaTime);
+
                 ChangeJetpackFuel(0.1f, 1);
             }
-        }
-        else
-        {
-            fuelIsEmpty = true;
         }
     }
 
@@ -324,10 +327,6 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
             {
                 StartCoroutine(ChangeFuel(change, seconds));
             }
-        }
-        else
-        {
-            fuelIsEmpty = true;
         }
 
     }
@@ -377,6 +376,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
         this.fuel.fillAmount = jetpacktank;
         yield return new WaitForSeconds(seconds);
         addFuel = true;
+
     }
 
 }
