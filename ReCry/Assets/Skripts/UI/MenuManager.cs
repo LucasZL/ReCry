@@ -10,7 +10,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
-public class ButtonManager : Photon.MonoBehaviour {
+public class MenuManager : Photon.MonoBehaviour {
 
     public Menu CurrentMenu;
 

@@ -22,7 +22,6 @@ public class Trigger : MonoBehaviour
             panel.SetActive(true);
             this.PanelText.text = triggersay[Utility.TutorialID];
             Utility.TutorialID++;
-            Debug.Log(Utility.TutorialID);
             if (Utility.TutorialID == 8)
             {
                 MinimapImage.SetActive(true);

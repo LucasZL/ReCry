@@ -10,14 +10,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
-public class CreatePhotonRoom : Photon.MonoBehaviour {
+public class CreatePhotonRoom : Photon.MonoBehaviour
+{
 
-    public  InputField ServerName;
+    public InputField ServerName;
     public InputField MaxPlayers;
     public Toggle IsVisible;
     public Toggle IsPrivate;
     public Text failuretext;
 
+    private int maxplayer;
     public void CreateNewRoom()
     {
         RoomOptions options = new RoomOptions();
@@ -38,22 +40,37 @@ public class CreatePhotonRoom : Photon.MonoBehaviour {
         {
             options.isOpen = true;
         }
-        options.maxPlayers = byte.Parse(MaxPlayers.text);
+        this.maxplayer = int.Parse(MaxPlayers.text);
+        if (maxplayer > 32)
+        {
+            failuretext.text = "Max Player cannot be higher than 32";
+            StartCoroutine(DeleteTextAfterFewSeconds(4));
+        }
+        else
+        {
+            options.maxPlayers = byte.Parse(MaxPlayers.text);
+        }
 
         if (ServerName.text != "")
         {
-            PhotonNetwork.CreateRoom(ServerName.text,options,TypedLobby.Default);
+            PhotonNetwork.CreateRoom(ServerName.text, options, TypedLobby.Default);
         }
         else
         {
             failuretext.text = "Please enter a Servername";
+            StartCoroutine(DeleteTextAfterFewSeconds(4));
         }
-        
-        Debug.Log(string.Format("Room created with this options Servername: {0}, MaxPlayers: {1}, IsVisible: {2}, IsPrivate: {3} ", ServerName.text, MaxPlayers.text, IsVisible, IsPrivate));
     }
 
     public void JoinPhotonRoom()
     {
         PhotonNetwork.JoinRoom(ServerName.text);
+    }
+
+
+    IEnumerator DeleteTextAfterFewSeconds(int seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        failuretext.text = "";
     }
 }

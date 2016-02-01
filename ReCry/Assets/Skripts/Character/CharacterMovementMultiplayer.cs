@@ -2,7 +2,7 @@
 //  CharacterMovementMultiplayer.cs
 //  ReCry
 //  
-//  Created by Kevin Holst, Lucas Zacharias-Langhans on 14.09.2015
+//  Created by Kevin Holst, Lucas Zacharias-Langhans(Camera) on 14.09.2015
 //  Copyright (c) 2015 ReCry. All Rights Reserved.
 //
 
@@ -27,7 +27,9 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     public float RunSpeed;
     public float MouseSensitivity = 5f;
     public float MaxHeight;
-    public float JumpHeight = 12.5f;
+    public float JumpHeight;
+    public int JetPackDirectionSpeed;
+    public int JetPackHeight;
     public int LookUp = -50;
     public int lookDown = 50;
     private bool isWalking = true;
@@ -36,8 +38,6 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     private float mouseY;
     private float horizontal;
     private float vertical;
-    public float speed;
-    private bool gamestarted = false;
     public bool IsGrounded = true;
     private CapsuleCollider collider;
 
@@ -52,7 +52,6 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     private float maxJetPackJump = 0.3f;
     private float maxJetPackDirection = 0.1f;
     private float maxFuel = 1;
-    private int jetpackchange;
 
     //Camera Movement and JumpController
     private Camera camera;
@@ -248,7 +247,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
                     {
                         moveForwards = true;
                         ChangeJetpackFuel(0.1f, 1);
-                        this.rigid.AddRelativeForce(new Vector3(0, 0, 300 / (this.rigid.mass / 4)));
+                        this.rigid.AddRelativeForce(new Vector3(0, 0, JetPackDirectionSpeed / (this.rigid.mass / 4)));
 
 
                     }
@@ -256,27 +255,27 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
                     {
                         moveForwards = true;
                         ChangeJetpackFuel(0.1f, 1);
-                        this.rigid.AddRelativeForce(new Vector3(0, 0, -300 / (this.rigid.mass / 4)));
+                        this.rigid.AddRelativeForce(new Vector3(0, 0, -JetPackDirectionSpeed / (this.rigid.mass / 4)));
 
                     }
                     if (Input.GetKey(KeyCode.A))
                     {
                         moveForwards = true;
                         ChangeJetpackFuel(0.1f, 1);
-                        this.rigid.AddRelativeForce(new Vector3(-250 / (this.rigid.mass / 4), 0, 0));
+                        this.rigid.AddRelativeForce(new Vector3(-JetPackDirectionSpeed / (this.rigid.mass / 4), 0, 0));
 
                     }
                     if (Input.GetKey(KeyCode.D))
                     {
                         moveForwards = true;
                         ChangeJetpackFuel(0.1f, 1);
-                        this.rigid.AddRelativeForce(new Vector3(250 / (this.rigid.mass / 4), 0, 0));
+                        this.rigid.AddRelativeForce(new Vector3(JetPackDirectionSpeed / (this.rigid.mass / 4), 0, 0));
 
                     }
                     if (Input.GetKey(KeyCode.LeftShift) && !moveForwards)
                     {
                         ChangeJetpackFuel(0.1f, 1);
-                        this.rigid.AddRelativeForce(new Vector3(0, 250, 0));
+                        this.rigid.AddRelativeForce(new Vector3(0, JetPackHeight, 0));
                     }
                     else
                     {
