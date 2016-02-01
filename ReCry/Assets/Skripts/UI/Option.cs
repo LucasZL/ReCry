@@ -40,6 +40,7 @@ public class Option : MonoBehaviour
         VSync.isOn = PlayerPrefs.GetInt("VSync") != 0;
         AnisotropicFiltering.value = PlayerPrefs.GetInt("QualityAnisotropicFiltering");
         ShadowDistance.value = PlayerPrefs.GetFloat("QualityShadowDistance");
+        Master.value = PlayerPrefs.GetFloat("Volume");
     }
 
     public void IsFullScreen(bool changed)
@@ -198,9 +199,12 @@ public class Option : MonoBehaviour
         PlayerPrefs.SetFloat("MouseSensitivity", changed);
     }
 
-    public void SetMasterVolume()
+    public void SetMasterVolume(float changed)
     {
-        
+        PlayerPrefs.SetFloat("Volume", changed);
+        source.volume = changed;
+        int volume = (int)(changed * 100);
+        MasterText.text = volume.ToString();
     }
 
 }
