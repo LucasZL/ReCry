@@ -5,12 +5,12 @@ public class MinimapIslandStats : MonoBehaviour
 {
     public int owner = 0;
 
-	void Start ()
+    void Start()
     {
-	
-	}
 
-	void Update ()
+    }
+
+    void Update()
     {
         Color color;
         if (this.owner == 0)
@@ -41,6 +41,12 @@ public class MinimapIslandStats : MonoBehaviour
         {
             color = new Color32(26, 35, 126, 1);
             color.a = 1f;
+            gameObject.GetComponent<Renderer>().material.color = color;
+        }
+        else if (this.owner == 5)
+        {
+            color = new Color32(255, 255, 255, 1);
+            color.a = 0.015f;
             gameObject.GetComponent<Renderer>().material.color = color;
         }
     }
