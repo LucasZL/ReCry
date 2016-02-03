@@ -107,13 +107,13 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
             JetPackForward();
             FillUpJetPackFuel();
             CheckIfGrounded();
-            OnCrashWithGorund();
+            OnCrashWithGround();
             lastvelocity = rigid.velocity;
         }
 
     }
 
-    private void OnCrashWithGorund()
+    private void OnCrashWithGround()
     {
         if (Vector3.Distance(lastvelocity, this.rigid.velocity) > 10)
         {
