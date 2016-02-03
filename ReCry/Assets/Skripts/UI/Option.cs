@@ -9,6 +9,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System;
 
 public class Option : MonoBehaviour
 {
@@ -154,20 +155,19 @@ public class Option : MonoBehaviour
         PlayerPrefs.SetInt("QualityTexture", changed);
     }
 
-    public void ChangeVSync()
+    public void ChangeVSync(bool changed)
     {
-        int changed;
         if (VSync.isOn)
         {
-            changed = 1;
-            QualitySettings.vSyncCount = changed;
+            QualitySettings.vSyncCount = Convert.ToInt32(changed);
+            Debug.Log("VSync activated");
         }
         else
         {
-            changed = 0;
-            QualitySettings.vSyncCount = 0;
+            QualitySettings.vSyncCount = Convert.ToInt32(changed);
+            Debug.Log("VSync De-Activated");
         }
-        PlayerPrefs.SetInt("VSync", changed);
+        PlayerPrefs.SetInt("VSync", Convert.ToInt32(changed));
     }
 
     public void ChangeAnisotropicFiltering(int changed)
