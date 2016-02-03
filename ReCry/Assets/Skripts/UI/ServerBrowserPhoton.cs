@@ -18,6 +18,7 @@ public class ServerBrowserPhoton : Photon.MonoBehaviour {
     public Text Servername;
     public Text Player;
     public Text Ping;
+    public Text NoServers;
     public Transform Serverbrowser;
 
 
@@ -39,6 +40,7 @@ public class ServerBrowserPhoton : Photon.MonoBehaviour {
             {
                 if (room.visible)
                 {
+                    NoServers.text = "";
                     Servername.text = room.name;
                     Player.text = string.Format("{0} / {1}", room.playerCount, room.maxPlayers);
                     Ping.text = PhotonNetwork.GetPing().ToString();
@@ -47,8 +49,12 @@ public class ServerBrowserPhoton : Photon.MonoBehaviour {
                     var script = this.server.GetComponent<JoinGame>();
                     script.Name = room.name;
                 }
-                
             }
+            if (PhotonNetwork.GetRoomList() == null)
+            {
+                NoServers.text = "No Server avaiable, create a new room";
+            }
+
         }
     }
 }
