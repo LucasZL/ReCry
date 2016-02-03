@@ -1,12 +1,17 @@
-﻿#pragma warning disable 618
+﻿//
+//  CharacterStats.cs
+//  ReCry
+//  
+//  Created by Kevin Holst on 30.09.2015
+//  Copyright (c) 2015 ReCry. All Rights Reserved.
+//
+
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
 public class CharacterStats : MonoBehaviour
 {
-
-    //Respawn
     public bool respawnModus = false;
 
     public float Armor;
@@ -16,7 +21,7 @@ public class CharacterStats : MonoBehaviour
     public int staticMunition = 30;
     public int team;
 
-	private Vector3 startPos;
+    private Vector3 startPos;
 
     private Text lifeText;
     private Text armorText;
@@ -24,13 +29,10 @@ public class CharacterStats : MonoBehaviour
     public Image healthImage;
     public Image armorImage;
 
-    private bool CanvasFullyLoaded;
-
     PhotonView ph;
-    MapWithoutConnectingtoMaster nmr;
+    MapGenerator nmr;
     Color color;
 
-    // Use this for initialization
     void Start()
     {
         ph = PhotonView.Get(this.transform.gameObject);
@@ -52,12 +54,11 @@ public class CharacterStats : MonoBehaviour
             this.lifeText.text = this.Life.ToString();
             this.armorText.text = this.Armor.ToString();
 
-            nmr = GameObject.Find("MapGenerator").GetComponent<MapWithoutConnectingtoMaster>();
+            nmr = GameObject.Find("MapGenerator").GetComponent<MapGenerator>();
             this.nmr.SpawnPlayer(this.gameObject);
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (ph.isMine)
@@ -86,7 +87,7 @@ public class CharacterStats : MonoBehaviour
         {
             this.Life -= damage;
         }
-        
+
     }
 
     void UpdateLifeText()
@@ -179,28 +180,21 @@ public class CharacterStats : MonoBehaviour
     void RespawnPlayer()
     {
         respawnModus = true;
-		startPos = this.gameObject.transform.position;
+        startPos = this.gameObject.transform.position;
 
-		GameObject[] minimap = GameObject.FindGameObjectsWithTag ("minimapIsland");
-		int i = (minimap.Length + 1) / 2;
-		GameObject respawn = minimap [i];
-		
-		startPos = new Vector3(respawn.transform.position.x -300, respawn.transform.position.y, respawn.transform.position.z);
+        GameObject[] minimap = GameObject.FindGameObjectsWithTag("minimapIsland");
+        int i = (minimap.Length + 1) / 2;
+        GameObject respawn = minimap[i];
+
+        startPos = new Vector3(respawn.transform.position.x - 300, respawn.transform.position.y, respawn.transform.position.z);
+
     }
 
     void OnMiniMapClick()
     {
-		//this.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY| RigidbodyConstraints.FreezePositionZ;
-        
+        this.gameObject.transform.position = startPos;
 
-		//this.gameObject.transform.position = Vector3.Lerp(startPos, new Vector3(0,0,0), Time.deltaTime);
-
-		this.gameObject.transform.position = startPos;
-
-		//this.gameObject.transform.LookAt (respawn.transform);
-		//this.gameObject.transform.position -= this.gameObject.transform.forward * 100;
-
-		if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
             Ray RayCast = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
@@ -215,14 +209,13 @@ public class CharacterStats : MonoBehaviour
                             if (island == hit.transform.gameObject)
                             {
                                 int mapIndex = this.nmr.minimapIslands.IndexOf(island);
-                                nmr.RespawnPlayer(this.gameObject,mapIndex);
+                                nmr.RespawnPlayer(this.gameObject, mapIndex);
                                 respawnModus = false;
                             }
                         }
                     }
                 }
             }
-            
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿//
-//  CharacterMovementMultiplayer.cs
+//  Option.cs
 //  ReCry
 //  
 //  Created by Kevin Holst on 15.01.2015
@@ -13,7 +13,6 @@ using System;
 
 public class Option : MonoBehaviour
 {
-
     public Dropdown Resolution;
     public Dropdown Anti;
     public Dropdown Texture;

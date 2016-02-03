@@ -1,5 +1,5 @@
 ﻿//
-//  CharacterMovementMultiplayer.cs
+//  CreatePhotonRoom.cs
 //  ReCry
 //  
 //  Created by Kevin Holst, Lucas Zacharias-Langhans on 17.09.2015
@@ -12,7 +12,6 @@ using System.Collections;
 
 public class CreatePhotonRoom : Photon.MonoBehaviour
 {
-
     public InputField ServerName;
     public InputField MaxPlayers;
     public Toggle IsVisible;

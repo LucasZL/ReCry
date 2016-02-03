@@ -1,5 +1,5 @@
 ﻿//
-//  CharacterMovementMultiplayer.cs
+//  ButtonManagerInGame.cs
 //  ReCry
 //  
 //  Created by Kevin Holst on 24.01.2016
@@ -23,7 +23,6 @@ public class ButtonManagerInGame : Photon.MonoBehaviour {
         MenuPanel.SetActive(false);
         OptionPanel.SetActive(false);
     }
-
 
     void Update()
     {

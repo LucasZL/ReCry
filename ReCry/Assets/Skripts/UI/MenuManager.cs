@@ -1,5 +1,5 @@
 ﻿//
-//  CharacterMovementMultiplayer.cs
+//  MenuManager.cs
 //  ReCry
 //  
 //  Created by Kevin Holst on 12.01.2015
@@ -13,8 +13,7 @@ using System.Collections;
 public class MenuManager : Photon.MonoBehaviour {
 
     public Menu CurrentMenu;
-
-	// Use this for initialization
+    
 	void Start ()
     {
         StartAnimation(CurrentMenu);

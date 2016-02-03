@@ -29,11 +29,6 @@ public class IslandStats : MonoBehaviour
         this.x = x;
         this.z = z;
     }
-
-    void Start()
-    {
-    }
-
     public void GetSomeStats(GameObject Island, int x, int z)
     {
         this.island = Island;

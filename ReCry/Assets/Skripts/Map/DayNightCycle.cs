@@ -1,4 +1,12 @@
-﻿using UnityEngine;
+﻿//
+//  DayNightCycle.cs
+//  ReCry
+//  
+//  Created by Lucas Zacharias-Langhans, Kevin Holst on 15.10.2015
+//  Copyright (c) 2015 ReCry. All Rights Reserved.
+//
+
+using UnityEngine;
 using System.Collections;
 
 public class DayNightCycle : MonoBehaviour {
@@ -31,7 +39,6 @@ public class DayNightCycle : MonoBehaviour {
             if ((SecondsOfDay + updateRaise) / updateLockCorrection > 86400)
             {
                 SecondsOfDay = 0 + ((86400 - SecondsOfDay + updateRaise) / updateLockCorrection);
-                
             }
             else
             {

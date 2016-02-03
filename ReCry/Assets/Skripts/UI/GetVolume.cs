@@ -1,5 +1,5 @@
 ﻿//
-//  CharacterMovementMultiplayer.cs
+//  GetVolume.cs
 //  ReCry
 //  
 //  Created by Kevin Holst on 01.02.2016
@@ -12,8 +12,7 @@ using System.Collections;
 
 public class GetVolume : MonoBehaviour {
     public AudioSource Audiosource;
-
-	// Use this for initialization
+    
 	void Start () {
         Audiosource.volume = PlayerPrefs.GetFloat("Volume");
 	}

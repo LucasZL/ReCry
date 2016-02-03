@@ -1,5 +1,5 @@
 ﻿//
-//  CharacterMovementMultiplayer.cs
+//  WayPoint.cs
 //  ReCry
 //  
 //  Created by Max Mulert on 21.09.2015

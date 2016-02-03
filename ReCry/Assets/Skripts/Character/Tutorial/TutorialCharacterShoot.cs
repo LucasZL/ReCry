@@ -1,8 +1,8 @@
 ﻿//
-//  CharacterMovementMultiplayer.cs
+//  TutorialCharacterShoot.cs
 //  ReCry
 //  
-//  Created by Kevin Holst on 22.09.2015
+//  Created by Kevin Holst on 26.01.2016
 //  Copyright (c) 2015 ReCry. All Rights Reserved.
 //
 
@@ -39,7 +39,6 @@ public class TutorialCharacterShoot : MonoBehaviour
 
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (ph.isMine && !Utility.IsInGame)

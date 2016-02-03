@@ -1,5 +1,5 @@
 ﻿//
-//  CharacterMovementMultiplayer.cs
+//  BridgeStats.cs
 //  ReCry
 //  
 //  Created by Maximilian Mulert on 08.11.2015
@@ -21,12 +21,7 @@ public class BridgeStats : MonoBehaviour
     float plankWidth;
     float gapWidth;
     int lifePoints;
-
-    void Start()
-    {
-
-    }
-
+    
     public void GetStats(GameObject plank, Vector3 startPos, Vector3 endPos, float lenght, float xAngle, float yAngle, float plankWidth, float gapWidth)
     {
         this.plank = plank;

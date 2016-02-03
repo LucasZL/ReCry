@@ -1,5 +1,5 @@
 ﻿//
-//  CharacterMovementMultiplayer.cs
+//  TeamSelection.cs
 //  ReCry
 //  
 //  Created by Kevin Holst on 15.01.2015
@@ -17,13 +17,13 @@ public class TeamSelection : Photon.MonoBehaviour
     public Text RedTeam;
     public Text CyanTeam;
     public Text GreenTeam;
-    MapWithoutConnectingtoMaster master;
+    MapGenerator master;
     public GameObject PanelCamera;
     public GameObject buttonpanel;
 
     void Start()
     {
-        master = GameObject.Find("MapGenerator").GetComponent<MapWithoutConnectingtoMaster>();
+        master = GameObject.Find("MapGenerator").GetComponent<MapGenerator>();
     }
 
     void Update()

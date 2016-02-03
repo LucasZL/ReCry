@@ -1,5 +1,5 @@
 ﻿//
-//  CharacterMovementMultiplayer.cs
+//  BridgePlankScript.cs
 //  ReCry
 //  
 //  Created by Maximilian Mulert on 17.11.2015

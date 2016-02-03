@@ -13,8 +13,6 @@ using System;
 
 public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 {
-
-
     //Used for Photon
     PhotonView ph;
 
@@ -45,15 +43,14 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
     //JetPack
     public Image fuel;
-    public float jetpacktank = 1;
+    public float jetpacktank = 1f;
     public float JetPackSpeed = 25f;
-    //private bool fuelIsEmpty = false;
     private bool moveForwards = false;
     private bool changeFuel = true;
     private bool addFuel = true;
     private float maxJetPackJump = 0.3f;
     private float maxJetPackDirection = 0.1f;
-    private float maxFuel = 1;
+    private float maxFuel = 1f;
 
     //Camera Movement and JumpController
     private Camera camera;
@@ -67,9 +64,6 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
         if (ph.isMine)
         {
-            RunSpeed = 28;
-            JetPackDirectionSpeed = 4000;
-            JetPackHeight = 2000;
             this.stats = GetComponent<CharacterStats>();
             this.camera = this.transform.Find("Camera").GetComponent<Camera>();
             this.fuel = GameObject.FindWithTag("Fuel").GetComponent<Image>();
@@ -115,9 +109,9 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
     private void OnCrashWithGround()
     {
-        if (Vector3.Distance(lastvelocity, this.rigid.velocity) > 10)
+        if (Vector3.Distance(lastvelocity, this.rigid.velocity) > 50)
         {
-            stats.Armor -= 30;
+            stats.Armor -= 80;
         }
     }
 

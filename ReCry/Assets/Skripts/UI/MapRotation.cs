@@ -1,4 +1,12 @@
-﻿using UnityEngine;
+﻿//
+//  MapRotation.cs
+//  ReCry
+//  
+//  Created by Lucas Zacharias-Langhans on 05.10.2015
+//  Copyright (c) 2015 ReCry. All Rights Reserved.
+//
+
+using UnityEngine;
 using System.Collections;
 
 public class MapRotation : MonoBehaviour {

@@ -1,4 +1,12 @@
-﻿using UnityEngine;
+﻿//
+//  Login.cs
+//  ReCry
+//  
+//  Created by Kevin Holst on 10.11.2015
+//  Copyright (c) 2015 ReCry. All Rights Reserved.
+//
+
+using UnityEngine;
 using SimpleJSON;
 using UnityEngine.UI;
 using System.Xml;
@@ -35,8 +43,6 @@ public class Login : MonoBehaviour
         {
             StartCoroutine(CheckLogin());
         }
-
-
     }
 
     IEnumerator CheckLogin()
@@ -101,9 +107,6 @@ public class Login : MonoBehaviour
                 document.Load(reader);
                 Debug.Log(document.OuterXml);
             }
-
-
         }
     }
-
 }

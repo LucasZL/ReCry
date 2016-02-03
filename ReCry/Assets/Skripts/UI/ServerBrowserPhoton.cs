@@ -1,5 +1,5 @@
 ﻿//
-//  CharacterMovementMultiplayer.cs
+//  ServerBrowserPhoton.cs
 //  ReCry
 //  
 //  Created by Kevin Holst on 12.01.2015
@@ -21,8 +21,6 @@ public class ServerBrowserPhoton : Photon.MonoBehaviour {
     public Text NoServers;
     public Transform Serverbrowser;
 
-
-	// Use this for initialization
 	void Start ()
     {
         LoadServers();

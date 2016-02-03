@@ -1,5 +1,5 @@
 ﻿//
-//  CharacterMovementMultiplayer.cs
+//  JoinGame.cs
 //  ReCry
 //  
 //  Created by Kevin Holst on 23.01.2015
@@ -17,7 +17,6 @@ public class JoinGame : Photon.MonoBehaviour
     Button JoinButton;
 
     public string Name { get; set; }
-
 
     public void Click()
     {

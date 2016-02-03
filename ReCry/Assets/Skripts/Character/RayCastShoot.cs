@@ -1,5 +1,5 @@
 ﻿//
-//  CharacterMovementMultiplayer.cs
+//  RayCastShoot.cs
 //  ReCry
 //  
 //  Created by Kevin Holst on 22.09.2015
@@ -12,7 +12,6 @@ using System.Collections;
 
 public class RayCastShoot : MonoBehaviour
 {
-
     int munitionValue;
     AudioSource source;
     private bool fired;
@@ -37,8 +36,6 @@ public class RayCastShoot : MonoBehaviour
             this.hitplayer = GameObject.FindWithTag("HitPlayer").GetComponent<Text>();
             this.hitplayer.text = "";
         }
-
-
     }
 
     static T FindObject<T>(Transform transform) where T : MonoBehaviour

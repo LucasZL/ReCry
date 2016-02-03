@@ -1,14 +1,17 @@
-﻿using UnityEngine;
+﻿//
+//  MinimapIslandStats.cs
+//  ReCry
+//  
+//  Created by Lucas Zacharias-Langhans on 04.10.2015
+//  Copyright (c) 2015 ReCry. All Rights Reserved.
+//
+
+using UnityEngine;
 using System.Collections;
 
 public class MinimapIslandStats : MonoBehaviour
 {
     public int owner = 0;
-
-    void Start()
-    {
-
-    }
 
     void Update()
     {
