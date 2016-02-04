@@ -26,6 +26,7 @@ public class NetworkManager : Photon.MonoBehaviour
     {
         PhotonNetwork.ConnectUsingSettings(Utility.Version);
         PhotonNetwork.autoJoinLobby = true;
+        PhotonNetwork.automaticallySyncScene = true;
         Cursor.visible = true;
     }
 
