@@ -337,7 +337,9 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
                 groundcheck.transform.gameObject.tag == "BigPrefab" ||
                 groundcheck.transform.gameObject.tag == "SmallPrefab" ||
                 groundcheck.transform.gameObject.tag == "Bridge" ||
-                groundcheck.transform.gameObject.tag == "Trigger")
+                groundcheck.transform.gameObject.tag == "Trigger" ||
+                groundcheck.transform.gameObject.tag == "island_wood" ||
+                groundcheck.transform.gameObject.tag == "island_sand")
             {
                 IsGrounded = true;
             }

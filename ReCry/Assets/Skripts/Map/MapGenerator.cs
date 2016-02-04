@@ -342,14 +342,12 @@ public class MapGenerator : Photon.MonoBehaviour
                     if (emptyGameObject.transform.parent.name == "island_wood(Clone)")
                     {
                         int randomEnvirement = UnityEngine.Random.Range(0, SmallEnvirementWood.Length);
-                        GameObject prefab = PhotonNetwork.Instantiate(SmallEnvirementWood[randomEnvirement], new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, UnityEngine.Random.Range(0.0f, 360.0f), 0.0f), 0);
-                        prefab.transform.parent = emptyGameObject.transform.parent;
+                        GameObject prefab = PhotonNetwork.Instantiate(SmallEnvirementWood[randomEnvirement], new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, UnityEngine.Random.Range(0.0f, 360.0f), 0.0f), 0);                     
                     }
                     else if (emptyGameObject.transform.parent.name == "island_sand(Clone)")
                     {
                         int randomEnvirement = UnityEngine.Random.Range(0, SmallEnvirementSand.Length);
                         GameObject prefab = PhotonNetwork.Instantiate(SmallEnvirementSand[randomEnvirement], new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, UnityEngine.Random.Range(0.0f, 360.0f), 0.0f), 0);
-                        prefab.transform.parent = emptyGameObject.transform.parent;
                     }
                 }
             }
@@ -381,14 +379,12 @@ public class MapGenerator : Photon.MonoBehaviour
                     {
                         int randomEnvirement = UnityEngine.Random.Range(0, BigEnvirementWood.Length);
                         GameObject prefab = PhotonNetwork.Instantiate(BigEnvirementWood[randomEnvirement], new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, UnityEngine.Random.Range(0.0f, 360.0f), 0.0f), 0);
-                        prefab.transform.parent = emptyGameObject.transform.parent;
                         envirmts.Add(prefab);
                     }
                     else if (emptyGameObject.transform.parent.name == "island_sand(Clone)")
                     {
                         int randomEnvirement = UnityEngine.Random.Range(0, BigEnvirementSand.Length);
                         GameObject prefab = PhotonNetwork.Instantiate(BigEnvirementSand[randomEnvirement], new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, UnityEngine.Random.Range(0.0f, 360.0f), 0.0f), 0);
-                        prefab.transform.parent = emptyGameObject.transform.parent;
                         envirmts.Add(prefab);
                     }
                 }
@@ -415,13 +411,11 @@ public class MapGenerator : Photon.MonoBehaviour
                 if (emptyGameObject.transform.parent.name == "island_wood(Clone)")
                 {
                     GameObject prefab = PhotonNetwork.Instantiate(woodHouse, new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, UnityEngine.Random.Range(0.0f, 360.0f), 0.0f), 0);
-                    prefab.transform.parent = emptyGameObject.transform.parent;
                     envirmts.Add(prefab);
                 }
                 else if (emptyGameObject.transform.parent.name == "island_sand(Clone)")
                 {
                     GameObject prefab = PhotonNetwork.Instantiate(sandHouse, new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, UnityEngine.Random.Range(0.0f, 360.0f), 0.0f), 0);
-                    prefab.transform.parent = emptyGameObject.transform.parent;
                     envirmts.Add(prefab);
                 }
             }
