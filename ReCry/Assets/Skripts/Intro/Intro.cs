@@ -13,11 +13,12 @@ public class Intro : MonoBehaviour {
 
     IEnumerator ChangeImage()
     {
-        SAEImage.SetActive(false);
-        yield return new WaitForSeconds(2);
         LogoImage.SetActive(false);
         SAEImage.SetActive(true);
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(4);
+        SAEImage.SetActive(false);
+        LogoImage.SetActive(true);
+        yield return new WaitForSeconds(4);
         SceneManager.LoadScene("Menu");
     }
 }
