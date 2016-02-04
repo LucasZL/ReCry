@@ -36,7 +36,8 @@ public class MapGenerator : Photon.MonoBehaviour
     public string[] BigEnvirementSand;
     public string[] SmallEnvirementJapan;
     public string[] BigEnvirementJapan;
-    public string[] HousesToPlace;
+    public string woodHouse;
+    public string sandHouse;
 
     GameObject[] smallEnvirement;
     GameObject[] bigEnvirement;
@@ -411,9 +412,18 @@ public class MapGenerator : Photon.MonoBehaviour
         {
             if (PhotonNetwork.isMasterClient)
             {
-                GameObject prefab = PhotonNetwork.Instantiate(HousesToPlace[0], new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, UnityEngine.Random.Range(0.0f, 360.0f), 0.0f), 0);
-                prefab.transform.parent = emptyGameObject.transform.parent;
-                envirmts.Add(prefab);
+                if (emptyGameObject.transform.parent.name == "island_wood(Clone)")
+                {
+                    GameObject prefab = PhotonNetwork.Instantiate(woodHouse, new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, UnityEngine.Random.Range(0.0f, 360.0f), 0.0f), 0);
+                    prefab.transform.parent = emptyGameObject.transform.parent;
+                    envirmts.Add(prefab);
+                }
+                else if (emptyGameObject.transform.parent.name == "island_sand(Clone)")
+                {
+                    GameObject prefab = PhotonNetwork.Instantiate(sandHouse, new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, UnityEngine.Random.Range(0.0f, 360.0f), 0.0f), 0);
+                    prefab.transform.parent = emptyGameObject.transform.parent;
+                    envirmts.Add(prefab);
+                }
             }
         }
 
