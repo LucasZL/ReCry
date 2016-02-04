@@ -36,7 +36,6 @@ public class Option : MonoBehaviour
         Anti.value = PlayerPrefs.GetInt("QualityAntiAliasing");
         Texture.value = PlayerPrefs.GetInt("QualityTexture");
         MouseSensitivity.value = PlayerPrefs.GetFloat("MouseSensitivity");
-        //Polishing
         VSync.isOn = PlayerPrefs.GetInt("VSync") != 0;
         AnisotropicFiltering.value = PlayerPrefs.GetInt("QualityAnisotropicFiltering");
         ShadowDistance.value = PlayerPrefs.GetFloat("QualityShadowDistance");
@@ -201,7 +200,7 @@ public class Option : MonoBehaviour
     public void SetMasterVolume(float changed)
     {
         PlayerPrefs.SetFloat("Volume", changed);
-        source.volume = changed;
+        AudioListener.volume = changed;
         int volume = (int)(changed * 100);
         MasterText.text = volume.ToString();
     }

@@ -21,6 +21,8 @@ public class RayCastShoot : MonoBehaviour
     PhotonView ph;
     Camera mainCamera;
     public Text hitplayer;
+    public AudioClip AudioClip;
+
 
     void Start()
     {
@@ -30,26 +32,11 @@ public class RayCastShoot : MonoBehaviour
             mainCamera = this.transform.Find("Camera").GetComponent<Camera>();
             this.source = transform.Find("Bazooka_1").GetComponent<AudioSource>();
             this.source.volume = PlayerPrefs.GetFloat("Volume");
-            FindObject<Option>(FindObjectOfType<Canvas>().transform).source = this.source;
             stats = GetComponentInParent<CharacterStats>();
             stats.ammunitionText.text = string.Format("{0} / {1}", stats.munition, stats.restmuni);
             this.hitplayer = GameObject.FindWithTag("HitPlayer").GetComponent<Text>();
             this.hitplayer.text = "";
         }
-    }
-
-    static T FindObject<T>(Transform transform) where T : MonoBehaviour
-    {
-        var c = transform.GetComponent<T>();
-        if (c)
-            return c;
-        foreach (Transform item in transform)
-        {
-            c = FindObject<T>(item);
-            if (c)
-                return c;
-        }
-        return default(T);
     }
 
     // Update is called once per frame
@@ -74,16 +61,14 @@ public class RayCastShoot : MonoBehaviour
                 {
                     fired = true;
                     RaycastHit hit;
-
-                    Ray RayCast = new Ray(this.mainCamera.transform.position, this.mainCamera.transform.forward);
-                    if (Physics.Raycast(RayCast, out hit, shotDistance))
+                    if (stats.munition > 0)
                     {
-
-                        if (stats.munition > 0)
+                        stats.munition--;
+                        this.source.PlayOneShot(AudioClip, this.source.volume);
+                        stats.ammunitionText.text = string.Format("{0} / {1}", stats.munition, stats.restmuni);
+                        Ray RayCast = new Ray(this.mainCamera.transform.position, this.mainCamera.transform.forward);
+                        if (Physics.Raycast(RayCast, out hit, shotDistance))
                         {
-                            this.source.Play();
-                            stats.munition--;
-                            stats.ammunitionText.text = string.Format("{0} / {1}", stats.munition, stats.restmuni);
                             Debug.Log(hit.collider.name);
                             if (hit.transform.gameObject.tag == "Player")
                             {
@@ -97,11 +82,12 @@ public class RayCastShoot : MonoBehaviour
                             }
                             ActivateTimer();
                         }
-                        else
-                        {
-                            Debug.Log("Magazin is empty");
-                        }
                     }
+                    else
+                    {
+                        Debug.Log("Magazin is empty");
+                    }
+
                 }
             }
 
