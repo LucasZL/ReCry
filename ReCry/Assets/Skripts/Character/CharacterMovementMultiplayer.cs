@@ -39,6 +39,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     public bool IsGrounded = true;
     private CapsuleCollider collider;
     CharacterStats stats;
+    PlayerIndicatorUpdater indicatorupdater;
 
     //JetPack
     public Image fuel;
@@ -63,11 +64,13 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
 
         if (ph.isMine)
         {
+            this.indicatorupdater = GameObject.FindObjectOfType<PlayerIndicatorUpdater>();
             this.stats = GetComponent<CharacterStats>();
             this.camera = this.transform.Find("Camera").GetComponent<Camera>();
             this.fuel = GameObject.FindWithTag("Fuel").GetComponent<Image>();
             this.collider = GetComponent<CapsuleCollider>();
             this.fuel.fillAmount = jetpacktank;
+            indicatorupdater.PlayerTransform = this.transform;
             IsGrounded = true;
         }
         else
