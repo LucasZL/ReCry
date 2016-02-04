@@ -437,10 +437,18 @@ public class MapGenerator : Photon.MonoBehaviour
 
     void fillMapList()
     {
-        GameObject[] islands_wood = GameObject.FindGameObjectsWithTag("island_wood");
-        GameObject[] islands_sand = GameObject.FindGameObjectsWithTag("island_sand");
-        mapIslands.AddRange(islands_wood);
-        mapIslands.AddRange(islands_sand);
+        GameObject[] allObjects = FindObjectsOfType<GameObject>();
+
+        Debug.LogError("All:  " + allObjects.Length);
+
+        foreach (var checkObject in allObjects)
+        {
+            if (checkObject.tag.Contains("island_"))
+            {
+                mapIslands.Add(checkObject);
+            }
+        }
+        Debug.LogError("Islands:  " + mapIslands.Count);
     }
 
     bool isOdd(int value)
