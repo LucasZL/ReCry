@@ -30,8 +30,12 @@ public class MapGenerator : Photon.MonoBehaviour
     public bool gameStarted = false;
 
     public string[] IslandsToPlace;
-    public string[] SmallEnvirementsToPlace;
-    public string[] BigEnvirementsToPlace;
+    public string[] SmallEnvirementWood;
+    public string[] BigEnvirementWood;
+    public string[] SmallEnvirementSand;
+    public string[] BigEnvirementSand;
+    public string[] SmallEnvirementJapan;
+    public string[] BigEnvirementJapan;
     public string[] HousesToPlace;
 
     GameObject[] smallEnvirement;
@@ -329,13 +333,23 @@ public class MapGenerator : Photon.MonoBehaviour
         foreach (GameObject emptyGameObject in smallEnvirement)
         {
             int random = UnityEngine.Random.Range(0, 7);
-            int randomEnvirement = UnityEngine.Random.Range(0, SmallEnvirementsToPlace.Length);
+            
             if (random != 0)
             {
                 if (PhotonNetwork.isMasterClient)
                 {
-                    GameObject prefab = PhotonNetwork.Instantiate(SmallEnvirementsToPlace[randomEnvirement], new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, UnityEngine.Random.Range(0.0f, 360.0f), 0.0f), 0);
-                    prefab.transform.parent = emptyGameObject.transform.parent;
+                    if (emptyGameObject.transform.parent.name == "island_wood(Clone)")
+                    {
+                        int randomEnvirement = UnityEngine.Random.Range(0, SmallEnvirementWood.Length);
+                        GameObject prefab = PhotonNetwork.Instantiate(SmallEnvirementWood[randomEnvirement], new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, UnityEngine.Random.Range(0.0f, 360.0f), 0.0f), 0);
+                        prefab.transform.parent = emptyGameObject.transform.parent;
+                    }
+                    else if (emptyGameObject.transform.parent.name == "island_sand(Clone)")
+                    {
+                        int randomEnvirement = UnityEngine.Random.Range(0, SmallEnvirementSand.Length);
+                        GameObject prefab = PhotonNetwork.Instantiate(SmallEnvirementSand[randomEnvirement], new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, UnityEngine.Random.Range(0.0f, 360.0f), 0.0f), 0);
+                        prefab.transform.parent = emptyGameObject.transform.parent;
+                    }
                 }
             }
         }
@@ -357,14 +371,25 @@ public class MapGenerator : Photon.MonoBehaviour
         foreach (GameObject emptyGameObject in bigEnvirement)
         {
             int random = UnityEngine.Random.Range(0, 7);
-            int randomEnvirement = UnityEngine.Random.Range(0, BigEnvirementsToPlace.Length);
+            
             if (random != 0)
             {
                 if (PhotonNetwork.isMasterClient)
                 {
-                    GameObject prefab = PhotonNetwork.Instantiate(BigEnvirementsToPlace[randomEnvirement], new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, UnityEngine.Random.Range(0.0f, 360.0f), 0.0f), 0);
-                    prefab.transform.parent = emptyGameObject.transform.parent;
-                    envirmts.Add(prefab);
+                    if (emptyGameObject.transform.parent.name == "island_wood(Clone)")
+                    {
+                        int randomEnvirement = UnityEngine.Random.Range(0, BigEnvirementWood.Length);
+                        GameObject prefab = PhotonNetwork.Instantiate(BigEnvirementWood[randomEnvirement], new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, UnityEngine.Random.Range(0.0f, 360.0f), 0.0f), 0);
+                        prefab.transform.parent = emptyGameObject.transform.parent;
+                        envirmts.Add(prefab);
+                    }
+                    else if (emptyGameObject.transform.parent.name == "island_sand(Clone)")
+                    {
+                        int randomEnvirement = UnityEngine.Random.Range(0, BigEnvirementSand.Length);
+                        GameObject prefab = PhotonNetwork.Instantiate(BigEnvirementSand[randomEnvirement], new Vector3(emptyGameObject.transform.position.x, emptyGameObject.transform.position.y, emptyGameObject.transform.position.z), Quaternion.Euler(0.0f, UnityEngine.Random.Range(0.0f, 360.0f), 0.0f), 0);
+                        prefab.transform.parent = emptyGameObject.transform.parent;
+                        envirmts.Add(prefab);
+                    }
                 }
             }
         }
@@ -408,8 +433,10 @@ public class MapGenerator : Photon.MonoBehaviour
 
     void fillMapList()
     {
-        GameObject[] islands = GameObject.FindGameObjectsWithTag("Env");
-        mapIslands.AddRange(islands);
+        GameObject[] islands_wood = GameObject.FindGameObjectsWithTag("island_wood");
+        GameObject[] islands_sand = GameObject.FindGameObjectsWithTag("island_sand");
+        mapIslands.AddRange(islands_wood);
+        mapIslands.AddRange(islands_sand);
     }
 
     bool isOdd(int value)
@@ -609,8 +636,12 @@ public class MapGenerator : Photon.MonoBehaviour
         List<GameObject> islandList = new List<GameObject>();
         List<float> lines = new List<float>();
         List<GameObject> clearList = new List<GameObject>();
-        GameObject[] islandArray = GameObject.FindGameObjectsWithTag("Env");
-        GameObject toCopyIsland = islandArray[0];
+
+        List<GameObject> allIslands = new List<GameObject>();
+
+        allIslands.AddRange(GameObject.FindGameObjectsWithTag("island_wood"));
+        allIslands.AddRange(GameObject.FindGameObjectsWithTag("island_sand"));
+        GameObject toCopyIsland = allIslands[0];
         int z = 0;
         int x = 0;
         int counter;
@@ -620,7 +651,7 @@ public class MapGenerator : Photon.MonoBehaviour
         int islandCount;
         int currentMapWidth = (mapSize / 2) + 1;
 
-        foreach (var island in islandArray)
+        foreach (var island in allIslands)
         {
             islands.Add(island);
         }
