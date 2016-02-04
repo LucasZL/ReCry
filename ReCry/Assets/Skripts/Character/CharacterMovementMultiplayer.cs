@@ -2,7 +2,7 @@
 //  CharacterMovementMultiplayer.cs
 //  ReCry
 //  
-//  Created by Kevin Holst, Lucas Zacharias-Langhans(Camera) on 14.09.2015
+//  Created by Kevin Holst, Lucas Zacharias-Langhans(LookAround) on 14.09.2015
 //  Copyright (c) 2015 ReCry. All Rights Reserved.
 //
 
@@ -23,7 +23,6 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     //BasicStats
     public float MoveSpeed;
     public float RunSpeed;
-    public float MouseSensitivity = 5f;
     public float MaxHeight;
     public float JumpHeight;
     public int JetPackDirectionSpeed;
@@ -149,7 +148,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
                 isRunning = true;
                 this.horizontal = Input.GetAxis("Horizontal") * Time.deltaTime * MoveSpeed;
                 this.vertical = Input.GetAxis("Vertical") * Time.deltaTime * RunSpeed;
-                transform.Translate(horizontal, 0, vertical);
+                this.rigid.MovePosition(this.transform.position + this.transform.rotation * new Vector3(this.horizontal, 0, this.vertical));
 
             }
             else
@@ -187,7 +186,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     }
 
 
-
+    //PhotonNetwork
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.isWriting)
@@ -223,12 +222,12 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
                 if (isWalking)
                 {
                     ChangeJetpackFuel(0.3f, 0);
-                    this.rigid.AddRelativeForce(new Vector3(0,JumpHeight, MoveSpeed * this.rigid.mass), ForceMode.Impulse);
+                    this.rigid.AddRelativeForce(new Vector3(0,JumpHeight, MoveSpeed * 10), ForceMode.Impulse);
                 }
                 if (isRunning)
                 {
                     ChangeJetpackFuel(0.3f, 0);
-                    this.rigid.AddRelativeForce(new Vector3(0,JumpHeight, RunSpeed * this.rigid.mass), ForceMode.Impulse);
+                    this.rigid.AddRelativeForce(new Vector3(0,JumpHeight, RunSpeed * 25), ForceMode.Impulse);
                 }
                 if (!isWalking)
                 {
