@@ -29,15 +29,7 @@ public class CharacterStats : MonoBehaviour
     public Text ammunitionText;
     public Image healthImage;
     public Image armorImage;
-
-    private List<GameObject> islands;
-    private List<GameObject> teamMember;
-    private List<GameObject> otherPlayer;
-    private int teamRespawnPoints;
-    private int aliveTeamMember;
-    private int otherTeamRespawnPoints;
-    private int otherAliveTeamMember;
-
+    
     PhotonView ph;
     MapGenerator nmr;
     Color color;
@@ -65,23 +57,6 @@ public class CharacterStats : MonoBehaviour
 
             nmr = GameObject.Find("MapGenerator").GetComponent<MapGenerator>();
             this.nmr.SpawnPlayer(this.gameObject);
-
-            this.islands = new List<GameObject>();
-            this.islands.AddRange(GameObject.FindGameObjectsWithTag("island_wood"));
-            this.islands.AddRange(GameObject.FindGameObjectsWithTag("island_sand"));
-
-            this.teamMember = new List<GameObject>();
-            this.otherPlayer = new List<GameObject>();
-            this.teamMember.AddRange(GameObject.FindGameObjectsWithTag("Player"));
-
-            foreach (var player in teamMember)
-            {
-                if (player.GetComponent<CharacterStats>().team != this.team)
-                {
-                    teamMember.Remove(player);
-                    otherPlayer.Add(player);
-                }
-            }
         }
     }
 
@@ -98,51 +73,6 @@ public class CharacterStats : MonoBehaviour
             if (respawnModus)
             {
                 OnMiniMapClick();
-            }
-
-            teamRespawnPoints = 0;
-            aliveTeamMember = 0;
-            otherTeamRespawnPoints = 0;
-            otherAliveTeamMember = 0;
-
-            foreach (var island in islands)
-            {
-                IslandOwner islandOwner = island.GetComponent<IslandOwner>();
-                if(islandOwner.owner == this.team)
-                {
-                    teamRespawnPoints += islandOwner.respawnTickets;
-                }
-                else
-                {
-                    otherTeamRespawnPoints += islandOwner.respawnTickets;
-                }
-            }
-
-            foreach (var player in teamMember)
-            {
-                CharacterStats characterStats = player.GetComponent<CharacterStats>();
-                if (characterStats.Life != 0)
-                {
-                    aliveTeamMember += 1;
-                }
-            }
-
-            foreach (var player in otherPlayer)
-            {
-                CharacterStats characterStats = player.GetComponent<CharacterStats>();
-                if (characterStats.Life != 0)
-                {
-                    otherAliveTeamMember += 1;
-                }
-            }
-
-            if (teamRespawnPoints == 0 && aliveTeamMember == 0)
-            {
-                //Das Team hat verloren
-            }
-            else if(otherTeamRespawnPoints == 0 && otherAliveTeamMember == 0)
-            {
-                //Das Team hat gewonnen
             }
         }
     }
