@@ -15,6 +15,7 @@ public class RayCastShoot : MonoBehaviour
     int munitionValue;
     AudioSource source;
     private bool fired;
+    public AudioClip AudioClip;
     private float firedelay = 0.15f;
     private float shotDistance = 25000f;
     CharacterStats stats;
@@ -30,7 +31,6 @@ public class RayCastShoot : MonoBehaviour
             mainCamera = this.transform.Find("Camera").GetComponent<Camera>();
             this.source = transform.Find("Bazooka_1").GetComponent<AudioSource>();
             this.source.volume = PlayerPrefs.GetFloat("Volume");
-            FindObject<Option>(FindObjectOfType<Canvas>().transform).source = this.source;
             stats = GetComponentInParent<CharacterStats>();
             stats.ammunitionText.text = string.Format("{0} / {1}", stats.munition, stats.restmuni);
             this.hitplayer = GameObject.FindWithTag("HitPlayer").GetComponent<Text>();
@@ -38,19 +38,6 @@ public class RayCastShoot : MonoBehaviour
         }
     }
 
-    static T FindObject<T>(Transform transform) where T : MonoBehaviour
-    {
-        var c = transform.GetComponent<T>();
-        if (c)
-            return c;
-        foreach (Transform item in transform)
-        {
-            c = FindObject<T>(item);
-            if (c)
-                return c;
-        }
-        return default(T);
-    }
 
     // Update is called once per frame
     void Update()
@@ -81,7 +68,7 @@ public class RayCastShoot : MonoBehaviour
 
                         if (stats.munition > 0)
                         {
-                            this.source.Play();
+                            this.source.PlayOneShot(AudioClip, this.source.volume);
                             stats.munition--;
                             stats.ammunitionText.text = string.Format("{0} / {1}", stats.munition, stats.restmuni);
                             Debug.Log(hit.collider.name);
