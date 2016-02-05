@@ -80,6 +80,16 @@ public class RayCastShoot : MonoBehaviour
                                     StartCoroutine(HitMarker());
                                 }
                             }
+                            else if (hit.transform.gameObject.tag == "Agent")
+                            {
+                                RobotController rc = hit.transform.GetComponent<RobotController>();
+                                if (rc != null)
+                                {
+                                    rc.GetComponent<PhotonView>().RPC("GetDamage", PhotonTargets.All, 100);
+
+                                    StartCoroutine(HitMarker());
+                                }
+                            }
                             ActivateTimer();
                         }
                     }
