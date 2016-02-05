@@ -84,7 +84,6 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
         if (ph.isMine)
         {
             CheckIfCharacterMoved();
-            JetPackJump();
             Run();
             LookAround();
         }
@@ -100,6 +99,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     {
         if (ph.isMine && !Utility.IsInGame)
         {
+            JetPackJump();
             JetPackForward();
             FillUpJetPackFuel();
             CheckIfGrounded();
@@ -225,17 +225,17 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
                 if (isWalking)
                 {
                     ChangeJetpackFuel(0.3f, 0);
-                    this.rigid.AddRelativeForce(new Vector3(0,JumpHeight, MoveSpeed * 10), ForceMode.Impulse);
+                    this.rigid.AddRelativeForce(new Vector3(0,JumpHeight, MoveSpeed * 20), ForceMode.Impulse);
                 }
                 if (isRunning)
                 {
                     ChangeJetpackFuel(0.3f, 0);
-                    this.rigid.AddRelativeForce(new Vector3(0,JumpHeight, RunSpeed * 25), ForceMode.Impulse);
+                    this.rigid.AddRelativeForce(new Vector3(0,JumpHeight, RunSpeed * 40), ForceMode.Impulse);
                 }
                 if (!isWalking)
                 {
                     ChangeJetpackFuel(0.3f, 0);
-                    this.rigid.AddRelativeForce(new Vector3(0,JumpHeight, 0), ForceMode.Impulse);
+                    this.rigid.AddRelativeForce(new Vector3(0, this.transform.position.y + JumpHeight, 0), ForceMode.Impulse);
                 }
             }
         }
@@ -253,7 +253,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
                     {
                         moveForwards = true;
                         ChangeJetpackFuel(0.1f, 1);
-                        this.rigid.AddRelativeForce(new Vector3(0, 0, JetPackDirectionSpeed / (this.rigid.mass / 4)));
+                        this.rigid.AddRelativeForce(new Vector3(0, 0, JetPackDirectionSpeed));
 
 
                     }
@@ -261,21 +261,21 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
                     {
                         moveForwards = true;
                         ChangeJetpackFuel(0.1f, 1);
-                        this.rigid.AddRelativeForce(new Vector3(0, 0, -JetPackDirectionSpeed / (this.rigid.mass / 4)));
+                        this.rigid.AddRelativeForce(new Vector3(0, 0, -JetPackDirectionSpeed));
 
                     }
                     if (Input.GetKey(KeyCode.A))
                     {
                         moveForwards = true;
                         ChangeJetpackFuel(0.1f, 1);
-                        this.rigid.AddRelativeForce(new Vector3(-JetPackDirectionSpeed / (this.rigid.mass / 4), 0, 0));
+                        this.rigid.AddRelativeForce(new Vector3(-JetPackDirectionSpeed, 0, 0));
 
                     }
                     if (Input.GetKey(KeyCode.D))
                     {
                         moveForwards = true;
                         ChangeJetpackFuel(0.1f, 1);
-                        this.rigid.AddRelativeForce(new Vector3(JetPackDirectionSpeed / (this.rigid.mass / 4), 0, 0));
+                        this.rigid.AddRelativeForce(new Vector3(JetPackDirectionSpeed, 0, 0));
 
                     }
                     if (Input.GetKey(KeyCode.LeftShift) && !moveForwards)
