@@ -4,7 +4,6 @@ using UnityEngine.SceneManagement;
 
 public class Intro : MonoBehaviour {
 
-    public GameObject LogoImage;
     public GameObject SAEImage;
     void Start()
     {
@@ -13,11 +12,7 @@ public class Intro : MonoBehaviour {
 
     IEnumerator ChangeImage()
     {
-        LogoImage.SetActive(false);
         SAEImage.SetActive(true);
-        yield return new WaitForSeconds(4);
-        SAEImage.SetActive(false);
-        LogoImage.SetActive(true);
         yield return new WaitForSeconds(4);
         SceneManager.LoadScene("Menu");
     }

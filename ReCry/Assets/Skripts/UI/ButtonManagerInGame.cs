@@ -57,6 +57,7 @@ public class ButtonManagerInGame : Photon.MonoBehaviour {
 
     public void ReturntoMenu()
     {
+        IsInMenu = false;
         OptionPanel.SetActive(false);
         MenuPanel.SetActive(true);
     }
