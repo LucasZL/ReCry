@@ -149,7 +149,8 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
                 isRunning = true;
                 this.horizontal = Input.GetAxis("Horizontal") * Time.deltaTime * MoveSpeed;
                 this.vertical = Input.GetAxis("Vertical") * Time.deltaTime * RunSpeed;
-                transform.Translate(horizontal, 0, vertical);
+                this.rigid.MovePosition(this.transform.position + this.transform.rotation * new Vector3(this.horizontal, 0, this.vertical));
+
 
             }
             else

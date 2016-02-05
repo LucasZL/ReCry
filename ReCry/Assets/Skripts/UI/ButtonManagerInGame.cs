@@ -52,7 +52,7 @@ public class ButtonManagerInGame : Photon.MonoBehaviour {
     public void LeaveGame()
     {
         PhotonNetwork.LeaveRoom();
-        Application.LoadLevel("Menu");
+        PhotonNetwork.LoadLevel("Menu");
     }
 
     public void ReturntoMenu()
