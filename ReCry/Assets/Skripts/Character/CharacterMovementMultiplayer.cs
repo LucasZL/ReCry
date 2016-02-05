@@ -225,12 +225,12 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
                 if (isWalking)
                 {
                     ChangeJetpackFuel(0.3f, 0);
-                    this.rigid.AddRelativeForce(new Vector3(0,JumpHeight, MoveSpeed * 20), ForceMode.Impulse);
+                    this.rigid.AddRelativeForce(new Vector3(0,JumpHeight, MoveSpeed * this.rigid.mass), ForceMode.Impulse);
                 }
                 if (isRunning)
                 {
                     ChangeJetpackFuel(0.3f, 0);
-                    this.rigid.AddRelativeForce(new Vector3(0,JumpHeight, RunSpeed * 40), ForceMode.Impulse);
+                    this.rigid.AddRelativeForce(new Vector3(0,JumpHeight, RunSpeed * this.rigid.mass), ForceMode.Impulse);
                 }
                 if (!isWalking)
                 {
