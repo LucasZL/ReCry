@@ -1,15 +1,49 @@
 fileFormatVersion: 2
-guid: 13916dd3f60aa0c428d2c8ed5425371b
-timeCreated: 1454619690
+guid: 44baa07d6a75b486dbfa919c85fdb15c
+timeCreated: 1454676093
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
+    100002: tile_japan:tile_japan:pCylinder5
+    100004: tile_japan:tile_japan:polySurface3
+    100006: tile_japan:tile_japan:polySurface5
+    100008: tile_japan:tile_japan:polySurface6
+    100010: tile_japan:tile_japan:polySurface7
+    100012: tile_japan:tile_japan:polySurface8
+    100014: tile_japan:tile_japan:polySurface9
+    100016: tile_japan:tile_japan:tile_japan:tile_japan:polySurface3
+    100018: tile_japan:tile_japan:tile_japan:tile_japan:polySurface6
+    100020: tile_japan:tile_japan:tile_japan:tile_japan:transform1
+    100022: tile_japan:tile_japan:tile_japan:tile_japan:transform2
+    100024: tile_japan:tile_japan:tile_japan:tile_japan:transform3
+    100026: tile_japan:tile_japan:tile_japan:tile_japan:transform4
+    100028: tile_japan:tile_japan:tile_japan:tile_japan:transform5
+    100030: tile_japan:tile_japan:tile_japan:tile_japan:transform6
+    100032: tile_japan:tile_japan:tile_japan:tile_japan:transform7
+    100034: tile_japan:tile_japan:transform1
     400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: temple
+    400002: tile_japan:tile_japan:pCylinder5
+    400004: tile_japan:tile_japan:polySurface3
+    400006: tile_japan:tile_japan:polySurface5
+    400008: tile_japan:tile_japan:polySurface6
+    400010: tile_japan:tile_japan:polySurface7
+    400012: tile_japan:tile_japan:polySurface8
+    400014: tile_japan:tile_japan:polySurface9
+    400016: tile_japan:tile_japan:tile_japan:tile_japan:polySurface3
+    400018: tile_japan:tile_japan:tile_japan:tile_japan:polySurface6
+    400020: tile_japan:tile_japan:tile_japan:tile_japan:transform1
+    400022: tile_japan:tile_japan:tile_japan:tile_japan:transform2
+    400024: tile_japan:tile_japan:tile_japan:tile_japan:transform3
+    400026: tile_japan:tile_japan:tile_japan:tile_japan:transform4
+    400028: tile_japan:tile_japan:tile_japan:tile_japan:transform5
+    400030: tile_japan:tile_japan:tile_japan:tile_japan:transform6
+    400032: tile_japan:tile_japan:tile_japan:tile_japan:transform7
+    400034: tile_japan:tile_japan:transform1
+    2300000: tile_japan:tile_japan:tile_japan:tile_japan:polySurface6
+    3300000: tile_japan:tile_japan:tile_japan:tile_japan:polySurface6
+    4300000: tile_japan:tile_japan:tile_japan:tile_japan:polySurface6
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -35,7 +69,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 3
+    globalScale: 1
     meshCompression: 0
     addColliders: 0
     importBlendShapes: 1

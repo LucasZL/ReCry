@@ -7,7 +7,7 @@
 	<key>CFBundleExecutable</key>
 	<string>Untitled</string>
 	<key>CFBundleGetInfoString</key>
-	<string>Unity Player version 5.0.1f1 (5a2e8fe35a68). (c) 2015 Unity Technologies ApS. All rights reserved.</string>
+	<string>Unity Player version 5.3.1f1 (cc9cbbcc37b4). (c) 2015 Unity Technologies ApS. All rights reserved.</string>
 	<key>CFBundleIconFile</key>
 	<string>PlayerIcon.icns</string>
 	<key>CFBundleIdentifier</key>
@@ -15,20 +15,20 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Untitled</string>
+	<string>FinalProject</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>Unity Player version 5.0.1f1</string>
+	<string>Unity Player version 5.3.1f1</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>5.0.1f1</string>
+	<string>5.3.1f1</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>PlayerApplication</string>
 	<key>UnityBuildNumber</key>
-	<string>5a2e8fe35a68</string>
+	<string>cc9cbbcc37b4</string>
 </dict>
 </plist>
