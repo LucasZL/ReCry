@@ -225,17 +225,17 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
                 if (isWalking)
                 {
                     ChangeJetpackFuel(0.3f, 0);
-                    this.rigid.AddRelativeForce(new Vector3(0,JumpHeight, MoveSpeed / 2 * this.rigid.mass), ForceMode.Impulse);
+                    this.rigid.AddRelativeForce(new Vector3(0,JumpHeight, MoveSpeed  *( this.rigid.mass * Time.deltaTime * 50)), ForceMode.Impulse);
                 }
                 if (isRunning)
                 {
                     ChangeJetpackFuel(0.3f, 0);
-                    this.rigid.AddRelativeForce(new Vector3(0,JumpHeight, RunSpeed / 2 * this.rigid.mass), ForceMode.Impulse);
+                    this.rigid.AddRelativeForce(new Vector3(0,JumpHeight, RunSpeed * (this.rigid.mass  * Time.deltaTime * 50)), ForceMode.Impulse);
                 }
                 if (!isWalking)
                 {
                     ChangeJetpackFuel(0.3f, 0);
-                    this.rigid.AddRelativeForce(new Vector3(0, JumpHeight, 0), ForceMode.Impulse);
+                    this.rigid.AddRelativeForce(new Vector3(0, JumpHeight * (this.rigid.mass * Time.deltaTime), 0), ForceMode.Impulse);
                 }
             }
         }
@@ -253,7 +253,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
                     {
                         moveForwards = true;
                         ChangeJetpackFuel(0.2f, 1);
-                        this.rigid.AddRelativeForce(new Vector3(0, 0, JetPackDirectionSpeed));
+                        this.rigid.AddRelativeForce(new Vector3(0, 0, JetPackDirectionSpeed * (this.rigid.mass * Time.deltaTime)));
 
 
                     }
@@ -261,21 +261,21 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
                     {
                         moveForwards = true;
                         ChangeJetpackFuel(0.2f, 1);
-                        this.rigid.AddRelativeForce(new Vector3(0, 0, -JetPackDirectionSpeed));
+                        this.rigid.AddRelativeForce(new Vector3(0, 0, -JetPackDirectionSpeed * (this.rigid.mass * Time.deltaTime)));
 
                     }
                     if (Input.GetKey(KeyCode.A))
                     {
                         moveForwards = true;
                         ChangeJetpackFuel(0.2f, 1);
-                        this.rigid.AddRelativeForce(new Vector3(-JetPackDirectionSpeed, 0, 0));
+                        this.rigid.AddRelativeForce(new Vector3(-JetPackDirectionSpeed * (this.rigid.mass * Time.deltaTime), 0, 0));
 
                     }
                     if (Input.GetKey(KeyCode.D))
                     {
                         moveForwards = true;
                         ChangeJetpackFuel(0.2f, 1);
-                        this.rigid.AddRelativeForce(new Vector3(JetPackDirectionSpeed, 0, 0));
+                        this.rigid.AddRelativeForce(new Vector3(JetPackDirectionSpeed * (this.rigid.mass * Time.deltaTime), 0, 0));
 
                     }
                     if (Input.GetKey(KeyCode.LeftShift) && !moveForwards)
