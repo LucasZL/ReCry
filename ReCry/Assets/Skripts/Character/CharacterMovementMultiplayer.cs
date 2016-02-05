@@ -29,8 +29,8 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     public int JetPackHeight;
     public int LookUp = -50;
     public int lookDown = 50;
-    private bool isWalking = true;
-    private bool isRunning = false;
+    public bool isWalking;
+    public bool isRunning;
     private float mouseX;
     private float mouseY;
     private float horizontal;
@@ -121,6 +121,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
     {
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D) && !Utility.IsInGame)
         {
+            isWalking = true;
             MoveCharacter();
         }
         else
@@ -163,7 +164,6 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
         else
         {
             isRunning = false;
-            isWalking = true;
         }
     }
 
@@ -252,7 +252,7 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
                     if (Input.GetKey(KeyCode.W))
                     {
                         moveForwards = true;
-                        ChangeJetpackFuel(0.1f, 1);
+                        ChangeJetpackFuel(0.2f, 1);
                         this.rigid.AddRelativeForce(new Vector3(0, 0, JetPackDirectionSpeed));
 
 
@@ -260,21 +260,21 @@ public class CharacterMovementMultiplayer : Photon.MonoBehaviour
                     if (Input.GetKey(KeyCode.S))
                     {
                         moveForwards = true;
-                        ChangeJetpackFuel(0.1f, 1);
+                        ChangeJetpackFuel(0.2f, 1);
                         this.rigid.AddRelativeForce(new Vector3(0, 0, -JetPackDirectionSpeed));
 
                     }
                     if (Input.GetKey(KeyCode.A))
                     {
                         moveForwards = true;
-                        ChangeJetpackFuel(0.1f, 1);
+                        ChangeJetpackFuel(0.2f, 1);
                         this.rigid.AddRelativeForce(new Vector3(-JetPackDirectionSpeed, 0, 0));
 
                     }
                     if (Input.GetKey(KeyCode.D))
                     {
                         moveForwards = true;
-                        ChangeJetpackFuel(0.1f, 1);
+                        ChangeJetpackFuel(0.2f, 1);
                         this.rigid.AddRelativeForce(new Vector3(JetPackDirectionSpeed, 0, 0));
 
                     }
