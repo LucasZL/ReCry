@@ -1138,7 +1138,7 @@ public class MapGenerator : Photon.MonoBehaviour
         Bridges = new List<GameObject>();
         //BridgePlank = GameObject.FindGameObjectWithTag("Bridge");
         //BridgePlank = (GameObject)Resources.Load("Assets/Skripts/Prefabs/BridgeCube", typeof(GameObject));
-        BridgePlank = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        //BridgePlank = GameObject.CreatePrimitive(PrimitiveType.Cube);
         BridgePlank.transform.localScale = new Vector3(10, 1, 1);
         BridgePlank.tag = "Bridge";
 
@@ -1166,20 +1166,20 @@ public class MapGenerator : Photon.MonoBehaviour
                         //bridgeCube.transform.localScale = new Vector3(1, 1, 1);
 
                         //  ---the real bridge---
-                        //bridge = new GameObject();
-                        //bridge.AddComponent<BridgeStats>();
-                        //bS = bridge.GetComponent<BridgeStats>();
-                        //bS.GetStats(BridgePlank, wp.transform.position, wp.otherBridgePoint.transform.position, bridgeLenght, xAngle, yAngle, BridgePlankWidth, BridgeGapWidth);
-                        //bS.SpawnMultiBridge();
-                        //Bridges.Add(bridge);
-
-                        //  ---the Sinlge Bridge ---
                         bridge = new GameObject();
                         bridge.AddComponent<BridgeStats>();
                         bS = bridge.GetComponent<BridgeStats>();
                         bS.GetStats(BridgePlank, wp.transform.position, wp.otherBridgePoint.transform.position, bridgeLenght, xAngle, yAngle, BridgePlankWidth, BridgeGapWidth);
-                        bS.SpawnSingleBridge();
+                        bS.SpawnMultiBridge();
                         Bridges.Add(bridge);
+
+                        //  ---the Sinlge Bridge ---
+                        //bridge = new GameObject();
+                        //bridge.AddComponent<BridgeStats>();
+                        //bS = bridge.GetComponent<BridgeStats>();
+                        //bS.GetStats(BridgePlank, wp.transform.position, wp.otherBridgePoint.transform.position, bridgeLenght, xAngle, yAngle, BridgePlankWidth, BridgeGapWidth);
+                        //bS.SpawnSingleBridge();
+                        //Bridges.Add(bridge);
 
 
                         wp.bridgeSpwaned = true;

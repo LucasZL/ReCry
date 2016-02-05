@@ -58,7 +58,8 @@ public class BridgeStats : MonoBehaviour
 
         foreach (var items in planks)
         {
-            planks[counter] = (GameObject)Instantiate(plank, new Vector3(startPos.x + xGrowth * counter, startPos.y + yGrowth * counter, startPos.z + zGrowth * counter), Quaternion.Euler(xAngle, yAngle, 0));
+            //planks[counter] = (GameObject)Instantiate(plank, new Vector3(startPos.x + xGrowth * counter, startPos.y + yGrowth * counter, startPos.z + zGrowth * counter), Quaternion.Euler(xAngle, yAngle, 0));
+            planks[counter] = (GameObject)PhotonNetwork.Instantiate("BridgeCube", new Vector3(startPos.x + xGrowth * counter, startPos.y + yGrowth * counter, startPos.z + zGrowth * counter), Quaternion.Euler(xAngle, yAngle, 0), 0);
             planks[counter].AddComponent<BridgePlankScript>();
             planks[counter].GetComponent<BridgePlankScript>().GetBridge(this.gameObject);
             counter++;
