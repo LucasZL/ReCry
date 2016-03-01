@@ -51,13 +51,14 @@ public class ButtonManagerInGame : Photon.MonoBehaviour {
 
     public void LeaveGame()
     {
+        IsInMenu = false;
         PhotonNetwork.LeaveRoom();
         PhotonNetwork.LoadLevel("Menu");
     }
 
     public void ReturntoMenu()
     {
-        IsInMenu = false;
+        
         OptionPanel.SetActive(false);
         MenuPanel.SetActive(true);
     }

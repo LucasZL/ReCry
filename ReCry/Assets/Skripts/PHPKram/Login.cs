@@ -28,21 +28,11 @@ public class Login : MonoBehaviour
         this.password = GameObject.Find("Password").GetComponent<InputField>() as InputField;
         this.saveUserName = GameObject.Find("SaveUser").GetComponent<Toggle>() as Toggle;
         this.saveUserName.isOn = false;
-
-        DeserializeData();
     }
 
     public void LoginButton()
     {
-        if (saveUserName.isOn)
-        {
-            StartCoroutine(CheckLogin());
-            SerializeData();
-        }
-        else
-        {
-            StartCoroutine(CheckLogin());
-        }
+        StartCoroutine(CheckLogin());
     }
 
     IEnumerator CheckLogin()
@@ -74,38 +64,6 @@ public class Login : MonoBehaviour
             else
             {
                 Application.LoadLevel("Menu");
-            }
-        }
-    }
-
-    void SerializeData()
-    {
-        XmlSerializer serialize = new XmlSerializer(typeof(string));
-
-        XmlWriterSettings settings = new XmlWriterSettings();
-        settings.Indent = true;
-
-        using (XmlWriter writer = XmlWriter.Create("Usersettings.xml", settings))
-        {
-            writer.WriteStartDocument();
-            writer.WriteStartElement("Login");
-            writer.WriteElementString("User", this.username.text);
-            writer.WriteEndElement();
-            writer.WriteEndDocument();
-        }
-    }
-
-    void DeserializeData()
-    {
-        if (File.Exists("Usersettings.xml"))
-        {
-            XmlReaderSettings settings = new XmlReaderSettings();
-            settings.IgnoreWhitespace = true;
-            using (XmlReader reader = XmlReader.Create("Usersettings.xml", settings))
-            {
-                XmlDocument document = new XmlDocument();
-                document.Load(reader);
-                Debug.Log(document.OuterXml);
             }
         }
     }
